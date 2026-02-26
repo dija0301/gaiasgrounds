@@ -19,9 +19,7 @@
       --moss:       #3D4A32;
       --sage:       #6B7C5E;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Cormorant Garamond', Georgia, serif;
       background: var(--parchment);
@@ -32,507 +30,379 @@
 
     /* ── HEADER ── */
     header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
+      position: fixed; top: 0; left: 0; right: 0;
       z-index: 1000;
       background: rgba(242,234,216,0.97);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(122,79,46,0.15);
-      padding: 0 2rem;
-      height: 64px;
+      padding: 0 1.5rem;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-right { display: flex; align-items: center; gap: 1.5rem; }
+    .logo { display: flex; align-items: center; gap: 0.85rem; text-decoration: none; }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-    }
-
-    .header-filters {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .filter-label {
+    .filter-toggle {
+      display: none;
+      background: none;
+      border: 1px solid rgba(122,79,46,0.22);
+      color: var(--clay);
       font-family: 'Josefin Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.52rem;
-      letter-spacing: 0.3em;
+      font-weight: 200;
+      font-size: 0.44rem;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
-      color: rgba(122,79,46,0.4);
-    }
-
-    select {
-      background: rgba(237,224,204,0.8);
-      border: 1px solid rgba(122,79,46,0.2);
-      color: var(--earth);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85rem;
-      padding: 0.3rem 0.6rem;
+      padding: 0.38rem 0.8rem;
       border-radius: 3px;
       cursor: pointer;
-      outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
-
-    select:hover, select:focus { border-color: var(--clay); }
+    .filter-toggle:hover { background: rgba(122,79,46,0.05); border-color: var(--clay); }
+    @media (max-width: 900px) { .filter-toggle { display: block; } }
 
     .count-badge {
       font-family: 'Josefin Sans', sans-serif;
       font-weight: 200;
-      font-size: 0.58rem;
-      color: rgba(122,79,46,0.38);
+      font-size: 0.5rem;
+      color: rgba(122,79,46,0.52);
       letter-spacing: 0.15em;
     }
 
-    /* ── LAYOUT ── */
-    .layout {
-      display: flex;
-      height: 100vh;
-      padding-top: 64px;
+    .global-link {
+      display: flex; align-items: center; gap: 0.5rem;
+      text-decoration: none;
+      opacity: 0.65;
+      transition: opacity 0.2s;
+      border-left: 1px solid rgba(122,79,46,0.12);
+      padding-left: 1.2rem;
     }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: 380px;
-      min-width: 380px;
-      background: var(--mist);
-      border-right: 1px solid rgba(122,79,46,0.12);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .sidebar-header {
-      padding: 1.5rem 1.5rem 1rem;
-      border-bottom: 1px solid rgba(122,79,46,0.09);
-    }
-
-    .sidebar-title {
+    .global-link:hover { opacity: 1; }
+    .global-link-text { display: flex; flex-direction: column; line-height: 1; gap: 0.12rem; }
+    .global-super {
       font-family: 'Josefin Sans', sans-serif;
-      font-weight: 200;
-      font-size: 0.5rem;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
+      font-weight: 200; font-size: 0.34rem;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: rgba(122,79,46,0.48);
+    }
+    .global-name {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.44rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: rgba(122,79,46,0.68);
+    }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; height: 100vh; padding-top: 60px; }
+
+    /* ── FILTER SIDEBAR ── */
+    .filter-sidebar {
+      width: 200px; min-width: 200px;
+      background: var(--parchment);
+      border-right: 1px solid rgba(122,79,46,0.1);
+      display: flex; flex-direction: column;
+      overflow-y: auto;
+      padding: 1.5rem 1.1rem;
+      gap: 1.5rem;
+      flex-shrink: 0;
+      z-index: 200;
+    }
+    .filter-sidebar::-webkit-scrollbar { width: 3px; }
+    .filter-sidebar::-webkit-scrollbar-thumb { background: rgba(122,79,46,0.1); }
+
+    @media (max-width: 900px) {
+      .filter-sidebar {
+        position: fixed; top: 60px; left: 0; bottom: 0;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        box-shadow: 4px 0 24px rgba(30,18,8,0.12);
+      }
+      .filter-sidebar.open { transform: translateX(0); }
+    }
+
+    .filter-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(30,18,8,0.2); z-index: 150;
+    }
+    .filter-overlay.open { display: block; }
+
+    .filter-section-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.38rem;
+      letter-spacing: 0.5em; text-transform: uppercase;
       color: rgba(122,79,46,0.38);
       margin-bottom: 0.6rem;
+      display: block;
     }
+    .filter-group { display: flex; flex-direction: column; }
+    .filter-option {
+      display: flex; align-items: center; gap: 0.55rem;
+      padding: 0.42rem 0.5rem; border-radius: 3px;
+      cursor: pointer; transition: background 0.15s;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .filter-option:hover { background: rgba(122,79,46,0.05); }
+    .filter-option.active { background: rgba(122,79,46,0.08); }
+    .filter-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      border: 1.5px solid rgba(122,79,46,0.28); flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .filter-option.active .filter-dot { background: var(--clay); border-color: var(--clay); }
+    .filter-option-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.44rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(122,79,46,0.55); transition: color 0.15s;
+    }
+    .filter-option.active .filter-option-label { color: var(--clay); }
+    .filter-rule { width: 100%; height: 1px; background: rgba(122,79,46,0.07); }
 
+    select {
+      width: 100%;
+      background: rgba(242,234,216,0.7);
+      border: 1px solid rgba(122,79,46,0.18);
+      color: var(--earth);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      padding: 0.42rem 0.6rem;
+      border-radius: 3px; cursor: pointer; outline: none;
+      transition: border-color 0.2s; margin-top: 0.35rem;
+    }
+    select:hover, select:focus { border-color: var(--clay); }
+
+    /* ── LOCATION LIST SIDEBAR ── */
+    .sidebar {
+      width: 320px; min-width: 320px;
+      background: var(--mist);
+      border-right: 1px solid rgba(122,79,46,0.1);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    @media (max-width: 600px) { .sidebar { display: none; } }
+
+    .sidebar-header {
+      padding: 1.1rem 1.1rem 0.85rem;
+      border-bottom: 1px solid rgba(122,79,46,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.42rem;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: rgba(122,79,46,0.42); margin-bottom: 0.6rem;
+    }
     .search-input {
       width: 100%;
       background: rgba(242,234,216,0.7);
       border: 1px solid rgba(122,79,46,0.18);
       color: var(--earth);
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      padding: 0.6rem 0.9rem;
-      border-radius: 4px;
-      outline: none;
-      transition: border-color 0.2s;
+      font-size: 0.95rem; padding: 0.52rem 0.82rem;
+      border-radius: 4px; outline: none; transition: border-color 0.2s;
     }
-
-    .search-input::placeholder { color: rgba(122,79,46,0.28); font-style: italic; }
+    .search-input::placeholder { color: rgba(122,79,46,0.3); font-style: italic; }
     .search-input:focus { border-color: var(--clay); }
 
-    .locations-list {
-      overflow-y: auto;
-      flex: 1;
-      padding: 0.75rem;
-    }
+    .locations-list { overflow-y: auto; flex: 1; padding: 0.6rem; }
+    .locations-list::-webkit-scrollbar { width: 3px; }
+    .locations-list::-webkit-scrollbar-thumb { background: rgba(122,79,46,0.1); border-radius: 2px; }
 
-    .locations-list::-webkit-scrollbar { width: 4px; }
-    .locations-list::-webkit-scrollbar-track { background: transparent; }
-    .locations-list::-webkit-scrollbar-thumb { background: rgba(200,153,90,0.2); border-radius: 2px; }
-
+    /* ── LOCATION CARD ── */
     .location-card {
-      padding: 1rem 1.1rem;
-      border: 1px solid rgba(200,153,90,0.1);
-      border-radius: 6px;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(122,79,46,0.09);
+      border-radius: 5px; margin-bottom: 0.42rem;
+      cursor: pointer; transition: all 0.2s ease;
       background: rgba(242,234,216,0.55);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-
     .location-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
+      content: ''; position: absolute;
+      left: 0; top: 0; bottom: 0; width: 3px;
       background: var(--clay);
-      transform: scaleY(0);
-      transition: transform 0.2s ease;
+      transform: scaleY(0); transition: transform 0.2s ease;
       transform-origin: bottom;
     }
+    .location-card:hover { border-color: rgba(122,79,46,0.22); background: rgba(237,224,204,0.8); }
+    .location-card:hover::before, .location-card.active::before { transform: scaleY(1); }
+    .location-card.active { border-color: rgba(122,79,46,0.32); background: rgba(237,224,204,0.9); }
 
-    .location-card:hover {
-      border-color: rgba(122,79,46,0.26);
-      background: rgba(237,224,204,0.8);
-    }
-
-    .location-card:hover::before,
-    .location-card.active::before { transform: scaleY(1); }
-
-    .location-card.active {
-      border-color: rgba(122,79,46,0.38);
-      background: rgba(237,224,204,0.9);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.35rem;
-    }
-
-    .card-emoji { font-size: 1.2rem; line-height: 1; margin-right: 0.5rem; }
-
-    .card-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--earth);
-      flex: 1;
-    }
-
-    .card-rating {
-      font-family: 'Josefin Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.62rem;
-      color: var(--clay);
-      letter-spacing: 0.05em;
-    }
-
-    .card-location {
-      font-size: 0.78rem;
-      color: rgba(122,79,46,0.58);
-      font-style: italic;
-      margin-bottom: 0.38rem;
-    }
-
-    .card-tags {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.22rem; gap: 0.5rem; }
+    .card-name { font-size: 0.98rem; font-weight: 500; color: var(--earth); flex: 1; line-height: 1.2; }
+    .card-location { font-size: 0.78rem; color: rgba(122,79,46,0.65); font-style: italic; margin-bottom: 0.38rem; }
+    .card-tags { display: flex; gap: 0.32rem; flex-wrap: wrap; }
     .tag {
       font-family: 'Josefin Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.48rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 0.12rem 0.42rem;
-      border-radius: 2px;
-      border: 1px solid;
+      font-weight: 200; font-size: 0.4rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 0.1rem 0.36rem; border-radius: 2px; border: 1px solid;
     }
+    .tag-type  { border-color: rgba(61,74,50,0.25); color: var(--sage); }
+    .tag-roast { border-color: rgba(122,79,46,0.2); color: var(--clay); }
 
-    .tag-type  { border-color: rgba(61,74,50,0.28); color: var(--sage); }
-    .tag-roast { border-color: rgba(122,79,46,0.22); color: var(--clay); }
+    /* ── ROSETTE SCORE SVG ── */
+    .rosette-wrap { flex-shrink: 0; }
 
     /* ── MAP ── */
     #map { flex: 1; }
-
     .leaflet-tile { filter: sepia(0.2) saturate(0.9) brightness(1.04); }
 
     /* ── DETAIL PANEL ── */
     .detail-panel {
-      position: fixed;
-      right: 0; top: 64px; bottom: 0;
-      width: 420px;
-      background: var(--mist);
+      position: fixed; right: 0; top: 60px; bottom: 0;
+      width: 400px; background: var(--mist);
       border-left: 1px solid rgba(122,79,46,0.15);
       transform: translateX(100%);
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 500;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      z-index: 500; overflow-y: auto;
     }
-
     .detail-panel.open { transform: translateX(0); }
-
-    .detail-panel::-webkit-scrollbar { width: 4px; }
-    .detail-panel::-webkit-scrollbar-thumb { background: rgba(200,153,90,0.2); }
+    .detail-panel::-webkit-scrollbar { width: 3px; }
+    .detail-panel::-webkit-scrollbar-thumb { background: rgba(122,79,46,0.1); }
+    @media (max-width: 600px) { .detail-panel { width: 100%; } }
 
     .detail-close {
-      position: absolute;
-      top: 1rem; right: 1rem;
-      background: none;
-      border: 1px solid rgba(122,79,46,0.22);
-      color: var(--clay);
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 0.9rem;
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: 1px solid rgba(122,79,46,0.22);
+      color: var(--clay); width: 28px; height: 28px;
+      border-radius: 50%; cursor: pointer; font-size: 0.85rem;
       display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.2s; z-index: 10;
     }
-
     .detail-close:hover { background: rgba(122,79,46,0.07); border-color: var(--clay); }
 
     .detail-hero {
-      padding: 2.5rem 1.75rem 1.5rem;
+      padding: 2.25rem 1.75rem 1.5rem;
       background: linear-gradient(135deg, rgba(237,224,204,0.7) 0%, rgba(248,243,235,0.3) 100%);
       border-bottom: 1px solid rgba(122,79,46,0.09);
     }
+    .detail-name { font-size: 1.5rem; font-weight: 400; color: var(--earth); line-height: 1.2; margin-bottom: 0.3rem; }
+    .detail-location { font-size: 0.85rem; color: var(--clay); font-style: italic; letter-spacing: 0.04em; margin-bottom: 0.75rem; }
+    .detail-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .detail-description { font-size: 0.95rem; line-height: 1.65; color: rgba(46,26,10,0.7); font-style: italic; }
 
-    .detail-emoji { font-size: 3rem; margin-bottom: 0.75rem; display: block; }
-
-    .detail-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      font-weight: 400;
-      color: var(--earth);
-      line-height: 1.2;
-      margin-bottom: 0.35rem;
-    }
-
-    .detail-location {
-      font-size: 0.85rem;
-      color: var(--clay);
-      font-style: italic;
-      letter-spacing: 0.04em;
-      margin-bottom: 0.85rem;
-    }
-
-    .detail-meta {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
+    .detail-rosette-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 0; border-bottom: 1px solid rgba(122,79,46,0.07);
       margin-bottom: 1rem;
     }
-
-    .detail-description {
-      font-size: 0.95rem;
-      line-height: 1.6;
-      color: rgba(46,26,10,0.62);
-      font-style: italic;
+    .detail-rosette-info { display: flex; flex-direction: column; gap: 0.18rem; }
+    .detail-rosette-title {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.4rem;
+      letter-spacing: 0.38em; text-transform: uppercase;
+      color: rgba(122,79,46,0.48);
+    }
+    .detail-rosette-score { font-size: 1.1rem; font-weight: 400; color: var(--clay); letter-spacing: 0.05em; }
+    .detail-rosette-sub {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.36rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(122,79,46,0.4);
     }
 
-    .detail-section {
-      padding: 1.25rem 1.75rem;
-      border-bottom: 1px solid rgba(200,153,90,0.08);
-    }
-
+    .detail-section { padding: 1.2rem 1.75rem; border-bottom: 1px solid rgba(122,79,46,0.07); }
     .section-label {
       font-family: 'Josefin Sans', sans-serif;
-      font-weight: 200;
-      font-size: 0.48rem;
-      letter-spacing: 0.42em;
-      text-transform: uppercase;
-      color: rgba(122,79,46,0.38);
-      margin-bottom: 0.85rem;
+      font-weight: 200; font-size: 0.42rem;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: rgba(122,79,46,0.48); margin-bottom: 0.85rem;
     }
+
+    .principle-rows { display: flex; flex-direction: column; gap: 0.6rem; }
+    .principle-row { display: flex; align-items: center; gap: 0.75rem; }
+    .principle-row-label {
+      font-family: 'Josefin Sans', sans-serif;
+      font-weight: 200; font-size: 0.38rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(122,79,46,0.55); flex: 1;
+    }
+    .principle-row-bar { width: 72px; height: 3px; background: rgba(122,79,46,0.1); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+    .principle-row-fill { height: 100%; background: var(--clay); border-radius: 2px; }
 
     .product-item {
-      padding: 0.85rem 1rem;
+      padding: 0.78rem 0.9rem;
       background: rgba(242,234,216,0.55);
       border: 1px solid rgba(122,79,46,0.09);
-      border-radius: 5px;
-      margin-bottom: 0.5rem;
+      border-radius: 4px; margin-bottom: 0.42rem;
       transition: border-color 0.2s;
     }
+    .product-item:hover { border-color: rgba(122,79,46,0.2); }
+    .product-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.22rem; }
+    .product-name { font-weight: 500; font-size: 0.92rem; color: var(--earth); }
+    .product-price { font-family: 'Josefin Sans', sans-serif; font-weight: 300; font-size: 0.6rem; color: var(--clay); }
+    .product-notes { font-size: 0.76rem; color: rgba(122,79,46,0.6); font-style: italic; }
 
-    .product-item:hover { border-color: rgba(122,79,46,0.22); }
-
-    .product-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 0.3rem;
-    }
-
-    .product-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 0.95rem;
-      color: var(--earth);
-    }
-
-    .product-price {
-      font-family: 'Josefin Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.65rem;
-      color: var(--clay);
-    }
-
-    .product-notes {
-      font-size: 0.78rem;
-      color: rgba(122,79,46,0.52);
-      font-style: italic;
-    }
-
-    .contact-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.85rem;
-    }
-
+    .contact-grid { display: flex; flex-direction: column; gap: 0.5rem; }
+    .contact-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; }
     .contact-icon {
-      font-family: 'Josefin Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.52rem;
-      color: rgba(122,79,46,0.38);
-      width: 38px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-family: 'Josefin Sans', sans-serif; font-weight: 200;
+      font-size: 0.46rem; color: rgba(122,79,46,0.48);
+      width: 36px; letter-spacing: 0.1em; text-transform: uppercase;
     }
-
-    .contact-value {
-      color: rgba(30,18,8,0.7);
-    }
-
-    .contact-value a {
-      color: var(--clay);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
+    .contact-value { color: rgba(30,18,8,0.72); }
+    .contact-value a { color: var(--clay); text-decoration: none; transition: color 0.2s; }
     .contact-value a:hover { color: var(--earth); text-decoration: underline; }
 
-    /* Leaflet popup overrides */
-    .leaflet-popup-content-wrapper {
-      background: var(--mist) !important;
-      border: 1px solid rgba(122,79,46,0.2) !important;
-      border-radius: 4px !important;
-      box-shadow: 0 8px 32px rgba(30,18,8,0.16) !important;
-      color: var(--earth) !important;
-    }
-
+    /* Leaflet */
+    .leaflet-popup-content-wrapper { background: var(--mist) !important; border: 1px solid rgba(122,79,46,0.2) !important; border-radius: 4px !important; box-shadow: 0 8px 32px rgba(30,18,8,0.16) !important; color: var(--earth) !important; }
     .leaflet-popup-tip { background: var(--mist) !important; }
-
-    .leaflet-popup-content {
-      margin: 12px 16px !important;
-      font-family: 'Cormorant Garamond', serif !important;
-    }
-
-    .popup-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 500;
-      font-size: 1rem;
-      color: var(--earth);
-      margin-bottom: 0.2rem;
-    }
-
-    .popup-sub {
-      font-size: 0.8rem;
-      color: rgba(122,79,46,0.6);
-      font-style: italic;
-    }
-
+    .leaflet-popup-content { margin: 12px 16px !important; font-family: 'Cormorant Garamond', serif !important; }
+    .popup-name { font-weight: 500; font-size: 1rem; color: var(--earth); margin-bottom: 0.2rem; }
+    .popup-sub { font-size: 0.8rem; color: rgba(122,79,46,0.65); font-style: italic; }
     .popup-btn {
-      display: inline-block;
-      margin-top: 0.5rem;
-      font-family: 'Josefin Sans', sans-serif;
-      font-weight: 300;
-      font-size: 0.52rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--clay);
-      border: 1px solid rgba(122,79,46,0.28);
-      padding: 0.25rem 0.6rem;
-      border-radius: 2px;
-      cursor: pointer;
-      background: none;
-      transition: all 0.2s;
+      display: inline-block; margin-top: 0.5rem;
+      font-family: 'Josefin Sans', sans-serif; font-weight: 200;
+      font-size: 0.48rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--clay); border: 1px solid rgba(122,79,46,0.28);
+      padding: 0.25rem 0.6rem; border-radius: 2px;
+      cursor: pointer; background: none; transition: all 0.2s;
     }
-
     .popup-btn:hover { background: rgba(122,79,46,0.06); border-color: var(--clay); }
 
-    /* ── LOADING ── */
+    /* Loading */
     .loading-overlay {
-      position: fixed; inset: 0;
-      background: var(--parchment);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
+      position: fixed; inset: 0; background: var(--parchment);
+      z-index: 9999; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2rem;
       transition: opacity 0.7s ease;
     }
-
     .loading-overlay.hidden { opacity: 0; pointer-events: none; }
-
-
-
-
-
-
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); opacity: 0.4; }
-      50% { transform: translateY(-8px); opacity: 1; }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
     @keyframes dotbounce {
       0%, 100% { transform: scale(1); opacity: 0.25; }
-      50% { transform: scale(1.6); opacity: 0.75; }
+      50%       { transform: scale(1.6); opacity: 0.75; }
     }
-
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
-
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .detail-panel { width: 100%; }
-    }
   </style>
 </head>
 <body>
-
 <!-- Loading Screen -->
 <div class="loading-overlay" id="loading">
   <div style="display:flex;flex-direction:column;align-items:center;gap:2.2rem;animation:fadeUp 0.8s ease forwards;">
-    <svg width="88" height="88" viewBox="60 60 80 80" fill="none">
-      <defs><clipPath id="load-clip"><circle cx="100" cy="100" r="39"/></clipPath></defs>
-      <g clip-path="url(#load-clip)">
-        <path d="M 67.1 119.0 L 68.4 121.2 L 70.0 123.3 L 71.6 125.2 L 73.4 127.1 L 75.2 128.8 L 77.3 130.4 L 79.4 131.9 L 81.6 133.2 L 83.8 134.4 L 86.2 135.4 L 88.6 136.3 L 91.1 136.9 L 93.6 137.5 L 96.2 137.8 L 98.7 138.0 L 101.3 138.0 L 103.8 137.8 L 106.4 137.5 L 108.9 136.9 L 111.4 136.3 L 113.8 135.4 L 116.2 134.4 L 118.4 133.2 L 120.6 131.9 L 122.7 130.4 L 124.8 128.8 L 126.6 127.1 L 128.4 125.2 L 130.0 123.3 L 131.6 121.2 L 132.9 119.0 L 131.6 116.8 L 130.0 114.7 L 128.4 112.8 L 126.6 110.9 L 124.8 109.2 L 122.7 107.6 L 120.6 106.1 L 118.4 104.8 L 116.2 103.6 L 113.8 102.6 L 111.4 101.7 L 108.9 101.1 L 106.4 100.5 L 103.8 100.2 L 101.3 100.0 L 98.7 100.0 L 96.2 100.2 L 93.6 100.5 L 91.1 101.1 L 88.6 101.7 L 86.2 102.6 L 83.8 103.6 L 81.6 104.8 L 79.4 106.1 L 77.3 107.6 L 75.2 109.2 L 73.4 110.9 L 71.6 112.8 L 70.0 114.7 L 68.4 116.8 L 67.1 119.0 Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
-        <path d="M 67.1 81.0 L 65.9 83.3 L 64.8 85.6 L 63.9 88.0 L 63.2 90.5 L 62.7 93.0 L 62.3 95.5 L 62.0 98.1 L 62.0 100.6 L 62.1 103.2 L 62.4 105.8 L 62.9 108.3 L 63.6 110.8 L 64.4 113.2 L 65.3 115.6 L 66.5 117.9 L 67.8 120.1 L 69.2 122.2 L 70.8 124.3 L 72.5 126.2 L 74.3 128.0 L 76.2 129.7 L 78.3 131.2 L 80.4 132.6 L 82.7 133.8 L 85.0 134.9 L 87.4 135.9 L 89.9 136.6 L 92.4 137.2 L 94.9 137.7 L 97.4 137.9 L 100.0 138.0 L 101.2 135.7 L 102.3 133.4 L 103.2 131.0 L 103.9 128.5 L 104.4 126.0 L 104.8 123.5 L 105.0 120.9 L 105.1 118.4 L 105.0 115.8 L 104.7 113.2 L 104.2 110.7 L 103.5 108.2 L 102.7 105.8 L 101.8 103.4 L 100.6 101.1 L 99.3 98.9 L 97.9 96.8 L 96.3 94.7 L 94.6 92.8 L 92.8 91.0 L 90.9 89.3 L 88.8 87.8 L 86.6 86.4 L 84.4 85.2 L 82.1 84.1 L 79.7 83.1 L 77.2 82.4 L 74.7 81.8 L 72.2 81.3 L 69.7 81.1 L 67.1 81.0 Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
-        <path d="M 100.0 62.0 L 97.4 62.1 L 94.9 62.3 L 92.4 62.8 L 89.9 63.4 L 87.4 64.1 L 85.0 65.1 L 82.7 66.2 L 80.4 67.4 L 78.3 68.8 L 76.2 70.3 L 74.3 72.0 L 72.5 73.8 L 70.8 75.7 L 69.2 77.8 L 67.8 79.9 L 66.5 82.1 L 65.3 84.4 L 64.4 86.8 L 63.6 89.2 L 62.9 91.7 L 62.4 94.2 L 62.1 96.8 L 62.0 99.4 L 62.0 101.9 L 62.3 104.5 L 62.7 107.0 L 63.2 109.5 L 63.9 112.0 L 64.8 114.4 L 65.9 116.7 L 67.1 119.0 L 69.7 118.9 L 72.2 118.7 L 74.7 118.2 L 77.2 117.6 L 79.7 116.9 L 82.1 115.9 L 84.4 114.8 L 86.6 113.6 L 88.8 112.2 L 90.9 110.7 L 92.8 109.0 L 94.6 107.2 L 96.3 105.3 L 97.9 103.2 L 99.3 101.1 L 100.6 98.9 L 101.8 96.6 L 102.7 94.2 L 103.5 91.8 L 104.2 89.3 L 104.7 86.8 L 105.0 84.2 L 105.1 81.6 L 105.0 79.1 L 104.8 76.5 L 104.4 74.0 L 103.9 71.5 L 103.2 69.0 L 102.3 66.6 L 101.2 64.3 L 100.0 62.0 Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
-        <path d="M 132.9 81.0 L 131.6 78.8 L 130.0 76.7 L 128.4 74.8 L 126.6 72.9 L 124.8 71.2 L 122.7 69.6 L 120.6 68.1 L 118.4 66.8 L 116.2 65.6 L 113.8 64.6 L 111.4 63.7 L 108.9 63.1 L 106.4 62.5 L 103.8 62.2 L 101.3 62.0 L 98.7 62.0 L 96.2 62.2 L 93.6 62.5 L 91.1 63.1 L 88.6 63.7 L 86.2 64.6 L 83.8 65.6 L 81.6 66.8 L 79.4 68.1 L 77.3 69.6 L 75.2 71.2 L 73.4 72.9 L 71.6 74.8 L 70.0 76.7 L 68.4 78.8 L 67.1 81.0 L 68.4 83.2 L 70.0 85.3 L 71.6 87.2 L 73.4 89.1 L 75.2 90.8 L 77.3 92.4 L 79.4 93.9 L 81.6 95.2 L 83.8 96.4 L 86.2 97.4 L 88.6 98.3 L 91.1 98.9 L 93.6 99.5 L 96.2 99.8 L 98.7 100.0 L 101.3 100.0 L 103.8 99.8 L 106.4 99.5 L 108.9 98.9 L 111.4 98.3 L 113.8 97.4 L 116.2 96.4 L 118.4 95.2 L 120.6 93.9 L 122.7 92.4 L 124.8 90.8 L 126.6 89.1 L 128.4 87.2 L 130.0 85.3 L 131.6 83.2 L 132.9 81.0 Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
-        <path d="M 132.9 119.0 L 134.1 116.7 L 135.2 114.4 L 136.1 112.0 L 136.8 109.5 L 137.3 107.0 L 137.7 104.5 L 138.0 101.9 L 138.0 99.4 L 137.9 96.8 L 137.6 94.2 L 137.1 91.7 L 136.4 89.2 L 135.6 86.8 L 134.7 84.4 L 133.5 82.1 L 132.2 79.9 L 130.8 77.8 L 129.2 75.7 L 127.5 73.8 L 125.7 72.0 L 123.8 70.3 L 121.7 68.8 L 119.6 67.4 L 117.3 66.2 L 115.0 65.1 L 112.6 64.1 L 110.1 63.4 L 107.6 62.8 L 105.1 62.3 L 102.6 62.1 L 100.0 62.0 L 98.8 64.3 L 97.7 66.6 L 96.8 69.0 L 96.1 71.5 L 95.6 74.0 L 95.2 76.5 L 95.0 79.1 L 94.9 81.6 L 95.0 84.2 L 95.3 86.8 L 95.8 89.3 L 96.5 91.8 L 97.3 94.2 L 98.2 96.6 L 99.4 98.9 L 100.7 101.1 L 102.1 103.2 L 103.7 105.3 L 105.4 107.2 L 107.2 109.0 L 109.1 110.7 L 111.2 112.2 L 113.4 113.6 L 115.6 114.8 L 117.9 115.9 L 120.3 116.9 L 122.8 117.6 L 125.3 118.2 L 127.8 118.7 L 130.3 118.9 L 132.9 119.0 Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
-        <path d="M 100.0 138.0 L 102.6 137.9 L 105.1 137.7 L 107.6 137.2 L 110.1 136.6 L 112.6 135.9 L 115.0 134.9 L 117.3 133.8 L 119.6 132.6 L 121.7 131.2 L 123.8 129.7 L 125.7 128.0 L 127.5 126.2 L 129.2 124.3 L 130.8 122.2 L 132.2 120.1 L 133.5 117.9 L 134.7 115.6 L 135.6 113.2 L 136.4 110.8 L 137.1 108.3 L 137.6 105.8 L 137.9 103.2 L 138.0 100.6 L 138.0 98.1 L 137.7 95.5 L 137.3 93.0 L 136.8 90.5 L 136.1 88.0 L 135.2 85.6 L 134.1 83.3 L 132.9 81.0 L 130.3 81.1 L 127.8 81.3 L 125.3 81.8 L 122.8 82.4 L 120.3 83.1 L 117.9 84.1 L 115.6 85.2 L 113.4 86.4 L 111.2 87.8 L 109.1 89.3 L 107.2 91.0 L 105.4 92.8 L 103.7 94.7 L 102.1 96.8 L 100.7 98.9 L 99.4 101.1 L 98.2 103.4 L 97.3 105.8 L 96.5 108.2 L 95.8 110.7 L 95.3 113.2 L 95.0 115.8 L 94.9 118.4 L 95.0 120.9 L 95.2 123.5 L 95.6 126.0 L 96.1 128.5 L 96.8 131.0 L 97.7 133.4 L 98.8 135.7 L 100.0 138.0 Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
+    <svg width="80" height="80" viewBox="60 60 80 80" fill="none">
+      <defs><clipPath id="lc"><circle cx="100" cy="100" r="39"/></clipPath></defs>
+      <g clip-path="url(#lc)">
+        <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
+        <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
+        <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
+        <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
+        <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
+        <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.09)"/>
         <ellipse cx="100" cy="100" rx="6" ry="9" stroke="#7A4F2E" stroke-width="0.9" fill="rgba(122,79,46,0.16)"/>
         <path d="M100 92 C97.8 95.5,97.8 104.5,100 108" stroke="#7A4F2E" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.6"/>
       </g>
     </svg>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:1.4rem;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:1.2rem;">
       <span style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.42rem;letter-spacing:0.7em;text-transform:uppercase;color:rgba(122,79,46,0.32);">Gaias</span>
-      <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:3rem;letter-spacing:0.6em;padding-left:0.6em;text-transform:uppercase;color:#1E1208;line-height:1;">Grounds</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:0.9rem;letter-spacing:0.22em;color:rgba(122,79,46,0.48);">Of the Earth · For the World</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2.8rem;letter-spacing:0.6em;padding-left:0.6em;text-transform:uppercase;color:#1E1208;line-height:1;">Grounds</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:0.88rem;letter-spacing:0.22em;color:rgba(122,79,46,0.48);">Of the Earth · For the World</div>
     </div>
-    <div style="display:flex;gap:0.5rem;margin-top:0.2rem;">
+    <div style="display:flex;gap:0.5rem;">
       <div style="width:5px;height:5px;background:#7A4F2E;border-radius:50%;opacity:0.25;animation:dotbounce 1.1s infinite ease-in-out;"></div>
       <div style="width:5px;height:5px;background:#7A4F2E;border-radius:50%;opacity:0.25;animation:dotbounce 1.1s 0.18s infinite ease-in-out;"></div>
       <div style="width:5px;height:5px;background:#7A4F2E;border-radius:50%;opacity:0.25;animation:dotbounce 1.1s 0.36s infinite ease-in-out;"></div>
@@ -540,88 +410,110 @@
   </div>
 </div>
 
-<!-- Header -->
+<!-- HEADER -->
 <header>
-  <div class="logo">
-    <svg width="34" height="34" viewBox="60 60 80 80" fill="none">
-      <defs><clipPath id="hdr-clip"><circle cx="100" cy="100" r="39"/></clipPath></defs>
-      <g clip-path="url(#hdr-clip)">
-        <path d="M 67.1 119.0 L 68.4 121.2 L 70.0 123.3 L 71.6 125.2 L 73.4 127.1 L 75.2 128.8 L 77.3 130.4 L 79.4 131.9 L 81.6 133.2 L 83.8 134.4 L 86.2 135.4 L 88.6 136.3 L 91.1 136.9 L 93.6 137.5 L 96.2 137.8 L 98.7 138.0 L 101.3 138.0 L 103.8 137.8 L 106.4 137.5 L 108.9 136.9 L 111.4 136.3 L 113.8 135.4 L 116.2 134.4 L 118.4 133.2 L 120.6 131.9 L 122.7 130.4 L 124.8 128.8 L 126.6 127.1 L 128.4 125.2 L 130.0 123.3 L 131.6 121.2 L 132.9 119.0 L 131.6 116.8 L 130.0 114.7 L 128.4 112.8 L 126.6 110.9 L 124.8 109.2 L 122.7 107.6 L 120.6 106.1 L 118.4 104.8 L 116.2 103.6 L 113.8 102.6 L 111.4 101.7 L 108.9 101.1 L 106.4 100.5 L 103.8 100.2 L 101.3 100.0 L 98.7 100.0 L 96.2 100.2 L 93.6 100.5 L 91.1 101.1 L 88.6 101.7 L 86.2 102.6 L 83.8 103.6 L 81.6 104.8 L 79.4 106.1 L 77.3 107.6 L 75.2 109.2 L 73.4 110.9 L 71.6 112.8 L 70.0 114.7 L 68.4 116.8 L 67.1 119.0 Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
-        <path d="M 67.1 81.0 L 65.9 83.3 L 64.8 85.6 L 63.9 88.0 L 63.2 90.5 L 62.7 93.0 L 62.3 95.5 L 62.0 98.1 L 62.0 100.6 L 62.1 103.2 L 62.4 105.8 L 62.9 108.3 L 63.6 110.8 L 64.4 113.2 L 65.3 115.6 L 66.5 117.9 L 67.8 120.1 L 69.2 122.2 L 70.8 124.3 L 72.5 126.2 L 74.3 128.0 L 76.2 129.7 L 78.3 131.2 L 80.4 132.6 L 82.7 133.8 L 85.0 134.9 L 87.4 135.9 L 89.9 136.6 L 92.4 137.2 L 94.9 137.7 L 97.4 137.9 L 100.0 138.0 L 101.2 135.7 L 102.3 133.4 L 103.2 131.0 L 103.9 128.5 L 104.4 126.0 L 104.8 123.5 L 105.0 120.9 L 105.1 118.4 L 105.0 115.8 L 104.7 113.2 L 104.2 110.7 L 103.5 108.2 L 102.7 105.8 L 101.8 103.4 L 100.6 101.1 L 99.3 98.9 L 97.9 96.8 L 96.3 94.7 L 94.6 92.8 L 92.8 91.0 L 90.9 89.3 L 88.8 87.8 L 86.6 86.4 L 84.4 85.2 L 82.1 84.1 L 79.7 83.1 L 77.2 82.4 L 74.7 81.8 L 72.2 81.3 L 69.7 81.1 L 67.1 81.0 Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
-        <path d="M 100.0 62.0 L 97.4 62.1 L 94.9 62.3 L 92.4 62.8 L 89.9 63.4 L 87.4 64.1 L 85.0 65.1 L 82.7 66.2 L 80.4 67.4 L 78.3 68.8 L 76.2 70.3 L 74.3 72.0 L 72.5 73.8 L 70.8 75.7 L 69.2 77.8 L 67.8 79.9 L 66.5 82.1 L 65.3 84.4 L 64.4 86.8 L 63.6 89.2 L 62.9 91.7 L 62.4 94.2 L 62.1 96.8 L 62.0 99.4 L 62.0 101.9 L 62.3 104.5 L 62.7 107.0 L 63.2 109.5 L 63.9 112.0 L 64.8 114.4 L 65.9 116.7 L 67.1 119.0 L 69.7 118.9 L 72.2 118.7 L 74.7 118.2 L 77.2 117.6 L 79.7 116.9 L 82.1 115.9 L 84.4 114.8 L 86.6 113.6 L 88.8 112.2 L 90.9 110.7 L 92.8 109.0 L 94.6 107.2 L 96.3 105.3 L 97.9 103.2 L 99.3 101.1 L 100.6 98.9 L 101.8 96.6 L 102.7 94.2 L 103.5 91.8 L 104.2 89.3 L 104.7 86.8 L 105.0 84.2 L 105.1 81.6 L 105.0 79.1 L 104.8 76.5 L 104.4 74.0 L 103.9 71.5 L 103.2 69.0 L 102.3 66.6 L 101.2 64.3 L 100.0 62.0 Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
-        <path d="M 132.9 81.0 L 131.6 78.8 L 130.0 76.7 L 128.4 74.8 L 126.6 72.9 L 124.8 71.2 L 122.7 69.6 L 120.6 68.1 L 118.4 66.8 L 116.2 65.6 L 113.8 64.6 L 111.4 63.7 L 108.9 63.1 L 106.4 62.5 L 103.8 62.2 L 101.3 62.0 L 98.7 62.0 L 96.2 62.2 L 93.6 62.5 L 91.1 63.1 L 88.6 63.7 L 86.2 64.6 L 83.8 65.6 L 81.6 66.8 L 79.4 68.1 L 77.3 69.6 L 75.2 71.2 L 73.4 72.9 L 71.6 74.8 L 70.0 76.7 L 68.4 78.8 L 67.1 81.0 L 68.4 83.2 L 70.0 85.3 L 71.6 87.2 L 73.4 89.1 L 75.2 90.8 L 77.3 92.4 L 79.4 93.9 L 81.6 95.2 L 83.8 96.4 L 86.2 97.4 L 88.6 98.3 L 91.1 98.9 L 93.6 99.5 L 96.2 99.8 L 98.7 100.0 L 101.3 100.0 L 103.8 99.8 L 106.4 99.5 L 108.9 98.9 L 111.4 98.3 L 113.8 97.4 L 116.2 96.4 L 118.4 95.2 L 120.6 93.9 L 122.7 92.4 L 124.8 90.8 L 126.6 89.1 L 128.4 87.2 L 130.0 85.3 L 131.6 83.2 L 132.9 81.0 Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
-        <path d="M 132.9 119.0 L 134.1 116.7 L 135.2 114.4 L 136.1 112.0 L 136.8 109.5 L 137.3 107.0 L 137.7 104.5 L 138.0 101.9 L 138.0 99.4 L 137.9 96.8 L 137.6 94.2 L 137.1 91.7 L 136.4 89.2 L 135.6 86.8 L 134.7 84.4 L 133.5 82.1 L 132.2 79.9 L 130.8 77.8 L 129.2 75.7 L 127.5 73.8 L 125.7 72.0 L 123.8 70.3 L 121.7 68.8 L 119.6 67.4 L 117.3 66.2 L 115.0 65.1 L 112.6 64.1 L 110.1 63.4 L 107.6 62.8 L 105.1 62.3 L 102.6 62.1 L 100.0 62.0 L 98.8 64.3 L 97.7 66.6 L 96.8 69.0 L 96.1 71.5 L 95.6 74.0 L 95.2 76.5 L 95.0 79.1 L 94.9 81.6 L 95.0 84.2 L 95.3 86.8 L 95.8 89.3 L 96.5 91.8 L 97.3 94.2 L 98.2 96.6 L 99.4 98.9 L 100.7 101.1 L 102.1 103.2 L 103.7 105.3 L 105.4 107.2 L 107.2 109.0 L 109.1 110.7 L 111.2 112.2 L 113.4 113.6 L 115.6 114.8 L 117.9 115.9 L 120.3 116.9 L 122.8 117.6 L 125.3 118.2 L 127.8 118.7 L 130.3 118.9 L 132.9 119.0 Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
-        <path d="M 100.0 138.0 L 102.6 137.9 L 105.1 137.7 L 107.6 137.2 L 110.1 136.6 L 112.6 135.9 L 115.0 134.9 L 117.3 133.8 L 119.6 132.6 L 121.7 131.2 L 123.8 129.7 L 125.7 128.0 L 127.5 126.2 L 129.2 124.3 L 130.8 122.2 L 132.2 120.1 L 133.5 117.9 L 134.7 115.6 L 135.6 113.2 L 136.4 110.8 L 137.1 108.3 L 137.6 105.8 L 137.9 103.2 L 138.0 100.6 L 138.0 98.1 L 137.7 95.5 L 137.3 93.0 L 136.8 90.5 L 136.1 88.0 L 135.2 85.6 L 134.1 83.3 L 132.9 81.0 L 130.3 81.1 L 127.8 81.3 L 125.3 81.8 L 122.8 82.4 L 120.3 83.1 L 117.9 84.1 L 115.6 85.2 L 113.4 86.4 L 111.2 87.8 L 109.1 89.3 L 107.2 91.0 L 105.4 92.8 L 103.7 94.7 L 102.1 96.8 L 100.7 98.9 L 99.4 101.1 L 98.2 103.4 L 97.3 105.8 L 96.5 108.2 L 95.8 110.7 L 95.3 113.2 L 95.0 115.8 L 94.9 118.4 L 95.0 120.9 L 95.2 123.5 L 95.6 126.0 L 96.1 128.5 L 96.8 131.0 L 97.7 133.4 L 98.8 135.7 L 100.0 138.0 Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
-        <ellipse cx="100" cy="100" rx="6" ry="9" stroke="#7A4F2E" stroke-width="1" fill="rgba(122,79,46,0.16)"/>
-        <path d="M100 92 C97.8 95.5,97.8 104.5,100 108" stroke="#7A4F2E" stroke-width="0.75" fill="none" stroke-linecap="round" opacity="0.6"/>
-      </g>
-    </svg>
-    <div style="display:flex;flex-direction:column;gap:0.18rem;">
-      <div style="display:flex;align-items:baseline;gap:0.4rem;">
-        <span style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.44rem;letter-spacing:0.48em;text-transform:uppercase;color:rgba(122,79,46,0.42);line-height:1;">Gaias</span>
-        <span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.25rem;letter-spacing:0.25em;text-transform:uppercase;color:#1E1208;line-height:1;">Grounds</span>
+  <div class="header-left">
+    <button class="filter-toggle" onclick="toggleFilterDrawer()">≡ Filters</button>
+    <a class="logo" href="#">
+      <svg width="30" height="30" viewBox="60 60 80 80" fill="none">
+        <defs><clipPath id="hc"><circle cx="100" cy="100" r="39"/></clipPath></defs>
+        <g clip-path="url(#hc)">
+          <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
+          <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
+          <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
+          <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
+          <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
+          <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.7" fill="rgba(122,79,46,0.1)"/>
+          <ellipse cx="100" cy="100" rx="6" ry="9" stroke="#7A4F2E" stroke-width="1" fill="rgba(122,79,46,0.16)"/>
+          <path d="M100 92 C97.8 95.5,97.8 104.5,100 108" stroke="#7A4F2E" stroke-width="0.75" fill="none" stroke-linecap="round" opacity="0.6"/>
+        </g>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:0.15rem;">
+        <div style="display:flex;align-items:baseline;gap:0.38rem;">
+          <span style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.42rem;letter-spacing:0.48em;text-transform:uppercase;color:rgba(122,79,46,0.5);line-height:1;">Gaias</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.18rem;letter-spacing:0.25em;text-transform:uppercase;color:#1E1208;line-height:1;">Grounds</span>
+        </div>
+        <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:0.58rem;letter-spacing:0.14em;color:rgba(122,79,46,0.45);line-height:1;">Of the Earth · For the World</span>
       </div>
-      <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:0.62rem;letter-spacing:0.14em;color:rgba(122,79,46,0.38);line-height:1;">Of the Earth · For the World</span>
-    </div>
+    </a>
   </div>
-  <div class="header-filters">
-    <div class="filter-group">
-      <span class="filter-label">Type</span>
-      <select id="filter-type" onchange="applyFilters()">
-        <option value="all">All</option>
-        <option value="café">Cafés</option>
-        <option value="roaster">Roasters</option>
-        <option value="farm">Farms</option>
-      </select>
+
+  <div class="header-right">
+    <span class="count-badge" id="count-badge">— locations</span>
+    <a href="https://gaiasglobal.com" target="_blank" class="global-link">
+      <svg width="18" height="18" viewBox="60 60 80 80" fill="none" style="opacity:0.55;flex-shrink:0;">
+        <defs><clipPath id="gc"><circle cx="100" cy="100" r="39"/></clipPath></defs>
+        <g clip-path="url(#gc)">
+          <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.14)"/>
+          <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.14)"/>
+          <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.14)"/>
+          <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.14)"/>
+          <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.14)"/>
+          <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.14)"/>
+        </g>
+      </svg>
+      <div class="global-link-text">
+        <span class="global-super">Part of</span>
+        <span class="global-name">Gaias Global</span>
+      </div>
+    </a>
+  </div>
+</header>
+
+<!-- Filter overlay -->
+<div class="filter-overlay" id="filter-overlay" onclick="toggleFilterDrawer()"></div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- Filter Sidebar -->
+  <aside class="filter-sidebar" id="filter-sidebar">
+    <div>
+      <span class="filter-section-label">Type</span>
+      <div class="filter-group">
+        <button class="filter-option active" data-filter="type" data-value="all" onclick="setFilter('type','all',this)"><span class="filter-dot"></span><span class="filter-option-label">All</span></button>
+        <button class="filter-option" data-filter="type" data-value="café" onclick="setFilter('type','café',this)"><span class="filter-dot"></span><span class="filter-option-label">Cafés</span></button>
+        <button class="filter-option" data-filter="type" data-value="roaster" onclick="setFilter('type','roaster',this)"><span class="filter-dot"></span><span class="filter-option-label">Roasters</span></button>
+        <button class="filter-option" data-filter="type" data-value="farm" onclick="setFilter('type','farm',this)"><span class="filter-dot"></span><span class="filter-option-label">Farms</span></button>
+      </div>
     </div>
-    <div class="filter-group">
-      <span class="filter-label">Roast</span>
-      <select id="filter-roast" onchange="applyFilters()">
-        <option value="all">All Roasts</option>
-        <option value="light">Light</option>
-        <option value="medium">Medium</option>
-      </select>
+    <div class="filter-rule"></div>
+    <div>
+      <span class="filter-section-label">Roast</span>
+      <div class="filter-group">
+        <button class="filter-option active" data-filter="roast" data-value="all" onclick="setFilter('roast','all',this)"><span class="filter-dot"></span><span class="filter-option-label">All Roasts</span></button>
+        <button class="filter-option" data-filter="roast" data-value="light" onclick="setFilter('roast','light',this)"><span class="filter-dot"></span><span class="filter-option-label">Light</span></button>
+        <button class="filter-option" data-filter="roast" data-value="medium" onclick="setFilter('roast','medium',this)"><span class="filter-dot"></span><span class="filter-option-label">Medium</span></button>
+      </div>
     </div>
-    <div class="filter-group">
-      <span class="filter-label">Country</span>
+    <div class="filter-rule"></div>
+    <div>
+      <span class="filter-section-label">Country</span>
       <select id="filter-country" onchange="applyFilters()">
         <option value="all">All Countries</option>
       </select>
     </div>
-    <span class="count-badge" id="count-badge">— locations</span>
-  </div>
-</header>
+    <div class="filter-rule"></div>
+    <div>
+      <span class="filter-section-label">Rosette Score</span>
+      <div class="filter-group">
+        <button class="filter-option active" data-filter="score" data-value="all" onclick="setFilter('score','all',this)"><span class="filter-dot"></span><span class="filter-option-label">All</span></button>
+        <button class="filter-option" data-filter="score" data-value="6" onclick="setFilter('score','6',this)"><span class="filter-dot"></span><span class="filter-option-label">Full (6/6)</span></button>
+        <button class="filter-option" data-filter="score" data-value="5" onclick="setFilter('score','5',this)"><span class="filter-dot"></span><span class="filter-option-label">5+ Petals</span></button>
+        <button class="filter-option" data-filter="score" data-value="4" onclick="setFilter('score','4',this)"><span class="filter-dot"></span><span class="filter-option-label">4+ Petals</span></button>
+      </div>
+    </div>
+  </aside>
 
-<!-- Main Layout -->
-<div class="layout">
-  <!-- Sidebar -->
+  <!-- Location List -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-title">Explore Locations</div>
-      <input
-        class="search-input"
-        type="text"
-        id="search-input"
-        placeholder="Search cafés, roasters, farms…"
-        oninput="handleSearch()"
-      />
+      <input class="search-input" type="text" id="search-input" placeholder="Search cafés, roasters, farms…" oninput="handleSearch()"/>
     </div>
     <div class="locations-list" id="locations-list"></div>
-    <div style="padding:1rem 1.5rem;border-top:1px solid rgba(122,79,46,0.07);display:flex;align-items:center;gap:0.6rem;flex-shrink:0;">
-      <svg width="18" height="18" viewBox="60 60 80 80" fill="none" style="opacity:0.35;flex-shrink:0;">
-        <defs><clipPath id="sb-clip"><circle cx="100" cy="100" r="39"/></clipPath></defs>
-        <g clip-path="url(#sb-clip)">
-          <path d="M 67.1 119.0 L 68.4 121.2 L 70.0 123.3 L 71.6 125.2 L 73.4 127.1 L 75.2 128.8 L 77.3 130.4 L 79.4 131.9 L 81.6 133.2 L 83.8 134.4 L 86.2 135.4 L 88.6 136.3 L 91.1 136.9 L 93.6 137.5 L 96.2 137.8 L 98.7 138.0 L 101.3 138.0 L 103.8 137.8 L 106.4 137.5 L 108.9 136.9 L 111.4 136.3 L 113.8 135.4 L 116.2 134.4 L 118.4 133.2 L 120.6 131.9 L 122.7 130.4 L 124.8 128.8 L 126.6 127.1 L 128.4 125.2 L 130.0 123.3 L 131.6 121.2 L 132.9 119.0 L 131.6 116.8 L 130.0 114.7 L 128.4 112.8 L 126.6 110.9 L 124.8 109.2 L 122.7 107.6 L 120.6 106.1 L 118.4 104.8 L 116.2 103.6 L 113.8 102.6 L 111.4 101.7 L 108.9 101.1 L 106.4 100.5 L 103.8 100.2 L 101.3 100.0 L 98.7 100.0 L 96.2 100.2 L 93.6 100.5 L 91.1 101.1 L 88.6 101.7 L 86.2 102.6 L 83.8 103.6 L 81.6 104.8 L 79.4 106.1 L 77.3 107.6 L 75.2 109.2 L 73.4 110.9 L 71.6 112.8 L 70.0 114.7 L 68.4 116.8 L 67.1 119.0 Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.12)"/>
-          <path d="M 67.1 81.0 L 65.9 83.3 L 64.8 85.6 L 63.9 88.0 L 63.2 90.5 L 62.7 93.0 L 62.3 95.5 L 62.0 98.1 L 62.0 100.6 L 62.1 103.2 L 62.4 105.8 L 62.9 108.3 L 63.6 110.8 L 64.4 113.2 L 65.3 115.6 L 66.5 117.9 L 67.8 120.1 L 69.2 122.2 L 70.8 124.3 L 72.5 126.2 L 74.3 128.0 L 76.2 129.7 L 78.3 131.2 L 80.4 132.6 L 82.7 133.8 L 85.0 134.9 L 87.4 135.9 L 89.9 136.6 L 92.4 137.2 L 94.9 137.7 L 97.4 137.9 L 100.0 138.0 L 101.2 135.7 L 102.3 133.4 L 103.2 131.0 L 103.9 128.5 L 104.4 126.0 L 104.8 123.5 L 105.0 120.9 L 105.1 118.4 L 105.0 115.8 L 104.7 113.2 L 104.2 110.7 L 103.5 108.2 L 102.7 105.8 L 101.8 103.4 L 100.6 101.1 L 99.3 98.9 L 97.9 96.8 L 96.3 94.7 L 94.6 92.8 L 92.8 91.0 L 90.9 89.3 L 88.8 87.8 L 86.6 86.4 L 84.4 85.2 L 82.1 84.1 L 79.7 83.1 L 77.2 82.4 L 74.7 81.8 L 72.2 81.3 L 69.7 81.1 L 67.1 81.0 Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.12)"/>
-          <path d="M 100.0 62.0 L 97.4 62.1 L 94.9 62.3 L 92.4 62.8 L 89.9 63.4 L 87.4 64.1 L 85.0 65.1 L 82.7 66.2 L 80.4 67.4 L 78.3 68.8 L 76.2 70.3 L 74.3 72.0 L 72.5 73.8 L 70.8 75.7 L 69.2 77.8 L 67.8 79.9 L 66.5 82.1 L 65.3 84.4 L 64.4 86.8 L 63.6 89.2 L 62.9 91.7 L 62.4 94.2 L 62.1 96.8 L 62.0 99.4 L 62.0 101.9 L 62.3 104.5 L 62.7 107.0 L 63.2 109.5 L 63.9 112.0 L 64.8 114.4 L 65.9 116.7 L 67.1 119.0 L 69.7 118.9 L 72.2 118.7 L 74.7 118.2 L 77.2 117.6 L 79.7 116.9 L 82.1 115.9 L 84.4 114.8 L 86.6 113.6 L 88.8 112.2 L 90.9 110.7 L 92.8 109.0 L 94.6 107.2 L 96.3 105.3 L 97.9 103.2 L 99.3 101.1 L 100.6 98.9 L 101.8 96.6 L 102.7 94.2 L 103.5 91.8 L 104.2 89.3 L 104.7 86.8 L 105.0 84.2 L 105.1 81.6 L 105.0 79.1 L 104.8 76.5 L 104.4 74.0 L 103.9 71.5 L 103.2 69.0 L 102.3 66.6 L 101.2 64.3 L 100.0 62.0 Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.12)"/>
-          <path d="M 132.9 81.0 L 131.6 78.8 L 130.0 76.7 L 128.4 74.8 L 126.6 72.9 L 124.8 71.2 L 122.7 69.6 L 120.6 68.1 L 118.4 66.8 L 116.2 65.6 L 113.8 64.6 L 111.4 63.7 L 108.9 63.1 L 106.4 62.5 L 103.8 62.2 L 101.3 62.0 L 98.7 62.0 L 96.2 62.2 L 93.6 62.5 L 91.1 63.1 L 88.6 63.7 L 86.2 64.6 L 83.8 65.6 L 81.6 66.8 L 79.4 68.1 L 77.3 69.6 L 75.2 71.2 L 73.4 72.9 L 71.6 74.8 L 70.0 76.7 L 68.4 78.8 L 67.1 81.0 L 68.4 83.2 L 70.0 85.3 L 71.6 87.2 L 73.4 89.1 L 75.2 90.8 L 77.3 92.4 L 79.4 93.9 L 81.6 95.2 L 83.8 96.4 L 86.2 97.4 L 88.6 98.3 L 91.1 98.9 L 93.6 99.5 L 96.2 99.8 L 98.7 100.0 L 101.3 100.0 L 103.8 99.8 L 106.4 99.5 L 108.9 98.9 L 111.4 98.3 L 113.8 97.4 L 116.2 96.4 L 118.4 95.2 L 120.6 93.9 L 122.7 92.4 L 124.8 90.8 L 126.6 89.1 L 128.4 87.2 L 130.0 85.3 L 131.6 83.2 L 132.9 81.0 Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.12)"/>
-          <path d="M 132.9 119.0 L 134.1 116.7 L 135.2 114.4 L 136.1 112.0 L 136.8 109.5 L 137.3 107.0 L 137.7 104.5 L 138.0 101.9 L 138.0 99.4 L 137.9 96.8 L 137.6 94.2 L 137.1 91.7 L 136.4 89.2 L 135.6 86.8 L 134.7 84.4 L 133.5 82.1 L 132.2 79.9 L 130.8 77.8 L 129.2 75.7 L 127.5 73.8 L 125.7 72.0 L 123.8 70.3 L 121.7 68.8 L 119.6 67.4 L 117.3 66.2 L 115.0 65.1 L 112.6 64.1 L 110.1 63.4 L 107.6 62.8 L 105.1 62.3 L 102.6 62.1 L 100.0 62.0 L 98.8 64.3 L 97.7 66.6 L 96.8 69.0 L 96.1 71.5 L 95.6 74.0 L 95.2 76.5 L 95.0 79.1 L 94.9 81.6 L 95.0 84.2 L 95.3 86.8 L 95.8 89.3 L 96.5 91.8 L 97.3 94.2 L 98.2 96.6 L 99.4 98.9 L 100.7 101.1 L 102.1 103.2 L 103.7 105.3 L 105.4 107.2 L 107.2 109.0 L 109.1 110.7 L 111.2 112.2 L 113.4 113.6 L 115.6 114.8 L 117.9 115.9 L 120.3 116.9 L 122.8 117.6 L 125.3 118.2 L 127.8 118.7 L 130.3 118.9 L 132.9 119.0 Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.12)"/>
-          <path d="M 100.0 138.0 L 102.6 137.9 L 105.1 137.7 L 107.6 137.2 L 110.1 136.6 L 112.6 135.9 L 115.0 134.9 L 117.3 133.8 L 119.6 132.6 L 121.7 131.2 L 123.8 129.7 L 125.7 128.0 L 127.5 126.2 L 129.2 124.3 L 130.8 122.2 L 132.2 120.1 L 133.5 117.9 L 134.7 115.6 L 135.6 113.2 L 136.4 110.8 L 137.1 108.3 L 137.6 105.8 L 137.9 103.2 L 138.0 100.6 L 138.0 98.1 L 137.7 95.5 L 137.3 93.0 L 136.8 90.5 L 136.1 88.0 L 135.2 85.6 L 134.1 83.3 L 132.9 81.0 L 130.3 81.1 L 127.8 81.3 L 125.3 81.8 L 122.8 82.4 L 120.3 83.1 L 117.9 84.1 L 115.6 85.2 L 113.4 86.4 L 111.2 87.8 L 109.1 89.3 L 107.2 91.0 L 105.4 92.8 L 103.7 94.7 L 102.1 96.8 L 100.7 98.9 L 99.4 101.1 L 98.2 103.4 L 97.3 105.8 L 96.5 108.2 L 95.8 110.7 L 95.3 113.2 L 95.0 115.8 L 94.9 118.4 L 95.0 120.9 L 95.2 123.5 L 95.6 126.0 L 96.1 128.5 L 96.8 131.0 L 97.7 133.4 L 98.8 135.7 L 100.0 138.0 Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.12)"/>
-          <ellipse cx="100" cy="100" rx="6" ry="9" stroke="#7A4F2E" stroke-width="1" fill="rgba(122,79,46,0.2)"/>
-          <path d="M100 92 C97.8 95.5,97.8 104.5,100 108" stroke="#7A4F2E" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/>
-        </g>
-      </svg>
-      <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.7rem;letter-spacing:0.1em;color:rgba(122,79,46,0.3);">Of the Earth · For the World</span>
+    <div style="padding:0.85rem 1.1rem;border-top:1px solid rgba(122,79,46,0.07);flex-shrink:0;display:flex;align-items:center;gap:0.5rem;">
+      <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;letter-spacing:0.1em;color:rgba(122,79,46,0.32);">Of the Earth · For the World</span>
     </div>
   </aside>
 
@@ -634,83 +526,108 @@
   <button class="detail-close" onclick="closeDetail()">✕</button>
   <div id="detail-content"></div>
 </div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
   let allLocations = [];
   let markers = {};
   let activeId = null;
+  let activeFilters = { type: 'all', roast: 'all', country: 'all', score: 'all' };
 
-  // ── MAP INIT ──
-  const map = L.map('map', {
-    center: [20, 10],
-    zoom: 2.5,
-    zoomControl: false,
-    attributionControl: false,
-  });
-
+  // ── MAP ──
+  const map = L.map('map', { center: [20,10], zoom: 2.5, zoomControl: false, attributionControl: false });
   L.control.zoom({ position: 'bottomright' }).addTo(map);
   L.control.attribution({ position: 'bottomright', prefix: '' }).addTo(map);
-
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 18,
+    attribution: '© OpenStreetMap contributors', maxZoom: 18
   }).addTo(map);
 
-  // ── CUSTOM PIN ICON ──
+  // ── ROSETTE SCORE SVG ──
+  // Each location has rosette_score (1-6). Petals fill sequentially.
+  // Petal order: bottom, bottom-right, top-right, top, top-left, bottom-left
+  // Using the 6 petal paths from the brand rosette
+  const PETAL_PATHS = [
+    "M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z",
+    "M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z",
+    "M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z",
+    "M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z",
+    "M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z",
+    "M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z"
+  ];
+
+  // Principle names mapped to petal index
+  const PRINCIPLES = [
+    'Act from Love',
+    'Live Simply',
+    'Mutual Support',
+    'Well-Being',
+    'Honest Growth',
+    'Overall Quality'
+  ];
+
+  function rosetteScoreSVG(score, size = 28) {
+    const filled = 'rgba(196,162,90,0.85)';
+    const empty  = 'rgba(122,79,46,0.1)';
+    const stroke = '#7A4F2E';
+    let paths = PETAL_PATHS.map((d, i) =>
+      `<path d="${d}" fill="${i < score ? filled : empty}" stroke="${stroke}" stroke-width="0.6"/>`
+    ).join('');
+    return `<svg width="${size}" height="${size}" viewBox="60 60 80 80" fill="none" style="flex-shrink:0;">${paths}</svg>`;
+  }
+
+  // ── PIN ICON ──
   function createPinIcon(type, isActive = false) {
     const colors = { café: '#7A4F2E', roaster: '#C4A25A', farm: '#6B7C5E' };
-    const emojis = { café: '☕', roaster: '🔥', farm: '🌿' };
     const color = colors[type] || colors.roaster;
-    const emoji = emojis[type] || '☕';
     const scale = isActive ? 1.3 : 1;
-
     return L.divIcon({
       className: '',
-      html: `<div style="
-        width:${28*scale}px; height:${28*scale}px;
-        background:${color};
-        border:2px solid #F2EAD8;
-        border-radius:50% 50% 50% 0;
-        transform:rotate(-45deg);
-        box-shadow: 0 3px ${isActive?16:8}px rgba(30,18,8,${isActive?0.45:0.25})${isActive?',0 0 18px '+color+'88':''};
-        display:flex; align-items:center; justify-content:center;
-        cursor:pointer;
-        transition: all 0.2s;
-      ">
-        <span style="transform:rotate(45deg); font-size:${11*scale}px; line-height:1">${emoji}</span>
-      </div>`,
+      html: `<div style="width:${28*scale}px;height:${28*scale}px;background:${color};border:2px solid #F2EAD8;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 3px ${isActive?16:8}px rgba(30,18,8,${isActive?0.45:0.25});cursor:pointer;"></div>`,
       iconSize: [28*scale, 28*scale],
       iconAnchor: [14*scale, 28*scale],
       popupAnchor: [0, -30*scale],
     });
   }
 
-  // ── FETCH & RENDER ──
-
-  // ── INLINE DATA (standalone mode) ──
+  // ── DATA ──
   const INLINE_LOCATIONS = [
-    {"id":1,"name":"Café de Flore","type":"café","city":"Paris","country":"France","lat":48.854,"lng":2.333,"description":"An iconic Parisian café serving exquisite single-origin espresso since 1887.","specialty":"Single-Origin Espresso","roast_profile":"Light","contact":{"phone":"+33 1 45 48 55 26","email":"info@cafedeflore.fr","website":"https://cafedeflore.fr"},"products":[{"name":"Ethiopian Yirgacheffe","price":"€4.50","tasting_notes":"Blueberry, jasmine, citrus"},{"name":"Colombian Supremo","price":"€4.00","tasting_notes":"Caramel, red apple, milk chocolate"}],"rating":4.8,"image_emoji":"🥐"},
-    {"id":2,"name":"Blue Bottle Coffee","type":"roaster","city":"San Francisco","country":"USA","lat":37.7749,"lng":-122.4194,"description":"Pioneering third-wave roaster obsessed with freshness and transparency.","specialty":"Pour Over","roast_profile":"Light-Medium","contact":{"phone":"+1 510-653-3394","email":"hello@bluebottlecoffee.com","website":"https://bluebottlecoffee.com"},"products":[{"name":"Hayes Valley Espresso","price":"$5.00","tasting_notes":"Dark chocolate, toasted almond"},{"name":"Three Africas","price":"$4.50","tasting_notes":"Tropical fruit, berry, bright acidity"}],"rating":4.7,"image_emoji":"🌉"},
-    {"id":3,"name":"Tim Wendelboe","type":"roaster","city":"Oslo","country":"Norway","lat":59.9139,"lng":10.7522,"description":"World Barista Champion turned roaster. Legendary light roasts from direct trade farms.","specialty":"Filter Coffee","roast_profile":"Light","contact":{"phone":"+47 400 04 062","email":"post@timwendelboe.no","website":"https://timwendelboe.no"},"products":[{"name":"Finca El Paraiso","price":"NOK 85","tasting_notes":"Peach, oolong tea, candied lemon"},{"name":"Guji Natural","price":"NOK 90","tasting_notes":"Strawberry, rose, dark chocolate"}],"rating":4.9,"image_emoji":"🏔️"},
-    {"id":4,"name":"Onibus Coffee","type":"café","city":"Tokyo","country":"Japan","lat":35.6762,"lng":139.6503,"description":"Tokyo's beloved specialty café bridging Japanese precision with global coffee culture.","specialty":"Japanese Iced Coffee","roast_profile":"Medium-Light","contact":{"phone":"+81 3-6413-8048","email":"info@onibuscoffee.com","website":"https://onibuscoffee.com"},"products":[{"name":"Kenya Kiambu AA","price":"¥800","tasting_notes":"Blackcurrant, tomato, brown sugar"},{"name":"Brazil Sul de Minas","price":"¥750","tasting_notes":"Walnut, dark caramel, earthy"}],"rating":4.8,"image_emoji":"🍵"},
-    {"id":5,"name":"Café Granja La Esperanza","type":"farm","city":"Cali","country":"Colombia","lat":3.4516,"lng":-76.532,"description":"Award-winning coffee farm producing extraordinary experimental lots in the Cauca Valley.","specialty":"Experimental Process","roast_profile":"Light","contact":{"phone":"+57 2 555 1234","email":"info@granjalaesperanza.com","website":"https://granjalaesperanza.com"},"products":[{"name":"Cerro Azul Geisha","price":"$28.00 / 100g","tasting_notes":"Tropical, floral, lime zest"},{"name":"Las Margaritas Wush Wush","price":"$22.00 / 100g","tasting_notes":"Hibiscus, passion fruit, honey"}],"rating":4.9,"image_emoji":"🌿"},
-    {"id":6,"name":"Intelligentsia Coffee","type":"roaster","city":"Chicago","country":"USA","lat":41.8827,"lng":-87.6233,"description":"Direct trade pioneers. Every cup tells the story of the farmer who grew it.","specialty":"Direct Trade","roast_profile":"Medium","contact":{"phone":"+1 312-920-9390","email":"hello@intelligentsiacoffee.com","website":"https://intelligentsiacoffee.com"},"products":[{"name":"Black Cat Classic Espresso","price":"$4.50","tasting_notes":"Milk chocolate, dried cherry"},{"name":"House Blend","price":"$4.00","tasting_notes":"Brown sugar, orange peel, walnut"}],"rating":4.6,"image_emoji":"🏙️"},
-    {"id":7,"name":"Five Elephant","type":"roaster","city":"Berlin","country":"Germany","lat":52.52,"lng":13.405,"description":"Berlin's leading specialty roaster, famous for their cheesecake and exceptional filter coffee.","specialty":"Filter & Espresso","roast_profile":"Light-Medium","contact":{"phone":"+49 30 96208925","email":"hello@fiveelephant.com","website":"https://fiveelephant.com"},"products":[{"name":"Rwanda Gitesi","price":"€5.00","tasting_notes":"Red currant, peach, honey"},{"name":"Guatemala Finca La Hermosa","price":"€4.50","tasting_notes":"Milk chocolate, plum, toffee"}],"rating":4.7,"image_emoji":"🐘"},
-    {"id":8,"name":"Proud Mary Coffee","type":"roaster","city":"Melbourne","country":"Australia","lat":-37.8136,"lng":144.9631,"description":"Melbourne's world-class roaster known for boundary-pushing coffees and stunning presentation.","specialty":"Specialty Espresso","roast_profile":"Medium-Light","contact":{"phone":"+61 3 9417 5930","email":"hello@proudmarycoffee.com.au","website":"https://proudmarycoffee.com.au"},"products":[{"name":"Hologram Blend","price":"AUD $6.00","tasting_notes":"Mandarin, stone fruit, milk chocolate"},{"name":"Ethiopia Bombe Natural","price":"AUD $7.50","tasting_notes":"Strawberry jam, rose, vanilla"}],"rating":4.8,"image_emoji":"🦘"},
-    {"id":9,"name":"Kaldi's Coffee Farm","type":"farm","city":"Kaffa","country":"Ethiopia","lat":7.3333,"lng":36.5667,"description":"Named after the legendary goat herder who discovered coffee. Single estate, heirloom varieties.","specialty":"Heirloom Ethiopian","roast_profile":"Light","contact":{"phone":"+251 11 551 7700","email":"info@kaldiscoffee.et","website":"https://kaldiscoffee.et"},"products":[{"name":"Yirgacheffe Grade 1","price":"$18.00 / 250g","tasting_notes":"Blueberry, jasmine, dark chocolate"},{"name":"Sidama Sun-Dried","price":"$16.00 / 250g","tasting_notes":"Wild berries, wine, spice"}],"rating":4.9,"image_emoji":"☕"},
-    {"id":10,"name":"Café El Injerto","type":"farm","city":"Huehuetenango","country":"Guatemala","lat":15.3194,"lng":-91.4727,"description":"Multi-generational family farm producing some of the world's most coveted micro-lots.","specialty":"Micro-Lot","roast_profile":"Medium-Light","contact":{"phone":"+502 7764-1574","email":"info@elinjerto.com","website":"https://elinjerto.com"},"products":[{"name":"Maragogype Honey","price":"$32.00 / 100g","tasting_notes":"Papaya, brown sugar, jasmine"},{"name":"Bourbon Natural","price":"$28.00 / 100g","tasting_notes":"Blackberry, dark chocolate, vanilla"}],"rating":4.8,"image_emoji":"⛰️"}
+    {"id":1,"name":"Café de Flore","type":"café","city":"Paris","country":"France","lat":48.854,"lng":2.333,"description":"An iconic Parisian café serving exquisite single-origin espresso since 1887.","specialty":"Single-Origin Espresso","roast_profile":"Light","contact":{"phone":"+33 1 45 48 55 26","email":"info@cafedeflore.fr","website":"https://cafedeflore.fr"},"products":[{"name":"Ethiopian Yirgacheffe","price":"€4.50","tasting_notes":"Blueberry, jasmine, citrus"},{"name":"Colombian Supremo","price":"€4.00","tasting_notes":"Caramel, red apple, milk chocolate"}],"rosette_score":5,"principle_scores":[1,1,1,1,1,0]},
+    {"id":2,"name":"Blue Bottle Coffee","type":"roaster","city":"San Francisco","country":"USA","lat":37.7749,"lng":-122.4194,"description":"Pioneering third-wave roaster obsessed with freshness and transparency.","specialty":"Pour Over","roast_profile":"Light-Medium","contact":{"phone":"+1 510-653-3394","email":"hello@bluebottlecoffee.com","website":"https://bluebottlecoffee.com"},"products":[{"name":"Hayes Valley Espresso","price":"$5.00","tasting_notes":"Dark chocolate, toasted almond"},{"name":"Three Africas","price":"$4.50","tasting_notes":"Tropical fruit, berry, bright acidity"}],"rosette_score":4,"principle_scores":[1,1,1,1,0,0]},
+    {"id":3,"name":"Tim Wendelboe","type":"roaster","city":"Oslo","country":"Norway","lat":59.9139,"lng":10.7522,"description":"World Barista Champion turned roaster. Legendary light roasts from direct trade farms.","specialty":"Filter Coffee","roast_profile":"Light","contact":{"phone":"+47 400 04 062","email":"post@timwendelboe.no","website":"https://timwendelboe.no"},"products":[{"name":"Finca El Paraiso","price":"NOK 85","tasting_notes":"Peach, oolong tea, candied lemon"},{"name":"Guji Natural","price":"NOK 90","tasting_notes":"Strawberry, rose, dark chocolate"}],"rosette_score":6,"principle_scores":[1,1,1,1,1,1]},
+    {"id":4,"name":"Onibus Coffee","type":"café","city":"Tokyo","country":"Japan","lat":35.6762,"lng":139.6503,"description":"Tokyo's beloved specialty café bridging Japanese precision with global coffee culture.","specialty":"Japanese Iced Coffee","roast_profile":"Medium-Light","contact":{"phone":"+81 3-6413-8048","email":"info@onibuscoffee.com","website":"https://onibuscoffee.com"},"products":[{"name":"Kenya Kiambu AA","price":"¥800","tasting_notes":"Blackcurrant, tomato, brown sugar"},{"name":"Brazil Sul de Minas","price":"¥750","tasting_notes":"Walnut, dark caramel, earthy"}],"rosette_score":5,"principle_scores":[1,1,1,1,1,0]},
+    {"id":5,"name":"Café Granja La Esperanza","type":"farm","city":"Cali","country":"Colombia","lat":3.4516,"lng":-76.532,"description":"Award-winning coffee farm producing extraordinary experimental lots in the Cauca Valley.","specialty":"Experimental Process","roast_profile":"Light","contact":{"phone":"+57 2 555 1234","email":"info@granjalaesperanza.com","website":"https://granjalaesperanza.com"},"products":[{"name":"Cerro Azul Geisha","price":"$28.00 / 100g","tasting_notes":"Tropical, floral, lime zest"},{"name":"Las Margaritas Wush Wush","price":"$22.00 / 100g","tasting_notes":"Hibiscus, passion fruit, honey"}],"rosette_score":6,"principle_scores":[1,1,1,1,1,1]},
+    {"id":6,"name":"Intelligentsia Coffee","type":"roaster","city":"Chicago","country":"USA","lat":41.8827,"lng":-87.6233,"description":"Direct trade pioneers. Every cup tells the story of the farmer who grew it.","specialty":"Direct Trade","roast_profile":"Medium","contact":{"phone":"+1 312-920-9390","email":"hello@intelligentsiacoffee.com","website":"https://intelligentsiacoffee.com"},"products":[{"name":"Black Cat Classic Espresso","price":"$4.50","tasting_notes":"Milk chocolate, dried cherry"},{"name":"House Blend","price":"$4.00","tasting_notes":"Brown sugar, orange peel, walnut"}],"rosette_score":4,"principle_scores":[1,1,0,1,1,0]},
+    {"id":7,"name":"Five Elephant","type":"roaster","city":"Berlin","country":"Germany","lat":52.52,"lng":13.405,"description":"Berlin's leading specialty roaster, famous for their cheesecake and exceptional filter coffee.","specialty":"Filter & Espresso","roast_profile":"Light-Medium","contact":{"phone":"+49 30 96208925","email":"hello@fiveelephant.com","website":"https://fiveelephant.com"},"products":[{"name":"Rwanda Gitesi","price":"€5.00","tasting_notes":"Red currant, peach, honey"},{"name":"Guatemala Finca La Hermosa","price":"€4.50","tasting_notes":"Milk chocolate, plum, toffee"}],"rosette_score":5,"principle_scores":[1,1,1,1,1,0]},
+    {"id":8,"name":"Proud Mary Coffee","type":"roaster","city":"Melbourne","country":"Australia","lat":-37.8136,"lng":144.9631,"description":"Melbourne's world-class roaster known for boundary-pushing coffees and stunning presentation.","specialty":"Specialty Espresso","roast_profile":"Medium-Light","contact":{"phone":"+61 3 9417 5930","email":"hello@proudmarycoffee.com.au","website":"https://proudmarycoffee.com.au"},"products":[{"name":"Hologram Blend","price":"AUD $6.00","tasting_notes":"Mandarin, stone fruit, milk chocolate"},{"name":"Ethiopia Bombe Natural","price":"AUD $7.50","tasting_notes":"Strawberry jam, rose, vanilla"}],"rosette_score":5,"principle_scores":[1,1,1,1,1,0]},
+    {"id":9,"name":"Kaldi's Coffee Farm","type":"farm","city":"Kaffa","country":"Ethiopia","lat":7.3333,"lng":36.5667,"description":"Named after the legendary goat herder who discovered coffee. Single estate, heirloom varieties.","specialty":"Heirloom Ethiopian","roast_profile":"Light","contact":{"phone":"+251 11 551 7700","email":"info@kaldiscoffee.et","website":"https://kaldiscoffee.et"},"products":[{"name":"Yirgacheffe Grade 1","price":"$18.00 / 250g","tasting_notes":"Blueberry, jasmine, dark chocolate"},{"name":"Sidama Sun-Dried","price":"$16.00 / 250g","tasting_notes":"Wild berries, wine, spice"}],"rosette_score":6,"principle_scores":[1,1,1,1,1,1]},
+    {"id":10,"name":"Café El Injerto","type":"farm","city":"Huehuetenango","country":"Guatemala","lat":15.3194,"lng":-91.4727,"description":"Multi-generational family farm producing some of the world's most coveted micro-lots.","specialty":"Micro-Lot","roast_profile":"Medium-Light","contact":{"phone":"+502 7764-1574","email":"info@elinjerto.com","website":"https://elinjerto.com"},"products":[{"name":"Maragogype Honey","price":"$32.00 / 100g","tasting_notes":"Papaya, brown sugar, jasmine"},{"name":"Bourbon Natural","price":"$28.00 / 100g","tasting_notes":"Blackberry, dark chocolate, vanilla"}],"rosette_score":6,"principle_scores":[1,1,1,1,1,1]}
   ];
 
-  async function loadLocations(params = {}) {
+  // ── FILTER LOGIC ──
+  function setFilter(type, value, el) {
+    activeFilters[type] = value;
+    // Update button states in that group
+    el.closest('.filter-group').querySelectorAll('.filter-option').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    applyFilters();
+  }
+
+  function applyFilters() {
     let results = INLINE_LOCATIONS;
-    if (params.type && params.type !== 'all') results = results.filter(l => l.type === params.type);
-    if (params.roast && params.roast !== 'all') results = results.filter(l => l.roast_profile.toLowerCase().includes(params.roast.toLowerCase()));
-    if (params.country && params.country !== 'all') results = results.filter(l => l.country.toLowerCase() === params.country.toLowerCase());
+    if (activeFilters.type !== 'all') results = results.filter(l => l.type === activeFilters.type);
+    if (activeFilters.roast !== 'all') results = results.filter(l => l.roast_profile.toLowerCase().includes(activeFilters.roast));
+    if (activeFilters.country !== 'all') results = results.filter(l => l.country.toLowerCase() === activeFilters.country.toLowerCase());
+    if (activeFilters.score !== 'all') results = results.filter(l => l.rosette_score >= parseInt(activeFilters.score));
     allLocations = results;
     renderSidebar(results);
     renderMarkers(results);
     updateCount(results.length);
+  }
+
+  async function loadLocations() {
+    allLocations = INLINE_LOCATIONS;
+    renderSidebar(allLocations);
+    renderMarkers(allLocations);
+    updateCount(allLocations.length);
   }
 
   async function loadCountries() {
@@ -723,12 +640,12 @@
     });
   }
 
-
+  // ── RENDER SIDEBAR ──
   function renderSidebar(locations) {
     const list = document.getElementById('locations-list');
     list.innerHTML = '';
-    if (locations.length === 0) {
-      list.innerHTML = `<div style="text-align:center; padding:3rem 1rem; color:rgba(200,153,90,0.3); font-style:italic; font-size:0.9rem">No locations found for this filter.</div>`;
+    if (!locations.length) {
+      list.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:rgba(122,79,46,0.3);font-style:italic;font-size:0.9rem;">No locations match these filters.</div>`;
       return;
     }
     locations.forEach(loc => {
@@ -737,9 +654,8 @@
       card.dataset.id = loc.id;
       card.innerHTML = `
         <div class="card-top">
-          <span class="card-emoji">${loc.image_emoji}</span>
           <span class="card-name">${loc.name}</span>
-          <span class="card-rating">★ ${loc.rating}</span>
+          <div class="rosette-wrap">${rosetteScoreSVG(loc.rosette_score, 26)}</div>
         </div>
         <div class="card-location">${loc.city}, ${loc.country}</div>
         <div class="card-tags">
@@ -754,21 +670,15 @@
   }
 
   function renderMarkers(locations) {
-    // Remove old markers
     Object.values(markers).forEach(m => map.removeLayer(m));
     markers = {};
-
     locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lng], {
-        icon: createPinIcon(loc.type, false)
-      }).addTo(map);
-
+      const marker = L.marker([loc.lat, loc.lng], { icon: createPinIcon(loc.type, false) }).addTo(map);
       marker.bindPopup(`
-        <div class="popup-name">${loc.image_emoji} ${loc.name}</div>
+        <div class="popup-name">${loc.name}</div>
         <div class="popup-sub">${loc.city}, ${loc.country} · ${loc.specialty}</div>
         <button class="popup-btn" onclick="selectLocation(${loc.id})">Explore →</button>
       `, { closeButton: false, maxWidth: 220 });
-
       marker.on('click', () => selectLocation(loc.id));
       markers[loc.id] = marker;
     });
@@ -778,35 +688,27 @@
     document.getElementById('count-badge').textContent = `${n} location${n !== 1 ? 's' : ''}`;
   }
 
-  // ── SELECT LOCATION ──
+  // ── SELECT ──
   function selectLocation(id) {
-    // Update active state
     if (activeId) {
-      const prevCard = document.querySelector(`.location-card[data-id="${activeId}"]`);
-      if (prevCard) prevCard.classList.remove('active');
-      const prevLoc = allLocations.find(l => l.id === activeId);
-      if (prevLoc && markers[activeId]) markers[activeId].setIcon(createPinIcon(prevLoc.type, false));
+      document.querySelector(`.location-card[data-id="${activeId}"]`)?.classList.remove('active');
+      const prev = allLocations.find(l => l.id === activeId);
+      if (prev && markers[activeId]) markers[activeId].setIcon(createPinIcon(prev.type, false));
     }
-
     activeId = id;
     const loc = allLocations.find(l => l.id === id);
     if (!loc) return;
-
     const card = document.querySelector(`.location-card[data-id="${id}"]`);
-    if (card) {
-      card.classList.add('active');
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
+    if (card) { card.classList.add('active'); card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
     if (markers[id]) {
       markers[id].setIcon(createPinIcon(loc.type, true));
       map.setView([loc.lat, loc.lng], Math.max(map.getZoom(), 5), { animate: true, duration: 0.5 });
       markers[id].openPopup();
     }
-
     showDetail(loc);
   }
 
+  // ── DETAIL PANEL ──
   function showDetail(loc) {
     const panel = document.getElementById('detail-panel');
     const content = document.getElementById('detail-content');
@@ -821,17 +723,37 @@
       </div>
     `).join('');
 
+    const principleRows = PRINCIPLES.map((name, i) => `
+      <div class="principle-row">
+        <span class="principle-row-label">${name}</span>
+        <div class="principle-row-bar">
+          <div class="principle-row-fill" style="width:${loc.principle_scores[i] ? '100' : '0'}%"></div>
+        </div>
+      </div>
+    `).join('');
+
     content.innerHTML = `
       <div class="detail-hero">
-        <span class="detail-emoji">${loc.image_emoji}</span>
+        <div class="detail-rosette-row">
+          ${rosetteScoreSVG(loc.rosette_score, 52)}
+          <div class="detail-rosette-info">
+            <span class="detail-rosette-title">Rosette Score</span>
+            <span class="detail-rosette-score">${loc.rosette_score} / 6 Petals</span>
+            <span class="detail-rosette-sub">Gaia Curated · Values Aligned</span>
+          </div>
+        </div>
         <div class="detail-name">${loc.name}</div>
         <div class="detail-location">📍 ${loc.city}, ${loc.country}</div>
         <div class="detail-meta">
           <span class="tag tag-type">${loc.type}</span>
           <span class="tag tag-roast">${loc.roast_profile} Roast</span>
-          <span class="tag tag-roast">★ ${loc.rating}</span>
         </div>
         <div class="detail-description">${loc.description}</div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-label">Principle Alignment</div>
+        <div class="principle-rows">${principleRows}</div>
       </div>
 
       <div class="detail-section">
@@ -842,107 +764,51 @@
       <div class="detail-section">
         <div class="section-label">Contact & Links</div>
         <div class="contact-grid">
-          <div class="contact-item">
-            <span class="contact-icon">Phone</span>
-            <span class="contact-value">${loc.contact.phone}</span>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">Email</span>
-            <span class="contact-value"><a href="mailto:${loc.contact.email}">${loc.contact.email}</a></span>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">Web</span>
-            <span class="contact-value"><a href="${loc.contact.website}" target="_blank">${loc.contact.website.replace('https://', '')}</a></span>
-          </div>
+          <div class="contact-item"><span class="contact-icon">Phone</span><span class="contact-value">${loc.contact.phone}</span></div>
+          <div class="contact-item"><span class="contact-icon">Email</span><span class="contact-value"><a href="mailto:${loc.contact.email}">${loc.contact.email}</a></span></div>
+          <div class="contact-item"><span class="contact-icon">Web</span><span class="contact-value"><a href="${loc.contact.website}" target="_blank">${loc.contact.website.replace('https://','')}</a></span></div>
         </div>
       </div>
     `;
-
     panel.classList.add('open');
   }
 
   function closeDetail() {
     document.getElementById('detail-panel').classList.remove('open');
     if (activeId) {
-      const prevCard = document.querySelector(`.location-card[data-id="${activeId}"]`);
-      if (prevCard) prevCard.classList.remove('active');
-      const prevLoc = allLocations.find(l => l.id === activeId);
-      if (prevLoc && markers[activeId]) markers[activeId].setIcon(createPinIcon(prevLoc.type, false));
+      document.querySelector(`.location-card[data-id="${activeId}"]`)?.classList.remove('active');
+      const prev = allLocations.find(l => l.id === activeId);
+      if (prev && markers[activeId]) markers[activeId].setIcon(createPinIcon(prev.type, false));
     }
     activeId = null;
   }
 
-  // ── FILTERS ──
-  function applyFilters() {
-    const type = document.getElementById('filter-type').value;
-    const roast = document.getElementById('filter-roast').value;
-    const country = document.getElementById('filter-country').value;
-    const params = {};
-    if (type !== 'all') params.type = type;
-    if (roast !== 'all') params.roast = roast;
-    if (country !== 'all') params.country = country;
-    loadLocations(params);
-  }
-
+  // ── SEARCH ──
   function handleSearch() {
-    const query = document.getElementById('search-input').value.toLowerCase();
-    if (!query) {
-      renderSidebar(allLocations);
-      return;
-    }
+    const q = document.getElementById('search-input').value.toLowerCase();
+    if (!q) { renderSidebar(allLocations); return; }
     const filtered = allLocations.filter(l =>
-      l.name.toLowerCase().includes(query) ||
-      l.city.toLowerCase().includes(query) ||
-      l.country.toLowerCase().includes(query) ||
-      l.specialty.toLowerCase().includes(query)
+      l.name.toLowerCase().includes(q) ||
+      l.city.toLowerCase().includes(q) ||
+      l.country.toLowerCase().includes(q) ||
+      l.specialty.toLowerCase().includes(q)
     );
     renderSidebar(filtered);
+  }
+
+  // ── MOBILE FILTER DRAWER ──
+  function toggleFilterDrawer() {
+    document.getElementById('filter-sidebar').classList.toggle('open');
+    document.getElementById('filter-overlay').classList.toggle('open');
   }
 
   // ── INIT ──
   async function init() {
     await Promise.all([loadLocations(), loadCountries()]);
-    setTimeout(() => {
-      document.getElementById('loading').classList.add('hidden');
-    }, 1100);
+    setTimeout(() => document.getElementById('loading').classList.add('hidden'), 1100);
   }
 
   init();
 </script>
-
-<div style="
-  background: #1A0F08;
-  border-top: 1px solid rgba(196,162,90,0.1);
-  padding: 1.1rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-">
-  <span style="
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 200;
-    font-size: 0.42rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: rgba(196,162,90,0.35);
-  ">Part of the Gaia Global family</span>
-  <a href="https://gaiasglobal.com" target="_blank" style="
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: 200;
-    font-size: 0.42rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: rgba(196,162,90,0.45);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(196,162,90,0.18);
-    padding-bottom: 2px;
-    transition: all 0.2s;
-  " onmouseover="this.style.color='rgba(196,162,90,0.8)';this.style.borderColor='rgba(196,162,90,0.45)'"
-     onmouseout="this.style.color='rgba(196,162,90,0.45)';this.style.borderColor='rgba(196,162,90,0.18)'">
-    gaiasglobal.com →
-  </a>
-</div>
 </body>
 </html>
