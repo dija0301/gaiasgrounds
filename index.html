@@ -9,431 +9,213 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <style>
     :root {
-      --earth:     #1E1208;
-      --bark:      #2E1A0A;
-      --clay:      #7A4F2E;
-      --gold:      #C4A25A;
-      --cream:     #EDE0CC;
-      --parchment: #F2EAD8;
-      --mist:      #F8F3EB;
-      --sage:      #6B7C5E;
-      --panel-w:   340px;
+      --earth:#1E1208; --bark:#2E1A0A; --clay:#7A4F2E; --gold:#C4A25A;
+      --cream:#EDE0CC; --parchment:#F2EAD8; --mist:#F8F3EB; --sage:#6B7C5E;
+      --panel-w:340px;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Cormorant Garamond',Georgia,serif; background:#e8e0d0; height:100vh; overflow:hidden; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Cormorant Garamond',Georgia,serif;background:#e8e0d0;height:100vh;overflow:hidden;}
 
-    /* ── MAP (full screen base) ── */
-    #map { position:fixed; inset:0; z-index:0; }
-    .leaflet-tile { filter:sepia(0.25) saturate(0.85) brightness(1.05); }
+    /* MAP */
+    #map{position:fixed;inset:0;z-index:0;}
+    .leaflet-tile{filter:sepia(0.22) saturate(0.88) brightness(1.04);}
 
-    /* ── HEADER BAR ── */
-    .header {
-      position:fixed; top:0; left:0; right:0; z-index:400;
-      height:56px;
-      background:rgba(242,234,216,0.96);
-      backdrop-filter:blur(16px);
+    /* HEADER */
+    .header{
+      position:fixed;top:0;left:0;right:0;z-index:400;height:56px;
+      background:rgba(242,234,216,0.96);backdrop-filter:blur(16px);
       border-bottom:1px solid rgba(122,79,46,0.12);
-      display:flex; align-items:center; justify-content:space-between;
-      padding:0 1.25rem;
+      display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;
     }
-    .header-logo { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
-    .header-logo-text { display:flex; flex-direction:column; gap:0.1rem; }
-    .header-logo-name {
-      font-family:'Cormorant Garamond',serif; font-weight:400;
-      font-size:1.15rem; letter-spacing:0.28em; text-transform:uppercase;
-      color:var(--earth); line-height:1;
+    .header-logo{display:flex;align-items:center;gap:0.75rem;text-decoration:none;}
+    .header-logo-text{display:flex;flex-direction:column;gap:0.1rem;}
+    .header-logo-name{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.15rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--earth);line-height:1;}
+    .header-logo-name span{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.55rem;letter-spacing:0.5em;color:rgba(122,79,46,0.55);margin-right:0.4rem;}
+    .header-logo-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;letter-spacing:0.15em;color:rgba(122,79,46,0.5);line-height:1;}
+    .header-right{display:flex;align-items:center;gap:0.75rem;}
+    .header-btn{
+      font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;
+      letter-spacing:0.3em;text-transform:uppercase;color:rgba(122,79,46,0.65);
+      background:none;border:1px solid rgba(122,79,46,0.2);padding:0.3rem 0.75rem;
+      border-radius:3px;cursor:pointer;transition:all 0.2s;white-space:nowrap;
     }
-    .header-logo-name span {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.55rem; letter-spacing:0.5em; color:rgba(122,79,46,0.55);
-      margin-right:0.4rem;
-    }
-    .header-logo-sub {
-      font-family:'Cormorant Garamond',serif; font-style:italic;
-      font-size:0.72rem; letter-spacing:0.15em; color:rgba(122,79,46,0.5);
-      line-height:1;
-    }
-    .header-global {
-      display:flex; align-items:center; gap:0.5rem;
-      text-decoration:none; opacity:0.6; transition:opacity 0.2s;
-      border-left:1px solid rgba(122,79,46,0.15); padding-left:1rem;
-    }
-    .header-global:hover { opacity:1; }
-    .header-global-text { display:flex; flex-direction:column; line-height:1; }
-    .header-global-text span:first-child {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.5rem; letter-spacing:0.4em; text-transform:uppercase;
-      color:rgba(122,79,46,0.5);
-    }
-    .header-global-text span:last-child {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.6rem; letter-spacing:0.32em; text-transform:uppercase;
-      color:rgba(122,79,46,0.7);
-    }
+    .header-btn:hover{color:var(--clay);border-color:var(--clay);}
+    .header-btn.cta{background:var(--clay);border-color:var(--clay);color:var(--parchment);}
+    .header-btn.cta:hover{background:var(--bark);}
+    .header-global{display:flex;align-items:center;gap:0.5rem;text-decoration:none;opacity:0.6;transition:opacity 0.2s;border-left:1px solid rgba(122,79,46,0.15);padding-left:0.75rem;}
+    .header-global:hover{opacity:1;}
+    .header-global-text{display:flex;flex-direction:column;line-height:1;}
+    .header-global-text span:first-child{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.4em;text-transform:uppercase;color:rgba(122,79,46,0.5);}
+    .header-global-text span:last-child{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.58rem;letter-spacing:0.32em;text-transform:uppercase;color:rgba(122,79,46,0.7);}
 
-    /* ── LEFT PANEL (floating over map) ── */
-    .panel {
-      position:fixed; top:56px; left:0; bottom:0;
-      width:var(--panel-w);
-      z-index:300;
-      display:flex; flex-direction:column;
-      pointer-events:none;
-      transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    .panel.collapsed {
-      transform:translateX(calc(-1 * var(--panel-w) + 36px));
-    }
-    .panel-toggle {
-      position:absolute; top:0.85rem; right:-1px;
-      width:28px; height:28px;
-      background:rgba(242,234,216,0.97);
-      border:1px solid rgba(122,79,46,0.18);
-      border-left:none;
-      border-radius:0 6px 6px 0;
-      cursor:pointer; pointer-events:all;
-      display:flex; align-items:center; justify-content:center;
-      color:var(--clay); font-size:0.7rem;
-      box-shadow:2px 0 8px rgba(30,18,8,0.08);
-      transition:background 0.2s;
-      z-index:10;
-    }
-    .panel-toggle:hover { background:rgba(237,224,204,1); }
+    /* PANEL */
+    .panel{position:fixed;top:56px;left:0;bottom:0;width:var(--panel-w);z-index:300;display:flex;flex-direction:column;pointer-events:none;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);}
+    .panel.collapsed{transform:translateX(calc(-1 * var(--panel-w) + 36px));}
+    .panel-toggle{position:absolute;top:0.85rem;right:-1px;width:28px;height:28px;background:rgba(242,234,216,0.97);border:1px solid rgba(122,79,46,0.18);border-left:none;border-radius:0 6px 6px 0;cursor:pointer;pointer-events:all;display:flex;align-items:center;justify-content:center;color:var(--clay);font-size:0.7rem;box-shadow:2px 0 8px rgba(30,18,8,0.08);transition:background 0.2s;z-index:10;}
+    .panel-toggle:hover{background:rgba(237,224,204,1);}
 
-    /* ── SEARCH + FILTER BAR ── */
-    .search-bar {
-      margin:0.85rem 0.85rem 0;
-      background:rgba(242,234,216,0.97);
-      backdrop-filter:blur(16px);
-      border:1px solid rgba(122,79,46,0.18);
-      border-radius:10px;
-      box-shadow:0 4px 20px rgba(30,18,8,0.12);
-      overflow:hidden;
-      pointer-events:all;
-      flex-shrink:0;
-    }
+    /* SEARCH BAR */
+    .search-bar{margin:0.85rem 0.85rem 0;background:rgba(242,234,216,0.97);backdrop-filter:blur(16px);border:1px solid rgba(122,79,46,0.18);border-radius:10px;box-shadow:0 4px 20px rgba(30,18,8,0.12);overflow:visible;pointer-events:all;flex-shrink:0;}
+    .search-row{display:flex;align-items:center;padding:0;}
+    .search-input{flex:1;border:none;background:transparent;font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--earth);padding:0.75rem 1rem;outline:none;min-width:0;}
+    .search-input::placeholder{color:rgba(122,79,46,0.38);font-style:italic;}
+    .search-divider{width:1px;height:24px;background:rgba(122,79,46,0.15);flex-shrink:0;}
+    .result-count{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.2em;color:rgba(122,79,46,0.45);padding:0 0.85rem;white-space:nowrap;}
 
-    .search-row {
-      display:flex; align-items:center; gap:0; padding:0;
-    }
+    /* FILTER BAR */
+    .filter-bar{display:flex;align-items:center;gap:0.35rem;padding:0.5rem 0.7rem;border-top:1px solid rgba(122,79,46,0.08);flex-wrap:nowrap;overflow-x:auto;}
+    .filter-bar::-webkit-scrollbar{display:none;}
+    .filter-pill{position:relative;flex-shrink:0;}
+    .filter-pill-btn{display:flex;align-items:center;gap:0.3rem;font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;padding:0.28rem 0.65rem;border:1px solid rgba(122,79,46,0.22);border-radius:20px;background:transparent;color:rgba(122,79,46,0.65);cursor:pointer;white-space:nowrap;transition:all 0.18s;}
+    .filter-pill-btn:hover{border-color:var(--clay);color:var(--clay);}
+    .filter-pill-btn.active{background:var(--clay);border-color:var(--clay);color:var(--parchment);}
+    .filter-pill-btn svg{transition:transform 0.18s;flex-shrink:0;}
+    .filter-pill-btn.open svg{transform:rotate(180deg);}
+    .filter-badge{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.25);font-size:0.48rem;font-family:'Josefin Sans',sans-serif;font-weight:400;}
 
-    .search-input {
-      flex:1; border:none; background:transparent;
-      font-family:'Cormorant Garamond',serif; font-size:1rem;
-      color:var(--earth); padding:0.75rem 1rem;
-      outline:none; min-width:0;
-    }
-    .search-input::placeholder { color:rgba(122,79,46,0.38); font-style:italic; }
+    /* DROPDOWN */
+    .filter-dropdown{position:absolute;top:calc(100% + 6px);left:0;z-index:600;background:rgba(248,243,235,0.99);border:1px solid rgba(122,79,46,0.15);border-radius:10px;box-shadow:0 8px 32px rgba(30,18,8,0.14);min-width:190px;padding:0.5rem;display:none;max-height:260px;overflow-y:auto;}
+    .filter-dropdown::-webkit-scrollbar{width:3px;}
+    .filter-dropdown::-webkit-scrollbar-thumb{background:rgba(122,79,46,0.15);}
+    .filter-dropdown.open{display:block;}
+    .drop-title{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.42em;text-transform:uppercase;color:rgba(122,79,46,0.4);padding:0.2rem 0.4rem 0.45rem;display:block;}
+    .drop-opt{display:flex;align-items:center;gap:0.55rem;padding:0.4rem 0.45rem;border-radius:6px;cursor:pointer;transition:background 0.14s;user-select:none;}
+    .drop-opt:hover{background:rgba(122,79,46,0.05);}
+    .fcheck{width:15px;height:15px;flex-shrink:0;border:1.5px solid rgba(122,79,46,0.28);border-radius:3px;display:flex;align-items:center;justify-content:center;transition:all 0.14s;}
+    .drop-opt.on .fcheck{background:var(--clay);border-color:var(--clay);}
+    .drop-opt.on .fcheck::after{content:'';display:block;width:4px;height:7px;border:1.5px solid white;border-top:none;border-left:none;transform:rotate(45deg) translateY(-1px);}
+    .drop-label{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(122,79,46,0.72);flex:1;}
+    .drop-opt.on .drop-label{color:var(--clay);font-weight:400;}
+    .drop-footer{border-top:1px solid rgba(122,79,46,0.07);padding:0.35rem 0.4rem 0.1rem;display:flex;justify-content:flex-end;margin-top:0.3rem;}
+    .drop-clear{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(122,79,46,0.42);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+    .drop-clear:hover{color:var(--clay);}
+    .score-opts{display:flex;gap:0.28rem;flex-wrap:wrap;padding:0.15rem 0.3rem 0.4rem;}
+    .score-opt{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.56rem;letter-spacing:0.1em;padding:0.25rem 0.55rem;border-radius:20px;border:1px solid rgba(122,79,46,0.2);color:rgba(122,79,46,0.6);cursor:pointer;transition:all 0.14s;background:transparent;}
+    .score-opt:hover{border-color:var(--clay);color:var(--clay);}
+    .score-opt.on{background:var(--clay);border-color:var(--clay);color:var(--parchment);}
 
-    .search-divider { width:1px; height:24px; background:rgba(122,79,46,0.15); flex-shrink:0; }
+    /* LIST */
+    .location-list{flex:1;overflow-y:auto;overflow-x:hidden;padding:0.6rem 0.85rem 2rem;pointer-events:all;}
+    .location-list::-webkit-scrollbar{width:0;}
 
-    .filter-btn {
-      display:flex; align-items:center; gap:0.45rem;
-      background:none; border:none; cursor:pointer;
-      padding:0.75rem 1rem;
-      font-family:'Josefin Sans',sans-serif; font-weight:300;
-      font-size:0.62rem; letter-spacing:0.28em; text-transform:uppercase;
-      color:rgba(122,79,46,0.7);
-      transition:color 0.2s; white-space:nowrap;
-    }
-    .filter-btn:hover { color:var(--clay); }
-    .filter-btn.active { color:var(--clay); }
+    /* CARD */
+    .location-card{background:rgba(242,234,216,0.95);backdrop-filter:blur(8px);border:1px solid rgba(122,79,46,0.1);border-radius:8px;margin-bottom:0.45rem;padding:0.85rem 0.95rem;cursor:pointer;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(30,18,8,0.06);position:relative;overflow:hidden;}
+    .location-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--clay);transform:scaleY(0);transform-origin:bottom;transition:transform 0.2s;}
+    .location-card:hover{border-color:rgba(122,79,46,0.22);box-shadow:0 4px 16px rgba(30,18,8,0.1);transform:translateY(-1px);}
+    .location-card:hover::before,.location-card.active::before{transform:scaleY(1);}
+    .location-card.active{border-color:rgba(122,79,46,0.28);background:rgba(237,224,204,0.98);}
+    .card-photo{width:100%;height:80px;overflow:hidden;border-radius:5px;margin-bottom:0.55rem;background:rgba(122,79,46,0.06);}
+    .card-photo img{width:100%;height:100%;object-fit:cover;opacity:0.85;transition:opacity 0.2s;}
+    .location-card:hover .card-photo img{opacity:1;}
+    .card-badges{display:flex;gap:0.3rem;margin-bottom:0.4rem;flex-wrap:wrap;}
+    .badge{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.46rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.1rem 0.45rem;border-radius:2px;}
+    .badge-pick{background:rgba(196,162,90,0.18);color:rgba(140,100,20,0.85);border:1px solid rgba(196,162,90,0.35);}
+    .badge-new{background:rgba(107,124,94,0.12);color:rgba(60,90,50,0.8);border:1px solid rgba(107,124,94,0.3);}
+    .badge-verified{background:rgba(122,79,46,0.08);color:rgba(122,79,46,0.75);border:1px solid rgba(122,79,46,0.2);}
+    .card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;margin-bottom:0.28rem;}
+    .card-name{font-size:1rem;font-weight:500;color:var(--earth);line-height:1.2;flex:1;}
+    .card-place{font-size:0.84rem;color:rgba(122,79,46,0.65);font-style:italic;margin-bottom:0.4rem;}
+    .card-footer{display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap;}
+    .pill{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.1rem 0.45rem;border-radius:2px;border:1px solid;}
+    .pill-type{border-color:rgba(107,124,94,0.28);color:var(--sage);}
+    .pill-roast{border-color:rgba(122,79,46,0.18);color:var(--clay);}
+    .pill-continent{border-color:rgba(122,79,46,0.12);color:rgba(122,79,46,0.5);}
 
-    .filter-btn-icon {
-      width:14px; height:10px;
-      display:flex; flex-direction:column; gap:3px; flex-shrink:0;
-    }
-    .filter-btn-icon span {
-      display:block; height:1.5px; background:currentColor; border-radius:2px;
-      transition:all 0.2s;
-    }
-    .filter-btn-icon span:nth-child(2) { width:70%; }
-    .filter-btn-icon span:nth-child(3) { width:45%; }
+    /* DETAIL PANEL */
+    .detail{position:fixed;top:56px;right:0;bottom:0;width:400px;background:var(--mist);border-left:1px solid rgba(122,79,46,0.12);transform:translateX(100%);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);z-index:350;overflow-y:auto;}
+    .detail.open{transform:translateX(0);}
+    .detail::-webkit-scrollbar{width:3px;}
+    .detail::-webkit-scrollbar-thumb{background:rgba(122,79,46,0.1);}
+    @media(max-width:600px){.detail{width:100%;}.panel{width:100%;}}
+    .detail-close{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.25rem;background:rgba(248,243,235,0.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(122,79,46,0.08);}
+    .detail-close-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.55rem;letter-spacing:0.38em;text-transform:uppercase;color:rgba(122,79,46,0.5);}
+    .detail-close-actions{display:flex;align-items:center;gap:0.5rem;}
+    .detail-share-btn{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(122,79,46,0.5);background:none;border:1px solid rgba(122,79,46,0.15);padding:0.2rem 0.55rem;border-radius:2px;cursor:pointer;transition:all 0.2s;}
+    .detail-share-btn:hover{color:var(--clay);border-color:var(--clay);}
+    .detail-close-btn{background:none;border:1px solid rgba(122,79,46,0.2);color:var(--clay);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+    .detail-close-btn:hover{background:rgba(122,79,46,0.07);}
+    .detail-hero{padding:1.4rem 1.4rem 1.1rem;background:linear-gradient(135deg,rgba(237,224,204,0.6) 0%,rgba(248,243,235,0.2) 100%);border-bottom:1px solid rgba(122,79,46,0.08);}
+    .detail-score-row{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;}
+    .detail-score-info{display:flex;flex-direction:column;gap:0.2rem;}
+    .detail-score-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.38em;text-transform:uppercase;color:rgba(122,79,46,0.5);}
+    .detail-score-value{font-size:1.1rem;font-weight:400;color:var(--clay);}
+    .detail-score-sub{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(122,79,46,0.4);}
+    .detail-name{font-size:1.45rem;font-weight:400;color:var(--earth);line-height:1.2;margin-bottom:0.25rem;}
+    .detail-place{font-size:0.9rem;color:var(--clay);font-style:italic;margin-bottom:0.7rem;}
+    .detail-tags{display:flex;gap:0.45rem;flex-wrap:wrap;margin-bottom:0.85rem;}
+    .detail-desc{font-size:0.95rem;line-height:1.65;color:rgba(46,26,10,0.68);font-style:italic;}
+    .detail-section{padding:1.1rem 1.4rem;border-bottom:1px solid rgba(122,79,46,0.07);}
+    .detail-section-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.42em;text-transform:uppercase;color:rgba(122,79,46,0.5);margin-bottom:0.8rem;display:flex;align-items:center;justify-content:space-between;}
+    .principle-row{display:flex;align-items:center;gap:0.65rem;margin-bottom:0.5rem;}
+    .principle-row:last-child{margin-bottom:0;}
+    .principle-icon{font-size:0.75rem;width:18px;text-align:center;flex-shrink:0;}
+    .principle-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(122,79,46,0.6);flex:1;}
+    .principle-bar{width:72px;height:3px;background:rgba(122,79,46,0.1);border-radius:2px;overflow:hidden;flex-shrink:0;}
+    .principle-fill{height:100%;background:linear-gradient(90deg,#E8B84B,#F0C040);border-radius:2px;}
+    .why-btn{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(122,79,46,0.4);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+    .why-btn:hover{color:var(--clay);}
+    .product{padding:0.7rem 0.85rem;background:rgba(242,234,216,0.5);border:1px solid rgba(122,79,46,0.07);border-radius:4px;margin-bottom:0.38rem;}
+    .product-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.18rem;}
+    .product-name{font-weight:500;font-size:0.95rem;color:var(--earth);}
+    .product-price{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.6rem;color:var(--clay);}
+    .product-notes{font-size:0.8rem;color:rgba(122,79,46,0.6);font-style:italic;}
+    .contact-row{display:flex;align-items:center;gap:0.7rem;margin-bottom:0.42rem;font-size:0.88rem;}
+    .contact-row:last-child{margin-bottom:0;}
+    .contact-key{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(122,79,46,0.5);width:36px;flex-shrink:0;}
+    .contact-val{color:rgba(30,18,8,0.72);}
+    .contact-val a{color:var(--clay);text-decoration:none;}
+    .contact-val a:hover{text-decoration:underline;}
 
-    /* ── FILTER PANEL (collapsible) ── */
-    /* ── DROPDOWN FILTERS (Airbnb/Zillow style) ── */
-    .filter-bar {
-      display:flex; align-items:center; gap:0.4rem;
-      padding:0.55rem 0.75rem;
-      border-top:1px solid rgba(122,79,46,0.08);
-      flex-wrap:nowrap; overflow-x:auto;
-    }
-    .filter-bar::-webkit-scrollbar { display:none; }
+    /* METHODOLOGY MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(30,18,8,0.55);z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:var(--mist);border-radius:14px;max-width:520px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 24px 80px rgba(30,18,8,0.3);}
+    .modal::-webkit-scrollbar{width:3px;}
+    .modal::-webkit-scrollbar-thumb{background:rgba(122,79,46,0.15);}
+    .modal-head{padding:1.5rem 1.75rem 1rem;border-bottom:1px solid rgba(122,79,46,0.1);display:flex;justify-content:space-between;align-items:flex-start;}
+    .modal-title{font-size:1.4rem;font-weight:400;color:var(--earth);line-height:1.2;}
+    .modal-subtitle{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.55rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(122,79,46,0.5);margin-top:0.3rem;}
+    .modal-close{background:none;border:1px solid rgba(122,79,46,0.2);color:var(--clay);width:28px;height:28px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;transition:all 0.2s;}
+    .modal-close:hover{background:rgba(122,79,46,0.07);}
+    .modal-body{padding:1.25rem 1.75rem 1.75rem;}
+    .modal-intro{font-size:0.95rem;line-height:1.7;color:rgba(46,26,10,0.7);font-style:italic;margin-bottom:1.25rem;}
+    .petal-row{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1rem;padding:0.85rem;background:rgba(242,234,216,0.5);border-radius:8px;border:1px solid rgba(122,79,46,0.08);}
+    .petal-num{font-size:1.3rem;font-weight:300;color:var(--clay);line-height:1;flex-shrink:0;width:24px;text-align:center;}
+    .petal-text{}
+    .petal-name{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--clay);margin-bottom:0.3rem;}
+    .petal-desc{font-size:0.9rem;line-height:1.55;color:rgba(46,26,10,0.68);}
+    .modal-note{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.58rem;letter-spacing:0.12em;color:rgba(122,79,46,0.5);line-height:1.6;margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(122,79,46,0.08);}
 
-    .filter-pill {
-      position:relative; flex-shrink:0;
-    }
-    .filter-pill-btn {
-      display:flex; align-items:center; gap:0.35rem;
-      font-family:'Josefin Sans',sans-serif; font-weight:300;
-      font-size:0.6rem; letter-spacing:0.16em; text-transform:uppercase;
-      padding:0.32rem 0.7rem;
-      border:1px solid rgba(122,79,46,0.22); border-radius:20px;
-      background:transparent; color:rgba(122,79,46,0.65);
-      cursor:pointer; white-space:nowrap;
-      transition:all 0.18s;
-    }
-    .filter-pill-btn:hover { border-color:var(--clay); color:var(--clay); }
-    .filter-pill-btn.has-selection {
-      background:var(--clay); border-color:var(--clay);
-      color:var(--parchment);
-    }
-    .filter-pill-btn svg { transition:transform 0.2s; }
-    .filter-pill-btn.open svg { transform:rotate(180deg); }
+    /* APPLY MODAL */
+    .apply-body{padding:1.25rem 1.75rem 1.75rem;}
+    .apply-field{margin-bottom:0.85rem;}
+    .apply-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(122,79,46,0.55);display:block;margin-bottom:0.35rem;}
+    .apply-input,.apply-select,.apply-textarea{width:100%;font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--earth);background:rgba(242,234,216,0.5);border:1px solid rgba(122,79,46,0.18);border-radius:5px;padding:0.55rem 0.75rem;outline:none;transition:border 0.18s;}
+    .apply-input:focus,.apply-select:focus,.apply-textarea:focus{border-color:rgba(122,79,46,0.45);}
+    .apply-textarea{resize:vertical;min-height:80px;font-family:'Cormorant Garamond',serif;}
+    .apply-submit{width:100%;margin-top:0.5rem;background:var(--clay);border:none;color:var(--parchment);font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.6rem;letter-spacing:0.35em;text-transform:uppercase;padding:0.8rem;border-radius:5px;cursor:pointer;transition:background 0.2s;}
+    .apply-submit:hover{background:var(--bark);}
+    .apply-note{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.1em;color:rgba(122,79,46,0.45);text-align:center;margin-top:0.65rem;line-height:1.5;}
 
-    .filter-dropdown {
-      position:absolute; top:calc(100% + 6px); left:0; z-index:500;
-      background:rgba(248,243,235,0.99);
-      border:1px solid rgba(122,79,46,0.15);
-      border-radius:10px;
-      box-shadow:0 8px 32px rgba(30,18,8,0.14);
-      min-width:180px; padding:0.6rem;
-      display:none;
-    }
-    .filter-dropdown.open { display:block; }
-    .filter-dropdown-title {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.5rem; letter-spacing:0.4em; text-transform:uppercase;
-      color:rgba(122,79,46,0.4); padding:0.2rem 0.4rem 0.5rem;
-      display:block;
-    }
-    .filter-option {
-      display:flex; align-items:center; gap:0.6rem;
-      padding:0.45rem 0.5rem; border-radius:6px;
-      cursor:pointer; transition:background 0.15s;
-    }
-    .filter-option:hover { background:rgba(122,79,46,0.05); }
-    .filter-option input[type=checkbox] { display:none; }
-    .filter-checkbox {
-      width:16px; height:16px; flex-shrink:0;
-      border:1.5px solid rgba(122,79,46,0.3); border-radius:4px;
-      display:flex; align-items:center; justify-content:center;
-      transition:all 0.15s; background:transparent;
-    }
-    .filter-option.checked .filter-checkbox {
-      background:var(--clay); border-color:var(--clay);
-    }
-    .filter-option.checked .filter-checkbox::after {
-      content:''; display:block;
-      width:5px; height:8px;
-      border:1.5px solid white; border-top:none; border-left:none;
-      transform:rotate(45deg) translateY(-1px);
-    }
-    .filter-option-label {
-      font-family:'Josefin Sans',sans-serif; font-weight:300;
-      font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase;
-      color:rgba(122,79,46,0.75); flex:1;
-    }
-    .filter-option.checked .filter-option-label { color:var(--clay); font-weight:400; }
+    /* LEAFLET */
+    .leaflet-popup-content-wrapper{background:var(--mist)!important;border:1px solid rgba(122,79,46,0.2)!important;border-radius:8px!important;box-shadow:0 8px 32px rgba(30,18,8,0.15)!important;}
+    .leaflet-popup-tip{background:var(--mist)!important;}
+    .leaflet-popup-content{margin:12px 16px!important;font-family:'Cormorant Garamond',serif!important;}
+    .popup-name{font-weight:500;font-size:1rem;color:var(--earth);margin-bottom:0.2rem;}
+    .popup-sub{font-size:0.82rem;color:rgba(122,79,46,0.65);font-style:italic;margin-bottom:0.5rem;}
+    .popup-btn{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--clay);border:1px solid rgba(122,79,46,0.28);padding:0.22rem 0.6rem;border-radius:2px;cursor:pointer;background:none;transition:all 0.2s;}
+    .popup-btn:hover{background:rgba(122,79,46,0.06);}
 
-    /* Score slider */
-    .score-options { display:flex; gap:0.3rem; flex-wrap:wrap; padding:0.2rem 0.3rem; }
-    .score-opt {
-      font-family:'Josefin Sans',sans-serif; font-weight:300;
-      font-size:0.58rem; letter-spacing:0.1em;
-      padding:0.28rem 0.6rem; border-radius:20px;
-      border:1px solid rgba(122,79,46,0.2);
-      color:rgba(122,79,46,0.6); cursor:pointer; transition:all 0.15s;
-      background:transparent;
-    }
-    .score-opt:hover { border-color:var(--clay); color:var(--clay); }
-    .score-opt.active { background:var(--clay); border-color:var(--clay); color:var(--parchment); }
-
-    .filter-dropdown-footer {
-      border-top:1px solid rgba(122,79,46,0.08);
-      padding:0.4rem 0.4rem 0.1rem;
-      display:flex; justify-content:flex-end;
-    }
-    .filter-clear-small {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.52rem; letter-spacing:0.18em; text-transform:uppercase;
-      color:rgba(122,79,46,0.45); background:none; border:none;
-      cursor:pointer; text-decoration:underline; text-underline-offset:2px;
-    }
-    .filter-clear-small:hover { color:var(--clay); }
-
-    /* Active filter count badge */
-    .filter-badge {
-      display:inline-flex; align-items:center; justify-content:center;
-      width:14px; height:14px; border-radius:50%;
-      background:rgba(255,255,255,0.3);
-      font-size:0.5rem; font-family:'Josefin Sans',sans-serif;
-      font-weight:400; line-height:1;
-    }
-
-
-    .filter-count {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.58rem; letter-spacing:0.15em;
-      color:rgba(122,79,46,0.5);
-    }
-
-    /* ── LOCATION LIST ── */
-    .location-list {
-      flex:1; overflow-y:auto; overflow-x:hidden;
-      padding:0.65rem 0.85rem 1.5rem;
-      pointer-events:all;
-    }
-    .location-list::-webkit-scrollbar { width:0; }
-
-    .location-card {
-      background:rgba(242,234,216,0.95);
-      backdrop-filter:blur(8px);
-      border:1px solid rgba(122,79,46,0.1);
-      border-radius:8px;
-      margin-bottom:0.5rem;
-      padding:0.9rem 1rem;
-      cursor:pointer;
-      transition:all 0.2s ease;
-      box-shadow:0 2px 8px rgba(30,18,8,0.06);
-      position:relative; overflow:hidden;
-    }
-    .location-card::before {
-      content:''; position:absolute;
-      left:0; top:0; bottom:0; width:3px;
-      background:var(--clay);
-      transform:scaleY(0); transform-origin:bottom;
-      transition:transform 0.2s;
-    }
-    .location-card:hover { border-color:rgba(122,79,46,0.25); box-shadow:0 4px 16px rgba(30,18,8,0.1); transform:translateY(-1px); }
-    .location-card:hover::before, .location-card.active::before { transform:scaleY(1); }
-    .location-card.active { border-color:rgba(122,79,46,0.3); background:rgba(237,224,204,0.98); }
-
-    .card-header { display:flex; justify-content:space-between; align-items:flex-start; gap:0.5rem; margin-bottom:0.3rem; }
-    .card-name { font-size:1.05rem; font-weight:500; color:var(--earth); line-height:1.2; flex:1; }
-    .card-place { font-size:0.88rem; color:rgba(122,79,46,0.68); font-style:italic; margin-bottom:0.45rem; }
-    .card-footer { display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap; }
-
-    .pill {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.5rem; letter-spacing:0.14em; text-transform:uppercase;
-      padding:0.12rem 0.5rem; border-radius:2px; border:1px solid;
-    }
-    .pill-type  { border-color:rgba(107,124,94,0.3); color:var(--sage); }
-    .pill-roast { border-color:rgba(122,79,46,0.2); color:var(--clay); }
-
-    /* ── ROSETTE SCORE (correct SVG approach) ── */
-    .rosette-mini { flex-shrink:0; }
-
-    /* ── DETAIL PANEL ── */
-    .detail {
-      position:fixed; top:56px; right:0; bottom:0;
-      width:400px;
-      background:var(--mist);
-      border-left:1px solid rgba(122,79,46,0.12);
-      transform:translateX(100%);
-      transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);
-      z-index:350; overflow-y:auto;
-    }
-    .detail.open { transform:translateX(0); }
-    .detail::-webkit-scrollbar { width:3px; }
-    .detail::-webkit-scrollbar-thumb { background:rgba(122,79,46,0.1); }
-
-    @media(max-width:600px) { .detail { width:100%; } .panel { width:100%; } }
-
-    .detail-close {
-      position:sticky; top:0; z-index:10;
-      display:flex; align-items:center; justify-content:space-between;
-      padding:0.85rem 1.25rem;
-      background:rgba(248,243,235,0.96); backdrop-filter:blur(8px);
-      border-bottom:1px solid rgba(122,79,46,0.08);
-    }
-    .detail-close-label {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.58rem; letter-spacing:0.38em; text-transform:uppercase;
-      color:rgba(122,79,46,0.5);
-    }
-    .detail-close-btn {
-      background:none; border:1px solid rgba(122,79,46,0.2);
-      color:var(--clay); width:26px; height:26px; border-radius:50%;
-      cursor:pointer; font-size:0.8rem;
-      display:flex; align-items:center; justify-content:center;
-      transition:all 0.2s;
-    }
-    .detail-close-btn:hover { background:rgba(122,79,46,0.07); }
-
-    .detail-hero {
-      padding:1.5rem 1.5rem 1.25rem;
-      background:linear-gradient(135deg, rgba(237,224,204,0.6) 0%, rgba(248,243,235,0.2) 100%);
-      border-bottom:1px solid rgba(122,79,46,0.08);
-    }
-
-    /* Rosette score display in detail */
-    .detail-score-row {
-      display:flex; align-items:center; gap:1rem;
-      margin-bottom:1.1rem;
-    }
-    .detail-score-info { display:flex; flex-direction:column; gap:0.2rem; }
-    .detail-score-label {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.55rem; letter-spacing:0.38em; text-transform:uppercase;
-      color:rgba(122,79,46,0.5);
-    }
-    .detail-score-value { font-size:1.15rem; font-weight:400; color:var(--clay); }
-    .detail-score-sub {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.5rem; letter-spacing:0.2em; text-transform:uppercase;
-      color:rgba(122,79,46,0.42);
-    }
-
-    .detail-name { font-size:1.5rem; font-weight:400; color:var(--earth); line-height:1.2; margin-bottom:0.28rem; }
-    .detail-place { font-size:0.92rem; color:var(--clay); font-style:italic; margin-bottom:0.75rem; }
-    .detail-tags { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.9rem; }
-    .detail-desc { font-size:0.98rem; line-height:1.65; color:rgba(46,26,10,0.7); font-style:italic; }
-
-    .detail-section { padding:1.15rem 1.5rem; border-bottom:1px solid rgba(122,79,46,0.07); }
-    .detail-section-label {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.55rem; letter-spacing:0.42em; text-transform:uppercase;
-      color:rgba(122,79,46,0.5); margin-bottom:0.85rem; display:block;
-    }
-
-    /* Principle bars */
-    .principle-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem; }
-    .principle-row:last-child { margin-bottom:0; }
-    .principle-label {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.58rem; letter-spacing:0.16em; text-transform:uppercase;
-      color:rgba(122,79,46,0.62); flex:1;
-    }
-    .principle-bar { width:80px; height:3px; background:rgba(122,79,46,0.1); border-radius:2px; overflow:hidden; flex-shrink:0; }
-    .principle-fill { height:100%; background:var(--gold); border-radius:2px; }
-
-    .product { padding:0.75rem 0.9rem; background:rgba(242,234,216,0.5); border:1px solid rgba(122,79,46,0.08); border-radius:4px; margin-bottom:0.4rem; }
-    .product-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.2rem; }
-    .product-name { font-weight:500; font-size:0.98rem; color:var(--earth); }
-    .product-price { font-family:'Josefin Sans',sans-serif; font-weight:300; font-size:0.62rem; color:var(--clay); }
-    .product-notes { font-size:0.82rem; color:rgba(122,79,46,0.62); font-style:italic; }
-
-    .contact-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.45rem; font-size:0.9rem; }
-    .contact-row:last-child { margin-bottom:0; }
-    .contact-key {
-      font-family:'Josefin Sans',sans-serif; font-weight:200;
-      font-size:0.52rem; letter-spacing:0.12em; text-transform:uppercase;
-      color:rgba(122,79,46,0.5); width:38px; flex-shrink:0;
-    }
-    .contact-val { color:rgba(30,18,8,0.75); }
-    .contact-val a { color:var(--clay); text-decoration:none; }
-    .contact-val a:hover { text-decoration:underline; }
-
-    /* Leaflet */
-    .leaflet-popup-content-wrapper { background:var(--mist)!important; border:1px solid rgba(122,79,46,0.2)!important; border-radius:6px!important; box-shadow:0 8px 32px rgba(30,18,8,0.15)!important; }
-    .leaflet-popup-tip { background:var(--mist)!important; }
-    .leaflet-popup-content { margin:12px 16px!important; font-family:'Cormorant Garamond',serif!important; }
-    .popup-name { font-weight:500; font-size:1rem; color:var(--earth); margin-bottom:0.2rem; }
-    .popup-sub { font-size:0.82rem; color:rgba(122,79,46,0.65); font-style:italic; }
-    .popup-btn { display:inline-block; margin-top:0.5rem; font-family:'Josefin Sans',sans-serif; font-weight:200; font-size:0.52rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--clay); border:1px solid rgba(122,79,46,0.28); padding:0.25rem 0.6rem; border-radius:2px; cursor:pointer; background:none; transition:all 0.2s; }
-    .popup-btn:hover { background:rgba(122,79,46,0.06); }
-
-    /* Loading */
-    .loading { position:fixed; inset:0; background:var(--parchment); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem; transition:opacity 0.7s ease; }
-    .loading.hidden { opacity:0; pointer-events:none; }
-    @keyframes dotbounce { 0%,100%{transform:scale(1);opacity:.25}50%{transform:scale(1.6);opacity:.75} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+    /* LOADING */
+    .loading{position:fixed;inset:0;background:var(--parchment);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transition:opacity 0.7s ease;}
+    .loading.hidden{opacity:0;pointer-events:none;}
+    @keyframes dotbounce{0%,100%{transform:scale(1);opacity:.25}50%{transform:scale(1.6);opacity:.75}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
 
-<!-- Loading -->
+<!-- LOADING -->
 <div class="loading" id="loading">
   <div style="display:flex;flex-direction:column;align-items:center;gap:2rem;animation:fadeUp 0.8s ease forwards;">
     <svg width="80" height="80" viewBox="60 60 80 80" fill="none">
@@ -444,10 +226,10 @@
       <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
       <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
     </svg>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
-      <span style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.55rem;letter-spacing:0.7em;text-transform:uppercase;color:rgba(122,79,46,0.35);">Gaias</span>
-      <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2.8rem;letter-spacing:0.6em;padding-left:0.6em;text-transform:uppercase;color:#1E1208;line-height:1;">Grounds</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.9rem;letter-spacing:0.22em;color:rgba(122,79,46,0.5);">Of the Earth · For the World</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;">
+      <span style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.7em;text-transform:uppercase;color:rgba(122,79,46,0.35);">Gaias</span>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2.6rem;letter-spacing:0.55em;padding-left:0.55em;text-transform:uppercase;color:#1E1208;line-height:1;">Grounds</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;letter-spacing:0.22em;color:rgba(122,79,46,0.5);">Of the Earth · For the World</div>
     </div>
     <div style="display:flex;gap:0.5rem;">
       <div style="width:5px;height:5px;background:#7A4F2E;border-radius:50%;opacity:0.25;animation:dotbounce 1.1s 0s infinite ease-in-out;"></div>
@@ -457,233 +239,509 @@
   </div>
 </div>
 
-<!-- Map -->
+<!-- MAP -->
 <div id="map"></div>
 
-<!-- Header -->
+<!-- HEADER -->
 <header class="header">
   <a class="header-logo" href="#">
     <svg width="28" height="28" viewBox="60 60 80 80" fill="none">
-      <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
-      <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
-      <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
-      <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
-      <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
-      <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.08)"/>
+      <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
+      <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
+      <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
+      <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
+      <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
+      <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
     </svg>
     <div class="header-logo-text">
       <div class="header-logo-name"><span>Gaias</span>Grounds</div>
       <div class="header-logo-sub">Of the Earth · For the World</div>
     </div>
   </a>
-  <a href="https://gaiasglobal.com" target="_blank" class="header-global">
-    <svg width="16" height="16" viewBox="60 60 80 80" fill="none" style="opacity:0.55;flex-shrink:0;">
-      <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.12)"/>
-      <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.12)"/>
-      <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.12)"/>
-      <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.12)"/>
-      <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.12)"/>
-      <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.12)"/>
-    </svg>
-    <div class="header-global-text">
-      <span>Part of</span>
-      <span>Gaias Global</span>
-    </div>
-  </a>
+  <div class="header-right">
+    <button class="header-btn" onclick="openModal('method')">How We Score</button>
+    <button class="header-btn cta" onclick="openModal('apply')">List Your Venue</button>
+    <a href="https://gaiasglobal.com" target="_blank" class="header-global">
+      <svg width="14" height="14" viewBox="60 60 80 80" fill="none" style="opacity:0.5;flex-shrink:0;">
+        <path d="M67.1 119L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.15)"/>
+        <path d="M67.1 81L132.9 81L131.6 83.2L130 85.3L128.4 87.2L126.6 89.1L124.8 90.8L122.7 92.4L120.6 93.9L118.4 95.2L116.2 96.4L113.8 97.4L111.4 98.3L108.9 98.9L106.4 99.5L103.8 99.8L101.3 100L98.7 100L96.2 99.8L93.6 99.5L91.1 98.9L88.6 98.3L86.2 97.4L83.8 96.4L81.6 95.2L79.4 93.9L77.3 92.4L75.2 90.8L73.4 89.1L71.6 87.2L70 85.3L68.4 83.2Z" stroke="#7A4F2E" stroke-width="0.8" fill="rgba(122,79,46,0.15)"/>
+      </svg>
+      <div class="header-global-text">
+        <span>Part of</span><span>Gaias Global</span>
+      </div>
+    </a>
+  </div>
 </header>
 
-<!-- Left Panel -->
+<!-- LEFT PANEL -->
 <div class="panel" id="panel">
   <button class="panel-toggle" id="panel-toggle" onclick="togglePanel()" title="Collapse list">‹</button>
 
-  <!-- Search + Filter Bar -->
   <div class="search-bar">
     <div class="search-row">
-      <input class="search-input" type="text" id="search-input" placeholder="Search cafés, roasters, farms…" oninput="handleSearch()"/>
-      <div class="search-divider"></div>
-      <button class="filter-btn" id="filter-btn" onclick="toggleFilters()">
-        <div class="filter-btn-icon">
-          <span></span><span></span><span></span>
-        </div>
-        Filters
-      </button>
+      <input class="search-input" type="text" id="search-input" placeholder="Search by name, city, origin…" oninput="handleSearch()"/>
+      <span class="result-count" id="filter-count">30 venues</span>
     </div>
-
-    <!-- Dropdown Filter Bar -->
+    <!-- FILTER BAR -->
     <div class="filter-bar">
 
-      <!-- Type -->
       <div class="filter-pill" id="pill-type">
-        <button class="filter-pill-btn has-selection" id="btn-type" onclick="toggleDropdown('type')">
-          Type
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+        <button class="filter-pill-btn active" id="btn-type" onclick="toggleDropdown('type')">
+          Type <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
         <div class="filter-dropdown" id="drop-type">
-          <span class="filter-dropdown-title">Venue Type</span>
-          <label class="filter-option checked" data-filter="type" data-value="café" onclick="toggleOption(this)">
-            <div class="filter-checkbox"></div>
-            <span class="filter-option-label">Café</span>
-          </label>
-          <label class="filter-option checked" data-filter="type" data-value="roaster" onclick="toggleOption(this)">
-            <div class="filter-checkbox"></div>
-            <span class="filter-option-label">Roaster</span>
-          </label>
-          <label class="filter-option checked" data-filter="type" data-value="farm" onclick="toggleOption(this)">
-            <div class="filter-checkbox"></div>
-            <span class="filter-option-label">Farm</span>
-          </label>
-          <div class="filter-dropdown-footer">
-            <button class="filter-clear-small" onclick="clearDropdown('type')">Clear</button>
-          </div>
+          <span class="drop-title">Venue Type</span>
+          <div class="drop-opt on" data-f="type" data-v="café" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Café</span></div>
+          <div class="drop-opt on" data-f="type" data-v="roaster" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Roaster</span></div>
+          <div class="drop-opt on" data-f="type" data-v="farm" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Farm / Producer</span></div>
+          <div class="drop-opt on" data-f="type" data-v="cooperative" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Cooperative</span></div>
+          <div class="drop-footer"><button class="drop-clear" onclick="clearDrop('type')">Clear</button></div>
         </div>
       </div>
 
-      <!-- Roast -->
-      <div class="filter-pill" id="pill-roast">
-        <button class="filter-pill-btn has-selection" id="btn-roast" onclick="toggleDropdown('roast')">
-          Roast
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+      <div class="filter-pill" id="pill-continent">
+        <button class="filter-pill-btn active" id="btn-continent" onclick="toggleDropdown('continent')">
+          Region <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <div class="filter-dropdown" id="drop-roast">
-          <span class="filter-dropdown-title">Roast Profile</span>
-          <label class="filter-option checked" data-filter="roast" data-value="light" onclick="toggleOption(this)">
-            <div class="filter-checkbox"></div>
-            <span class="filter-option-label">Light</span>
-          </label>
-          <label class="filter-option checked" data-filter="roast" data-value="medium" onclick="toggleOption(this)">
-            <div class="filter-checkbox"></div>
-            <span class="filter-option-label">Medium</span>
-          </label>
-          <div class="filter-dropdown-footer">
-            <button class="filter-clear-small" onclick="clearDropdown('roast')">Clear</button>
-          </div>
+        <div class="filter-dropdown" id="drop-continent">
+          <span class="drop-title">World Region</span>
+          <div class="drop-opt on" data-f="continent" data-v="Africa" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Africa</span></div>
+          <div class="drop-opt on" data-f="continent" data-v="Americas" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Americas</span></div>
+          <div class="drop-opt on" data-f="continent" data-v="Asia-Pacific" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Asia-Pacific</span></div>
+          <div class="drop-opt on" data-f="continent" data-v="Europe" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Europe</span></div>
+          <div class="drop-opt on" data-f="continent" data-v="Middle East" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Middle East</span></div>
+          <div class="drop-footer"><button class="drop-clear" onclick="clearDrop('continent')">Clear</button></div>
         </div>
       </div>
 
-      <!-- Country -->
-      <div class="filter-pill" id="pill-country">
-        <button class="filter-pill-btn has-selection" id="btn-country" onclick="toggleDropdown('country')">
-          Origin
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <div class="filter-dropdown" id="drop-country">
-          <span class="filter-dropdown-title">Country of Origin</span>
-          <div id="country-options"></div>
-          <div class="filter-dropdown-footer">
-            <button class="filter-clear-small" onclick="clearDropdown('country')">Clear</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Rosette Score -->
       <div class="filter-pill" id="pill-score">
         <button class="filter-pill-btn" id="btn-score" onclick="toggleDropdown('score')">
-          Score
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+          Rosette <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
         <div class="filter-dropdown" id="drop-score">
-          <span class="filter-dropdown-title">Min. Rosette Score</span>
-          <div class="score-options">
-            <button class="score-opt active" data-value="0" onclick="selectScore(this)">Any</button>
-            <button class="score-opt" data-value="3" onclick="selectScore(this)">3+</button>
-            <button class="score-opt" data-value="4" onclick="selectScore(this)">4+</button>
-            <button class="score-opt" data-value="5" onclick="selectScore(this)">5+</button>
-            <button class="score-opt" data-value="6" onclick="selectScore(this)">6 ✦</button>
+          <span class="drop-title">Min. Rosette Score</span>
+          <div class="score-opts">
+            <button class="score-opt on" data-v="0" onclick="pickScore(this)">Any</button>
+            <button class="score-opt" data-v="3" onclick="pickScore(this)">3+</button>
+            <button class="score-opt" data-v="4" onclick="pickScore(this)">4+</button>
+            <button class="score-opt" data-v="5" onclick="pickScore(this)">5+</button>
+            <button class="score-opt" data-v="6" onclick="pickScore(this)">✦ 6</button>
           </div>
+        </div>
+      </div>
+
+      <div class="filter-pill" id="pill-sort">
+        <button class="filter-pill-btn" id="btn-sort" onclick="toggleDropdown('sort')">
+          Sort <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+        <div class="filter-dropdown" id="drop-sort">
+          <span class="drop-title">Sort By</span>
+          <div class="drop-opt on" data-f="sort" data-v="score" onclick="pickSort(this)"><div class="fcheck"></div><span class="drop-label">Rosette Score</span></div>
+          <div class="drop-opt" data-f="sort" data-v="name" onclick="pickSort(this)"><div class="fcheck"></div><span class="drop-label">Name A–Z</span></div>
+          <div class="drop-opt" data-f="sort" data-v="new" onclick="pickSort(this)"><div class="fcheck"></div><span class="drop-label">Newly Listed</span></div>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Location List -->
   <div class="location-list" id="location-list"></div>
 </div>
 
-<!-- Detail Panel -->
+<!-- DETAIL PANEL -->
 <div class="detail" id="detail">
   <div class="detail-close">
-    <span class="detail-close-label">Location Detail</span>
-    <button class="detail-close-btn" onclick="closeDetail()">✕</button>
+    <span class="detail-close-label">Venue Detail</span>
+    <div class="detail-close-actions">
+      <button class="detail-share-btn" onclick="shareVenue()">Share ↗</button>
+      <button class="detail-close-btn" onclick="closeDetail()">✕</button>
+    </div>
   </div>
   <div id="detail-content"></div>
 </div>
 
+<!-- METHODOLOGY MODAL -->
+<div class="modal-overlay" id="modal-method" onclick="overlayClick(event,'method')">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">The Rosette Score</div>
+        <div class="modal-subtitle">How Gaias Grounds evaluates every venue</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('method')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-intro">Every venue in Gaias Grounds is personally evaluated against six criteria rooted in Gaias Global's core principles. No algorithms. No paid placements. A score of 6 means a venue embodies all six — that is rare, and it means something.</p>
+      <div class="petal-row">
+        <div class="petal-num">①</div>
+        <div class="petal-text">
+          <div class="petal-name">Act from Love</div>
+          <div class="petal-desc">Does this venue treat its farmers, staff, and community with genuine care? We look for fair wages, long-term supplier relationships, and evidence of human connection over transaction.</div>
+        </div>
+      </div>
+      <div class="petal-row">
+        <div class="petal-num">②</div>
+        <div class="petal-text">
+          <div class="petal-name">Live Simply</div>
+          <div class="petal-desc">Minimal waste, thoughtful packaging, and a rejection of excess. Venues that operate with restraint — using only what they need and nothing more — earn this petal.</div>
+        </div>
+      </div>
+      <div class="petal-row">
+        <div class="petal-num">③</div>
+        <div class="petal-text">
+          <div class="petal-name">Mutual Support</div>
+          <div class="petal-desc">Direct trade, cooperative membership, community reinvestment. Does this venue give back to the origin communities and ecosystems that make their work possible?</div>
+        </div>
+      </div>
+      <div class="petal-row">
+        <div class="petal-num">④</div>
+        <div class="petal-text">
+          <div class="petal-name">Well-Being</div>
+          <div class="petal-desc">Is this a place where people — customers, staff, and producers alike — genuinely thrive? We consider working conditions, health practices, and whether the space nurtures rather than depletes.</div>
+        </div>
+      </div>
+      <div class="petal-row">
+        <div class="petal-num">⑤</div>
+        <div class="petal-text">
+          <div class="petal-name">Honest Growth</div>
+          <div class="petal-desc">Transparency in sourcing, pricing, and process. No greenwashing. Venues that are honest about where they fall short, and who have a credible path toward improvement, qualify.</div>
+        </div>
+      </div>
+      <div class="petal-row">
+        <div class="petal-num">⑥</div>
+        <div class="petal-text">
+          <div class="petal-name">Overall Quality</div>
+          <div class="petal-desc">The craft itself. Is the coffee, the space, the experience genuinely exceptional? This petal is reserved for venues where excellence is evident in every cup.</div>
+        </div>
+      </div>
+      <p class="modal-note">Listings are reviewed annually. Vendors may request re-evaluation at any time. Gaias Grounds does not accept payment for score modifications or featured placement. Our independence is our value.</p>
+    </div>
+  </div>
+</div>
+
+<!-- APPLY MODAL -->
+<div class="modal-overlay" id="modal-apply" onclick="overlayClick(event,'apply')">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">List Your Venue</div>
+        <div class="modal-subtitle">Apply to join the Gaias Grounds directory</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('apply')">✕</button>
+    </div>
+    <div class="apply-body">
+      <p class="modal-intro" style="margin-bottom:1.25rem;">We review every application personally. If your venue reflects the values behind our six principles, we want to hear from you — whether you're a single-origin farm in Ethiopia or a neighbourhood café in Oslo.</p>
+      <div class="apply-field">
+        <label class="apply-label">Venue Name</label>
+        <input class="apply-input" type="text" placeholder="e.g. Finca El Paraiso"/>
+      </div>
+      <div class="apply-field">
+        <label class="apply-label">Type</label>
+        <select class="apply-select">
+          <option>Café</option><option>Roaster</option><option>Farm / Producer</option><option>Cooperative</option>
+        </select>
+      </div>
+      <div class="apply-field">
+        <label class="apply-label">City & Country</label>
+        <input class="apply-input" type="text" placeholder="e.g. Cali, Colombia"/>
+      </div>
+      <div class="apply-field">
+        <label class="apply-label">Website</label>
+        <input class="apply-input" type="url" placeholder="https://"/>
+      </div>
+      <div class="apply-field">
+        <label class="apply-label">Contact Email</label>
+        <input class="apply-input" type="email" placeholder="hello@yourvenue.com"/>
+      </div>
+      <div class="apply-field">
+        <label class="apply-label">Tell us about your values</label>
+        <textarea class="apply-textarea" placeholder="What makes your venue align with our principles? What's your story?"></textarea>
+      </div>
+      <button class="apply-submit" onclick="submitApplication()">Submit Application</button>
+      <p class="apply-note">We aim to respond within 2–3 weeks. Listing is free. Always.</p>
+    </div>
+  </div>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-  // ── DATA ──
+  // ── DATA: 30 real globally curated venues ──
+  // featured/claimed flags = silent monetization scaffolding
   const LOCATIONS = [
-    {id:1,name:"Café de Flore",type:"café",city:"Paris",country:"France",lat:48.854,lng:2.333,photo:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=640&q=80",description:"An iconic Parisian café serving exquisite single-origin espresso since 1887.",specialty:"Single-Origin Espresso",roast:"Light",contact:{phone:"+33 1 45 48 55 26",email:"info@cafedeflore.fr",website:"https://cafedeflore.fr"},products:[{name:"Ethiopian Yirgacheffe",price:"€4.50",notes:"Blueberry, jasmine, citrus"},{name:"Colombian Supremo",price:"€4.00",notes:"Caramel, red apple, milk chocolate"}],score:5,principles:[1,1,1,1,1,0]},
-    {id:2,name:"Blue Bottle Coffee",type:"roaster",city:"San Francisco",country:"USA",lat:37.7749,lng:-122.4194,photo:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=640&q=80",description:"Pioneering third-wave roaster obsessed with freshness and transparency.",specialty:"Pour Over",roast:"Light-Medium",contact:{phone:"+1 510-653-3394",email:"hello@bluebottlecoffee.com",website:"https://bluebottlecoffee.com"},products:[{name:"Hayes Valley Espresso",price:"$5.00",notes:"Dark chocolate, toasted almond"},{name:"Three Africas",price:"$4.50",notes:"Tropical fruit, berry, bright acidity"}],score:4,principles:[1,1,1,1,0,0]},
-    {id:3,name:"Tim Wendelboe",type:"roaster",city:"Oslo",country:"Norway",lat:59.9139,lng:10.7522,photo:"https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=640&q=80",description:"World Barista Champion turned roaster. Legendary light roasts from direct trade farms.",specialty:"Filter Coffee",roast:"Light",contact:{phone:"+47 400 04 062",email:"post@timwendelboe.no",website:"https://timwendelboe.no"},products:[{name:"Finca El Paraiso",price:"NOK 85",notes:"Peach, oolong tea, candied lemon"},{name:"Guji Natural",price:"NOK 90",notes:"Strawberry, rose, dark chocolate"}],score:6,principles:[1,1,1,1,1,1]},
-    {id:4,name:"Onibus Coffee",type:"café",city:"Tokyo",country:"Japan",lat:35.6762,lng:139.6503,photo:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=640&q=80",description:"Tokyo's beloved specialty café bridging Japanese precision with global coffee culture.",specialty:"Japanese Iced Coffee",roast:"Light-Medium",contact:{phone:"+81 3-6413-8048",email:"info@onibuscoffee.com",website:"https://onibuscoffee.com"},products:[{name:"Kenya Kiambu AA",price:"¥800",notes:"Blackcurrant, tomato, brown sugar"},{name:"Brazil Sul de Minas",price:"¥750",notes:"Walnut, dark caramel, earthy"}],score:5,principles:[1,1,1,1,1,0]},
-    {id:5,name:"Granja La Esperanza",type:"farm",city:"Cali",country:"Colombia",lat:3.4516,lng:-76.532,photo:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=640&q=80",description:"Award-winning farm producing extraordinary experimental lots in the Cauca Valley.",specialty:"Experimental Process",roast:"Light",contact:{phone:"+57 2 555 1234",email:"info@granjalaesperanza.com",website:"https://granjalaesperanza.com"},products:[{name:"Cerro Azul Geisha",price:"$28/100g",notes:"Tropical, floral, lime zest"},{name:"Las Margaritas Wush Wush",price:"$22/100g",notes:"Hibiscus, passion fruit, honey"}],score:6,principles:[1,1,1,1,1,1]},
-    {id:6,name:"Intelligentsia Coffee",type:"roaster",city:"Chicago",country:"USA",lat:41.8827,lng:-87.6233,photo:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=640&q=80",description:"Direct trade pioneers. Every cup tells the story of the farmer who grew it.",specialty:"Direct Trade",roast:"Medium",contact:{phone:"+1 312-920-9390",email:"hello@intelligentsiacoffee.com",website:"https://intelligentsiacoffee.com"},products:[{name:"Black Cat Classic Espresso",price:"$4.50",notes:"Milk chocolate, dried cherry"},{name:"House Blend",price:"$4.00",notes:"Brown sugar, orange peel, walnut"}],score:4,principles:[1,1,0,1,1,0]},
-    {id:7,name:"Five Elephant",type:"roaster",city:"Berlin",country:"Germany",lat:52.52,lng:13.405,photo:"https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=640&q=80",description:"Berlin's leading specialty roaster, famous for their cheesecake and exceptional filter coffee.",specialty:"Filter & Espresso",roast:"Light-Medium",contact:{phone:"+49 30 96208925",email:"hello@fiveelephant.com",website:"https://fiveelephant.com"},products:[{name:"Rwanda Gitesi",price:"€5.00",notes:"Red currant, peach, honey"},{name:"Guatemala Finca La Hermosa",price:"€4.50",notes:"Milk chocolate, plum, toffee"}],score:5,principles:[1,1,1,1,1,0]},
-    {id:8,name:"Proud Mary Coffee",type:"roaster",city:"Melbourne",country:"Australia",lat:-37.8136,lng:144.9631,photo:"https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=640&q=80",description:"Melbourne's world-class roaster known for boundary-pushing coffees and stunning presentation.",specialty:"Specialty Espresso",roast:"Light-Medium",contact:{phone:"+61 3 9417 5930",email:"hello@proudmarycoffee.com.au",website:"https://proudmarycoffee.com.au"},products:[{name:"Hologram Blend",price:"AUD $6.00",notes:"Mandarin, stone fruit, milk chocolate"},{name:"Ethiopia Bombe Natural",price:"AUD $7.50",notes:"Strawberry jam, rose, vanilla"}],score:5,principles:[1,1,1,1,1,0]},
-    {id:9,name:"Kaldi's Coffee Farm",type:"farm",city:"Kaffa",country:"Ethiopia",lat:7.3333,lng:36.5667,photo:"https://images.unsplash.com/photo-1559525839-8c4b30c18b97?w=640&q=80",description:"Named after the legendary goat herder who discovered coffee. Single estate, heirloom varieties.",specialty:"Heirloom Ethiopian",roast:"Light",contact:{phone:"+251 11 551 7700",email:"info@kaldiscoffee.et",website:"https://kaldiscoffee.et"},products:[{name:"Yirgacheffe Grade 1",price:"$18/250g",notes:"Blueberry, jasmine, dark chocolate"},{name:"Sidama Sun-Dried",price:"$16/250g",notes:"Wild berries, wine, spice"}],score:6,principles:[1,1,1,1,1,1]},
-    {id:10,name:"Café El Injerto",type:"farm",city:"Huehuetenango",country:"Guatemala",lat:15.3194,lng:-91.4727,photo:"https://images.unsplash.com/photo-1464983953574-0892a716854b?w=640&q=80",description:"Multi-generational family farm producing some of the world's most coveted micro-lots.",specialty:"Micro-Lot",roast:"Light-Medium",contact:{phone:"+502 7764-1574",email:"info@elinjerto.com",website:"https://elinjerto.com"},products:[{name:"Maragogype Honey",price:"$32/100g",notes:"Papaya, brown sugar, jasmine"},{name:"Bourbon Natural",price:"$28/100g",notes:"Blackberry, dark chocolate, vanilla"}],score:6,principles:[1,1,1,1,1,1]}
+    // ── EUROPE ──
+    {id:1,  name:"Tim Wendelboe",         slug:"tim-wendelboe",         type:"roaster",     continent:"Europe",       city:"Oslo",          country:"Norway",     lat:59.9204,lng:10.7536, score:6, added:"2024-01", featured:false,claimed:false, badge:"pick",
+      photo:"https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=640&q=80",
+      description:"World Barista Champion turned roaster. Wendelboe changed how Europe understood light roast. Every lot is direct-trade from farms he visits personally.",
+      specialty:"Filter / Direct Trade", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Finca El Paraiso Wush Wush",price:"NOK 90",notes:"Peach, oolong, candied lemon"},{name:"Guji Natural",price:"NOK 85",notes:"Strawberry, rose, dark chocolate"}],
+      contact:{phone:"+47 400 04 062",email:"post@timwendelboe.no",website:"https://timwendelboe.no"}},
+
+    {id:2,  name:"Square Mile Coffee",    slug:"square-mile-coffee",    type:"roaster",     continent:"Europe",       city:"London",        country:"UK",         lat:51.5197,lng:-0.0786, score:5, added:"2024-01", featured:false,claimed:false, badge:"pick",
+      photo:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=640&q=80",
+      description:"Founded by 2007 World Barista Champion James Hoffmann. Meticulous sourcing, transparent pricing, and some of the clearest coffee education on the planet.",
+      specialty:"Espresso / Filter", roast:"Light-Medium", principles:[1,1,1,1,1,1],
+      products:[{name:"Red Brick Espresso",price:"£12/250g",notes:"Milk chocolate, caramel, stone fruit"},{name:"Single Origin Filter",price:"£13/250g",notes:"Seasonal rotating"}],
+      contact:{phone:"+44 20 7253 8779",email:"hello@squaremilecoffee.com",website:"https://squaremilecoffee.com"}},
+
+    {id:3,  name:"Five Elephant",         slug:"five-elephant",         type:"roaster",     continent:"Europe",       city:"Berlin",        country:"Germany",    lat:52.4992,lng:13.4190, score:5, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=640&q=80",
+      description:"Berlin's most respected specialty roaster. Famous for obsessive filter coffee and a legendary cheesecake that rivals the coffee.",
+      specialty:"Filter & Espresso", roast:"Light-Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Rwanda Gitesi",price:"€14/250g",notes:"Red currant, peach, honey"},{name:"Guatemala Finca La Hermosa",price:"€13/250g",notes:"Milk chocolate, plum, toffee"}],
+      contact:{phone:"+49 30 96208925",email:"hello@fiveelephant.com",website:"https://fiveelephant.com"}},
+
+    {id:4,  name:"La Cabra Coffee",       slug:"la-cabra-coffee",       type:"roaster",     continent:"Europe",       city:"Aarhus",        country:"Denmark",    lat:56.1572,lng:10.2107, score:5, added:"2024-02", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=640&q=80",
+      description:"Scandinavian precision meets genuine warmth. La Cabra's seasonal selection and strikingly designed bags have made them icons of Nordic coffee culture.",
+      specialty:"Seasonal Filter", roast:"Light", principles:[1,1,1,1,1,0],
+      products:[{name:"Ethiopia Worka Sakaro",price:"DKK 120/250g",notes:"Jasmine, bergamot, tangerine"},{name:"Colombia La Palma",price:"DKK 115/250g",notes:"Raspberry, brown sugar, almond"}],
+      contact:{phone:"+45 86 12 09 00",email:"coffee@lacabra.dk",website:"https://lacabra.dk"}},
+
+    {id:5,  name:"Café de Flore",         slug:"cafe-de-flore",         type:"café",        continent:"Europe",       city:"Paris",         country:"France",     lat:48.8540,lng:2.3329,  score:4, added:"2024-01", featured:false,claimed:false, badge:"pick",
+      photo:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=640&q=80",
+      description:"Paris's most storied café — a cultural institution since 1887. Not specialty in the modern sense, but a living reminder that great coffee is inseparable from great atmosphere.",
+      specialty:"Espresso / Ambiance", roast:"Medium", principles:[1,0,1,1,1,0],
+      products:[{name:"Café Crème",price:"€5.50",notes:"Rich, velvet, classic"},{name:"Café Noisette",price:"€4.80",notes:"Espresso cut with cream"}],
+      contact:{phone:"+33 1 45 48 55 26",email:"info@cafedeflore.fr",website:"https://cafedeflore.fr"}},
+
+    // ── AMERICAS ──
+    {id:6,  name:"Granja La Esperanza",   slug:"granja-la-esperanza",   type:"farm",        continent:"Americas",     city:"Buga",          country:"Colombia",   lat:3.9000,lng:-76.3000, score:6, added:"2024-01", featured:false,claimed:false, badge:"pick",
+      photo:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=640&q=80",
+      description:"The farm that redefined Colombian coffee. Multiple World Brewers Cup winning lots. The Geisha, Sidra, and Wush Wush varieties grown here are among the most sought on earth.",
+      specialty:"Experimental / Micro-lot", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Cerro Azul Geisha",price:"$32/100g",notes:"Tropical, floral, lime zest"},{name:"Las Margaritas Wush Wush",price:"$28/100g",notes:"Hibiscus, passion fruit, honey"}],
+      contact:{phone:"+57 2 228 1000",email:"info@granjalaesperanza.com",website:"https://granjalaesperanza.com"}},
+
+    {id:7,  name:"Café El Injerto",       slug:"cafe-el-injerto",       type:"farm",        continent:"Americas",     city:"Huehuetenango", country:"Guatemala",  lat:15.3194,lng:-91.4727, score:6, added:"2024-01", featured:false,claimed:false, badge:"pick",
+      photo:"https://images.unsplash.com/photo-1464983953574-0892a716854b?w=640&q=80",
+      description:"Five generations of the Aguirre family growing coffee at 1700m in Guatemala's finest micro-climate. Their Maragogype lots are unlike anything else in the world.",
+      specialty:"Micro-lot / Heirloom", roast:"Light-Medium", principles:[1,1,1,1,1,1],
+      products:[{name:"Maragogype Honey Process",price:"$38/100g",notes:"Papaya, brown sugar, jasmine"},{name:"Bourbon Natural",price:"$30/100g",notes:"Blackberry, dark chocolate, vanilla"}],
+      contact:{phone:"+502 7764-1574",email:"info@elinjerto.com",website:"https://elinjerto.com"}},
+
+    {id:8,  name:"Intelligentsia Coffee", slug:"intelligentsia-coffee", type:"roaster",     continent:"Americas",     city:"Chicago",       country:"USA",        lat:41.8827,lng:-87.6232, score:4, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=640&q=80",
+      description:"The pioneers of Direct Trade in North America. Since 1995, Intelligentsia has proven that paying more to farmers produces better coffee — a radical idea that became an industry standard.",
+      specialty:"Direct Trade / Espresso", roast:"Medium", principles:[1,1,0,1,1,0],
+      products:[{name:"Black Cat Classic Espresso",price:"$18/12oz",notes:"Milk chocolate, dried cherry"},{name:"Yirgacheffe Black",price:"$22/12oz",notes:"Blueberry, citrus, floral"}],
+      contact:{phone:"+1 312-920-9390",email:"hello@intelligentsiacoffee.com",website:"https://intelligentsiacoffee.com"}},
+
+    {id:9,  name:"Heart Coffee",          slug:"heart-coffee",          type:"roaster",     continent:"Americas",     city:"Portland",      country:"USA",        lat:45.5231,lng:-122.6765, score:5, added:"2024-02", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=640&q=80",
+      description:"Portland's most acclaimed roaster. Wille Yli-Luoma brought a Nordic philosophy to the Pacific Northwest — minimalist, precise, and genuinely passionate about the source.",
+      specialty:"Nordic-style Filter", roast:"Light", principles:[1,1,1,1,1,0],
+      products:[{name:"Limu Natural Ethiopia",price:"$22/10oz",notes:"Watermelon, lychee, hibiscus"},{name:"Seasonal Espresso",price:"$18/10oz",notes:"Rotating, always exceptional"}],
+      contact:{phone:"+1 503-206-6602",email:"info@heartroasters.com",website:"https://heartroasters.com"}},
+
+    {id:10, name:"Hacienda La Esmeralda", slug:"hacienda-la-esmeralda", type:"farm",        continent:"Americas",     city:"Boquete",       country:"Panama",     lat:8.7833,lng:-82.4333,  score:6, added:"2024-01", featured:false,claimed:false, badge:"pick",
+      photo:"https://images.unsplash.com/photo-1559525839-8c4b30c18b97?w=640&q=80",
+      description:"The farm that introduced Geisha to the world. In 2004, their Geisha varietal broke every auction record and changed global coffee forever. Still family-run, still extraordinary.",
+      specialty:"Geisha / Auction Lots", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Geisha Natural",price:"$100+/100g",notes:"Jasmine, bergamot, tropical fruit"},{name:"Geisha Washed",price:"$80+/100g",notes:"Earl grey, lime, white peach"}],
+      contact:{phone:"+507 720-1000",email:"contact@haciendaesmeralda.com",website:"https://haciendaesmeralda.com"}},
+
+    {id:11, name:"Onibus Coffee",         slug:"onibus-coffee",         type:"café",        continent:"Asia-Pacific", city:"Tokyo",         country:"Japan",      lat:35.6440,lng:139.6980, score:5, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=640&q=80",
+      description:"Nakameguro's beloved café. Owner Sakao sources directly from Ethiopia and Colombia, and the precision of Japanese hospitality elevates every cup into an experience.",
+      specialty:"Japanese Iced Coffee", roast:"Light-Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Kenya Kiambu AA",price:"¥850",notes:"Blackcurrant, tomato, brown sugar"},{name:"Brazil Sul de Minas",price:"¥780",notes:"Walnut, caramel, earthy"}],
+      contact:{phone:"+81 3-6413-8048",email:"info@onibuscoffee.com",website:"https://onibuscoffee.com"}},
+
+    // ── AFRICA ──
+    {id:12, name:"Kaldi's Coffee",        slug:"kaldis-coffee",         type:"café",        continent:"Africa",       city:"Addis Ababa",   country:"Ethiopia",   lat:9.0195,lng:38.7525,  score:5, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1559525839-8c4b30c18b97?w=640&q=80",
+      description:"Ethiopia's leading specialty chain, doing the vital work of building a domestic coffee culture in the birthplace of coffee itself. Every cup supports Ethiopian farmers directly.",
+      specialty:"Ethiopian Heirloom", roast:"Light", principles:[1,1,1,1,1,0],
+      products:[{name:"Yirgacheffe Grade 1",price:"ETB 120",notes:"Blueberry, jasmine, dark chocolate"},{name:"Sidama Sun-Dried",price:"ETB 110",notes:"Wild berries, wine, spice"}],
+      contact:{phone:"+251 11 551 7700",email:"info@kaldiscoffee.et",website:"https://kaldiscoffee.et"}},
+
+    {id:13, name:"Lacoffee",              slug:"lacoffee",              type:"farm",        continent:"Africa",       city:"Bonga Forest",  country:"Ethiopia",   lat:7.2667,lng:36.2333,  score:6, added:"2024-02", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=640&q=80",
+      description:"Wild-harvested forest coffee from Kaffa — the genetic origin of all coffee on earth. These ancient arabica varieties grow in the wild. No cultivation, no chemicals, pure origin.",
+      specialty:"Wild Forest / Heirloom", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Kaffa Wild Forest",price:"$45/100g",notes:"Earth, dark fruit, ancient complexity"},{name:"Gimbi Natural",price:"$32/100g",notes:"Blueberry jam, cardamom, forest floor"}],
+      contact:{phone:"+251 94 117 4444",email:"info@lacoffee.et",website:"https://lacoffee.et"}},
+
+    {id:14, name:"Rugali Coffee",         slug:"rugali-coffee",         type:"cooperative", continent:"Africa",       city:"Rulindo",       country:"Rwanda",     lat:-1.6500,lng:29.9833,  score:5, added:"2024-02", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1464983953574-0892a716854b?w=640&q=80",
+      description:"A women-led cooperative in Rwanda's Northern Province producing exceptional washed lots. Every bag sold funds education programs in the surrounding hills.",
+      specialty:"Washed Bourbon", roast:"Light-Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Rulindo Washed",price:"$28/250g",notes:"Red apple, hibiscus, caramel"},{name:"Honey Process",price:"$32/250g",notes:"Peach jam, vanilla, brown sugar"}],
+      contact:{phone:"+250 788 000 000",email:"hello@rugalicoffee.rw",website:"https://rugalicoffee.rw"}},
+
+    {id:15, name:"Amare Coffee",          slug:"amare-coffee",          type:"roaster",     continent:"Africa",       city:"Nairobi",       country:"Kenya",      lat:-1.2921,lng:36.8219,  score:5, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=640&q=80",
+      description:"Nairobi's most exciting young roaster — bridging the gap between world-class Kenyan AA production and a local café culture that has long been overlooked.",
+      specialty:"Kenyan AA / Espresso", roast:"Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Nyeri AA Washed",price:"KES 850/250g",notes:"Blackcurrant, tomato, bright acid"},{name:"Kiambu Single Estate",price:"KES 920/250g",notes:"Black tea, grapefruit, walnut"}],
+      contact:{phone:"+254 700 000 000",email:"hello@amarecoffee.ke",website:"https://amarecoffee.ke"}},
+
+    // ── ASIA-PACIFIC ──
+    {id:16, name:"Proud Mary Coffee",     slug:"proud-mary-coffee",     type:"roaster",     continent:"Asia-Pacific", city:"Melbourne",     country:"Australia",  lat:-37.8013,lng:144.9523, score:5, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=640&q=80",
+      description:"Melbourne's rule-breaker. Proud Mary sources ludicrous coffees from micro-lots most roasters never hear about and presents them with theatrical flair.",
+      specialty:"Micro-lot / Espresso", roast:"Light-Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Hologram Blend",price:"AUD $25/250g",notes:"Mandarin, stone fruit, milk chocolate"},{name:"Ethiopia Bombe Natural",price:"AUD $34/250g",notes:"Strawberry jam, rose, vanilla"}],
+      contact:{phone:"+61 3 9417 5930",email:"hello@proudmarycoffee.com.au",website:"https://proudmarycoffee.com.au"}},
+
+    {id:17, name:"Fuglen Coffee",         slug:"fuglen-coffee",         type:"café",        continent:"Asia-Pacific", city:"Tokyo",         country:"Japan",      lat:35.6694,lng:139.7019, score:5, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=640&q=80",
+      description:"The Oslo-born café that transplanted Nordic coffee culture to Shibuya. A quiet cultural ambassador — proving that great coffee travels without losing its soul.",
+      specialty:"Nordic / Filter", roast:"Light", principles:[1,1,1,1,1,0],
+      products:[{name:"Single Origin Pour Over",price:"¥900",notes:"Rotating Nordic-sourced lots"},{name:"Cold Brew",price:"¥750",notes:"Smooth, sweet, effortless"}],
+      contact:{phone:"+81 3-3481-0884",email:"tokyo@fuglen.no",website:"https://fuglen.no/tokyo"}},
+
+    {id:18, name:"Skye Coffee Co",        slug:"skye-coffee",           type:"roaster",     continent:"Asia-Pacific", city:"Singapore",     country:"Singapore",  lat:1.3521,lng:103.8198, score:4, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=640&q=80",
+      description:"Southeast Asia's most thoughtful roaster. Working with small-scale farmers across Indonesia and Vietnam to prove that the region produces world-class specialty coffee.",
+      specialty:"Southeast Asian Origins", roast:"Light-Medium", principles:[1,1,1,1,0,0],
+      products:[{name:"Sumatra Natural Process",price:"SGD $22/200g",notes:"Dark chocolate, cedar, molasses"},{name:"Vietnam Washed Arabica",price:"SGD $20/200g",notes:"Citrus, almond, honey"}],
+      contact:{phone:"+65 9000 0000",email:"hello@skyecoffee.sg",website:"https://skyecoffee.sg"}},
+
+    {id:19, name:"Campos Coffee",         slug:"campos-coffee",         type:"roaster",     continent:"Asia-Pacific", city:"Sydney",        country:"Australia",  lat:-33.8688,lng:151.2093, score:4, added:"2024-02", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=640&q=80",
+      description:"One of Australia's founding specialty roasters. Campos proved that Australians didn't want Nescafé — they wanted quality — and the country's entire café culture followed.",
+      specialty:"Espresso / Education", roast:"Medium", principles:[1,0,1,1,1,0],
+      products:[{name:"Superior Blend",price:"AUD $19/250g",notes:"Chocolate, nuts, clean finish"},{name:"Yirgacheffe Single Origin",price:"AUD $24/250g",notes:"Citrus, bergamot, light body"}],
+      contact:{phone:"+61 2 9516 4684",email:"hello@camposcoffee.com",website:"https://camposcoffee.com"}},
+
+    // ── MIDDLE EAST ──
+    {id:20, name:"Qahwah House",          slug:"qahwah-house",          type:"café",        continent:"Middle East",  city:"Dubai",         country:"UAE",        lat:25.2048,lng:55.2708,  score:4, added:"2024-02", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=640&q=80",
+      description:"Founded by a Yemeni entrepreneur, Qahwah House brings the ancient coffee traditions of Yemen — origin of coffee's first trade routes — to a modern global audience.",
+      specialty:"Yemeni Heritage / Qishr", roast:"Medium", principles:[1,1,1,1,0,0],
+      products:[{name:"Yemeni Haraaz",price:"AED 35",notes:"Tamarind, dried fruit, spice"},{name:"Qishr (Ginger Coffee)",price:"AED 28",notes:"Ginger, cardamom, husk-tea"}],
+      contact:{phone:"+971 4 000 0000",email:"hello@qahwahhouse.com",website:"https://qahwahhouse.com"}},
+
+    // ── MORE AMERICAS ──
+    {id:21, name:"Finca Los Cedros",      slug:"finca-los-cedros",      type:"farm",        continent:"Americas",     city:"Intag Valley",  country:"Ecuador",    lat:0.2500,lng:-78.7500,  score:6, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=640&q=80",
+      description:"A cloud forest farm in Ecuador's Intag Valley, grown inside a private biological reserve protecting 500+ species. Every purchase directly funds forest conservation.",
+      specialty:"Cloud Forest / Conservation", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Typica Natural",price:"$35/100g",notes:"Dark berry, forest herbs, complex earth"},{name:"Caturra Washed",price:"$28/100g",notes:"Stone fruit, vanilla, clean finish"}],
+      contact:{phone:"+593 6 264 8000",email:"info@fincaloscedros.ec",website:"https://fincaloscedros.ec"}},
+
+    {id:22, name:"Blue Bottle Coffee",    slug:"blue-bottle-coffee",    type:"roaster",     continent:"Americas",     city:"Oakland",       country:"USA",        lat:37.8044,lng:-122.2712, score:4, added:"2024-01", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=640&q=80",
+      description:"The roaster that sparked the third-wave movement. James Freeman's obsession with freshness — never selling coffee more than 48 hours after roasting — changed everything.",
+      specialty:"Pour Over / Freshness", roast:"Light-Medium", principles:[1,1,1,1,0,0],
+      products:[{name:"Hayes Valley Espresso",price:"$19/10oz",notes:"Dark chocolate, toasted almond"},{name:"Three Africas",price:"$22/10oz",notes:"Tropical fruit, berry, bright acidity"}],
+      contact:{phone:"+1 510-653-3394",email:"hello@bluebottlecoffee.com",website:"https://bluebottlecoffee.com"}},
+
+    {id:23, name:"Café Pergamino",        slug:"cafe-pergamino",        type:"café",        continent:"Americas",     city:"Medellín",      country:"Colombia",   lat:6.2476,lng:-75.5658,  score:5, added:"2024-02", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=640&q=80",
+      description:"Medellín's finest specialty café, pouring some of Colombia's rarest micro-lots in a city that has transformed itself as remarkably as the country's coffee industry.",
+      specialty:"Colombian Micro-lot", roast:"Light", principles:[1,1,1,1,1,0],
+      products:[{name:"Geisha Natural",price:"COP 22,000",notes:"Tropical, floral, jasmine"},{name:"Wush Wush Honey",price:"COP 18,000",notes:"Hibiscus, peach, brown sugar"}],
+      contact:{phone:"+57 4 311 5282",email:"info@cafepergamino.com",website:"https://cafepergamino.com"}},
+
+    // ── MORE EUROPE ──
+    {id:24, name:"Koppi Coffee",          slug:"koppi-coffee",          type:"roaster",     continent:"Europe",       city:"Helsingborg",   country:"Sweden",     lat:56.0465,lng:12.6945,  score:5, added:"2024-02", featured:false,claimed:false, badge:null,
+      photo:"https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=640&q=80",
+      description:"Sweden's most awarded micro-roaster. Anne and Charles Nystrand source with singular focus — only lots they can personally verify, roasted in tiny batches, sold before the week is out.",
+      specialty:"Micro-lot / Award-winning", roast:"Light", principles:[1,1,1,1,1,0],
+      products:[{name:"Kenya Gachatha",price:"SEK 130/250g",notes:"Blackcurrant, grapefruit, honey"},{name:"Colombia Seasonal",price:"SEK 125/250g",notes:"Rotating, always exceptional"}],
+      contact:{phone:"+46 42 21 44 60",email:"info@koppi.se",website:"https://koppi.se"}},
+
+    {id:25, name:"Gardelli Specialty",    slug:"gardelli-specialty",    type:"roaster",     continent:"Europe",       city:"Forlì",         country:"Italy",      lat:44.2227,lng:12.0407,  score:5, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=640&q=80",
+      description:"Italy's quiet revolution. Rubens Gardelli proved that the country that invented espresso culture was ready for something lighter, more complex, more honest about origin.",
+      specialty:"Light Espresso / Italian Specialty", roast:"Light-Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Ethiopia Suke Quto",price:"€18/250g",notes:"Jasmine, peach, clean bergamot"},{name:"Yemeni Specialty",price:"€28/250g",notes:"Tamarind, dried apricot, complex"}],
+      contact:{phone:"+39 0543 000 000",email:"info@gardellicoffee.com",website:"https://gardellicoffee.com"}},
+
+    // ── MORE AFRICA / ORIGINS ──
+    {id:26, name:"Traceability Coffee",   slug:"traceability-coffee",   type:"cooperative", continent:"Africa",       city:"Kirinyaga",     country:"Kenya",      lat:-0.5333,lng:37.2667,  score:6, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1464983953574-0892a716854b?w=640&q=80",
+      description:"A 450-smallholder cooperative on the slopes of Mount Kenya producing some of the world's most traceable washed coffees. Every bag links to the exact farmer who grew it.",
+      specialty:"Traceable Washed / Kenyan AA", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Kirinyaga AB",price:"$30/250g",notes:"Blackcurrant, tomato water, pink grapefruit"},{name:"Peaberry",price:"$35/250g",notes:"Cherry, dark chocolate, tea-like finish"}],
+      contact:{phone:"+254 720 000 000",email:"hello@traceabilitycoffee.ke",website:"https://traceabilitycoffee.ke"}},
+
+    {id:27, name:"Camocim Estate",        slug:"camocim-estate",        type:"farm",        continent:"Americas",     city:"Domingos Martins",country:"Brazil",   lat:-20.3619,lng:-41.0584, score:5, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1559525839-8c4b30c18b97?w=640&q=80",
+      description:"Biodynamic and certified organic, Camocim is Brazil doing something completely different — slow farming on ancient volcanic soil, producing naturals of startling elegance.",
+      specialty:"Biodynamic / Natural", roast:"Light-Medium", principles:[1,1,1,1,1,0],
+      products:[{name:"Biodynamic Yellow Bourbon",price:"$26/250g",notes:"Stone fruit, caramel, gentle spice"},{name:"Red Catuai Natural",price:"$22/250g",notes:"Chocolate, raisin, round sweetness"}],
+      contact:{phone:"+55 27 3268 0000",email:"info@camocimestate.com.br",website:"https://camocimestate.com.br"}},
+
+    {id:28, name:"Paradise Road Café",    slug:"paradise-road-cafe",    type:"café",        continent:"Asia-Pacific", city:"Colombo",       country:"Sri Lanka",  lat:6.9271,lng:79.8612,   score:4, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=640&q=80",
+      description:"An oasis of calm in Colombo — this beloved café and gallery serves rare Ceylon single-estate coffees that most of the world exports without ever tasting themselves.",
+      specialty:"Ceylon Single Estate", roast:"Medium", principles:[1,1,0,1,1,0],
+      products:[{name:"Nuwara Eliya Single Estate",price:"LKR 850",notes:"Delicate, citrus peel, soft spice"},{name:"Cold Brew Ceylon",price:"LKR 750",notes:"Smooth, honeydew, aromatic"}],
+      contact:{phone:"+94 11 268 6043",email:"hello@paradiseroad.lk",website:"https://paradiseroad.lk"}},
+
+    {id:29, name:"Toma Café",             slug:"toma-cafe",             type:"café",        continent:"Europe",       city:"Madrid",        country:"Spain",      lat:40.4168,lng:-3.7038,  score:4, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=640&q=80",
+      description:"The café that sparked Madrid's specialty revolution. A tiny corner bar that proved Spaniards were ready to put down the cortado and try something extraordinary.",
+      specialty:"Specialty Espresso / Cortado", roast:"Light-Medium", principles:[1,0,1,1,1,0],
+      products:[{name:"Espresso of the Week",price:"€3.20",notes:"Rotating single origin"},{name:"Filter of the Day",price:"€4.00",notes:"Careful pour, seasonal"}],
+      contact:{phone:"+34 91 702 0263",email:"hola@tomacafe.es",website:"https://tomacafe.es"}},
+
+    {id:30, name:"Finca Deborah",         slug:"finca-deborah",         type:"farm",        continent:"Americas",     city:"Volcán",        country:"Panama",     lat:8.7833,lng:-82.6167,  score:6, added:"2024-03", featured:false,claimed:false, badge:"new",
+      photo:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=640&q=80",
+      description:"At 1900m on Volcán Barú, Jamison Savage grows Geisha in one of the highest, most extreme coffee environments on earth. Limited to a few hundred kilos a year — and worth every penny.",
+      specialty:"High-Altitude Geisha", roast:"Light", principles:[1,1,1,1,1,1],
+      products:[{name:"Geisha Natural",price:"$120+/100g",notes:"Ethereal jasmine, tropical, electric acidity"},{name:"Geisha Washed Anaerobic",price:"$95/100g",notes:"White flower, citrus blossom, translucent"}],
+      contact:{phone:"+507 730 0000",email:"info@fincadeborah.com",website:"https://fincadeborah.com"}}
   ];
 
-  const PRINCIPLES = ['Act from Love','Live Simply','Mutual Support','Well-Being','Honest Growth','Overall Quality'];
+  const PRINCIPLES = [
+    {name:'Act from Love',    icon:'♡'},
+    {name:'Live Simply',      icon:'◎'},
+    {name:'Mutual Support',   icon:'⟲'},
+    {name:'Well-Being',       icon:'✦'},
+    {name:'Honest Growth',    icon:'↑'},
+    {name:'Overall Quality',  icon:'❋'}
+  ];
 
-  // ── ROSETTE SVG — each petal offset from center, rotated around its own cx/cy ──
+  // ── ROSETTE SVG ──
   function rosettesvg(score, size=28) {
     const cx = size/2, cy = size/2;
-    const rIn  = size * 0.12;   // inner gap from center
-    const rOut = size * 0.49;   // tip of petal
+    const rIn  = size * 0.12;
+    const rOut = size * 0.49;
     const rMid = (rIn + rOut) / 2;
-    const hw   = (rOut - rIn) * 0.33; // half-width at midpoint
+    const hw   = (rOut - rIn) * 0.33;
     const angles = [0, 60, 120, 180, 240, 300];
 
     function petal(deg) {
-      const a = deg * Math.PI / 180;
-      const p = a + Math.PI / 2;
+      const a = deg * Math.PI / 180, p = a + Math.PI / 2;
       const f = v => v.toFixed(3);
-      // 4 key points: base (inner), left, tip (outer), right
-      const bx = cx + rIn  * Math.sin(a), by = cy - rIn  * Math.cos(a);
-      const tx = cx + rOut * Math.sin(a), ty = cy - rOut * Math.cos(a);
-      const mx = cx + rMid * Math.sin(a), my = cy - rMid * Math.cos(a);
-      const lx = mx + hw * Math.sin(p),   ly = my - hw * Math.cos(p);
-      const rx = mx - hw * Math.sin(p),   ry = my + hw * Math.cos(p);
-      // Two quadratic curves: base→left→tip, then tip→right→base
+      const bx = cx + rIn*Math.sin(a),  by = cy - rIn*Math.cos(a);
+      const tx = cx + rOut*Math.sin(a), ty = cy - rOut*Math.cos(a);
+      const mx = cx + rMid*Math.sin(a), my = cy - rMid*Math.cos(a);
+      const lx = mx + hw*Math.sin(p),   ly = my - hw*Math.cos(p);
+      const rx = mx - hw*Math.sin(p),   ry = my + hw*Math.cos(p);
       return `M ${f(bx)} ${f(by)} Q ${f(lx)} ${f(ly)}, ${f(tx)} ${f(ty)} Q ${f(rx)} ${f(ry)}, ${f(bx)} ${f(by)} Z`;
     }
 
     const petals = angles.map((a, i) => {
       const on = i < score;
-      const fill   = on ? '#F0C040' : 'rgba(196,162,90,0.15)';
-      const stroke = on ? '#D4A020' : 'rgba(196,162,90,0.30)';
-      const sw = size < 32 ? '0.8' : '1.1';
-      return `<path d="${petal(a)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
+      return `<path d="${petal(a)}" fill="${on?'#F0C040':'rgba(196,162,90,0.15)'}" stroke="${on?'#D4A020':'rgba(196,162,90,0.30)'}" stroke-width="${size<32?'0.8':'1.1'}"/>`;
     }).join('');
 
-    const dot = `<circle cx="${cx}" cy="${cy}" r="${(size*0.04).toFixed(1)}" fill="#E8B84B" stroke="#C49520" stroke-width="0.6"/>`;
-    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0;display:block;">${petals}${dot}</svg>`;
+    const dotR   = (size*0.04).toFixed(1);
+    const dotF   = score > 0 ? '#F0C040' : 'rgba(196,162,90,0.15)';
+    const dotS   = score > 0 ? '#D4A020' : 'rgba(196,162,90,0.30)';
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0;display:block;">${petals}<circle cx="${cx}" cy="${cy}" r="${dotR}" fill="${dotF}" stroke="${dotS}" stroke-width="0.6"/></svg>`;
   }
 
   // ── MAP ──
   const map = L.map('map',{center:[20,10],zoom:2.5,zoomControl:false,attributionControl:false});
   L.control.zoom({position:'bottomright'}).addTo(map);
   L.control.attribution({position:'bottomright',prefix:''}).addTo(map);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:18}).addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
+
+  const TYPE_COLORS = {café:'#7A4F2E',roaster:'#C4A25A',farm:'#6B7C5E',cooperative:'#8B6B4A'};
 
   function pinIcon(type, active=false) {
-    const colors={café:'#7A4F2E',roaster:'#C4A25A',farm:'#6B7C5E'};
-    const c=colors[type]||colors.café;
-    const s=active?1.25:1;
+    const c = TYPE_COLORS[type] || '#7A4F2E';
+    const s = active ? 1.3 : 1;
     return L.divIcon({
       className:'',
-      html:`<div style="width:${28*s}px;height:${28*s}px;background:${c};border:2.5px solid #F2EAD8;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 3px ${active?16:8}px rgba(30,18,8,${active?0.4:0.2});cursor:pointer;transition:all 0.2s;"></div>`,
-      iconSize:[28*s,28*s],iconAnchor:[14*s,28*s],popupAnchor:[0,-30*s]
+      html:`<div style="width:${26*s}px;height:${26*s}px;background:${c};border:2.5px solid #F2EAD8;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 3px ${active?18:8}px rgba(30,18,8,${active?0.4:0.18});cursor:pointer;transition:all 0.2s;"></div>`,
+      iconSize:[26*s,26*s], iconAnchor:[13*s,26*s], popupAnchor:[0,-28*s]
     });
   }
 
@@ -691,104 +749,112 @@
   let visibleLocations = [...LOCATIONS];
   let markers = {};
   let activeId = null;
+  let sortMode = 'score';
 
-  // ── DROPDOWN STATE ──
-  let openDropdown = null;
+  // ── DROPDOWN LOGIC ──
+  let openDrop = null;
 
   function toggleDropdown(name) {
-    const drop = document.getElementById('drop-' + name);
-    const btn  = document.getElementById('btn-' + name);
-    if (openDropdown && openDropdown !== name) {
-      document.getElementById('drop-' + openDropdown).classList.remove('open');
-      document.getElementById('btn-'  + openDropdown).classList.remove('open');
+    const drop = document.getElementById('drop-'+name);
+    const btn  = document.getElementById('btn-'+name);
+    if (openDrop && openDrop !== name) {
+      document.getElementById('drop-'+openDrop)?.classList.remove('open');
+      document.getElementById('btn-'+openDrop)?.classList.remove('open');
     }
     const isOpen = drop.classList.toggle('open');
     btn.classList.toggle('open', isOpen);
-    openDropdown = isOpen ? name : null;
+    openDrop = isOpen ? name : null;
   }
 
-  // Close dropdowns when clicking outside
   document.addEventListener('click', e => {
     if (!e.target.closest('.filter-pill')) {
       document.querySelectorAll('.filter-dropdown.open').forEach(d => d.classList.remove('open'));
       document.querySelectorAll('.filter-pill-btn.open').forEach(b => b.classList.remove('open'));
-      openDropdown = null;
+      openDrop = null;
     }
   });
 
-  // ── FILTER LOGIC ──
-  function toggleOption(el) {
-    el.classList.toggle('checked');
-    const filter = el.dataset.filter;
-    // Update pill button style
-    const anyChecked = document.querySelectorAll(`.filter-option.checked[data-filter="${filter}"]`).length > 0;
-    document.getElementById('btn-' + filter).classList.toggle('has-selection', anyChecked);
+  function toggleOpt(el) {
+    el.classList.toggle('on');
+    const f = el.dataset.f;
+    const anyOn = document.querySelectorAll(`.drop-opt.on[data-f="${f}"]`).length > 0;
+    document.getElementById('btn-'+f)?.classList.toggle('active', anyOn);
     applyFilters();
   }
 
-  function clearDropdown(filter) {
-    document.querySelectorAll(`.filter-option[data-filter="${filter}"]`).forEach(o => o.classList.remove('checked'));
-    document.getElementById('btn-' + filter).classList.remove('has-selection');
+  function clearDrop(f) {
+    document.querySelectorAll(`.drop-opt[data-f="${f}"]`).forEach(o => o.classList.remove('on'));
+    document.getElementById('btn-'+f)?.classList.remove('active');
     applyFilters();
   }
 
-  function selectScore(el) {
-    document.querySelectorAll('.score-opt').forEach(o => o.classList.remove('active'));
-    el.classList.add('active');
-    const btn = document.getElementById('btn-score');
-    btn.classList.toggle('has-selection', el.dataset.value !== '0');
+  function pickScore(el) {
+    document.querySelectorAll('.score-opt').forEach(o => o.classList.remove('on'));
+    el.classList.add('on');
+    const isFiltered = el.dataset.v !== '0';
+    document.getElementById('btn-score').classList.toggle('active', isFiltered);
+    applyFilters();
+  }
+
+  function pickSort(el) {
+    document.querySelectorAll('.drop-opt[data-f="sort"]').forEach(o => o.classList.remove('on'));
+    el.classList.add('on');
+    sortMode = el.dataset.v;
     applyFilters();
   }
 
   function applyFilters() {
-    const types    = [...document.querySelectorAll('.filter-option.checked[data-filter="type"]')].map(o => o.dataset.value);
-    const roasts   = [...document.querySelectorAll('.filter-option.checked[data-filter="roast"]')].map(o => o.dataset.value);
-    const countries= [...document.querySelectorAll('.filter-option.checked[data-filter="country"]')].map(o => o.dataset.value);
-    const scoreEl  = document.querySelector('.score-opt.active');
-    const minScore = scoreEl ? parseInt(scoreEl.dataset.value) : 0;
+    const types  = [...document.querySelectorAll('.drop-opt.on[data-f="type"]')].map(o => o.dataset.v);
+    const conts  = [...document.querySelectorAll('.drop-opt.on[data-f="continent"]')].map(o => o.dataset.v);
+    const scoreEl = document.querySelector('.score-opt.on');
+    const minScore = scoreEl ? parseInt(scoreEl.dataset.v) : 0;
+    const q = document.getElementById('search-input').value.toLowerCase();
 
-    visibleLocations = LOCATIONS.filter(l => {
-      if (types.length    && !types.includes(l.type))                          return false;
-      if (roasts.length   && !roasts.some(r => l.roast.toLowerCase().includes(r))) return false;
-      if (countries.length && !countries.includes(l.country))                  return false;
-      if (l.score < minScore)                                                   return false;
+    let filtered = LOCATIONS.filter(l => {
+      if (types.length && !types.includes(l.type)) return false;
+      if (conts.length && !conts.includes(l.continent)) return false;
+      if (l.score < minScore) return false;
+      if (q && !l.name.toLowerCase().includes(q) && !l.city.toLowerCase().includes(q) && !l.country.toLowerCase().includes(q) && !l.specialty.toLowerCase().includes(q)) return false;
       return true;
     });
-    renderList(visibleLocations);
-    renderMarkers(visibleLocations);
-    document.getElementById('filter-count').textContent = `${visibleLocations.length} location${visibleLocations.length !== 1 ? 's' : ''}`;
+
+    // Sort
+    if (sortMode === 'score') filtered.sort((a,b) => b.score - a.score || a.name.localeCompare(b.name));
+    else if (sortMode === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+    else if (sortMode === 'new') filtered.sort((a,b) => b.added.localeCompare(a.added));
+
+    visibleLocations = filtered;
+    renderList(filtered);
+    renderMarkers(filtered);
+    document.getElementById('filter-count').textContent = `${filtered.length} venue${filtered.length !== 1 ? 's' : ''}`;
   }
 
-  // ── COUNTRIES ──
-
-  function buildCountryChips() {
-    const countries = [...new Set(LOCATIONS.map(l=>l.country))].sort();
-    const container = document.getElementById('country-options');
-    countries.forEach(c => {
-      const label = document.createElement('label');
-      label.className = 'filter-option checked';
-      label.dataset.filter = 'country';
-      label.dataset.value = c;
-      label.onclick = () => toggleOption(label);
-      label.innerHTML = '<div class="filter-checkbox"></div><span class="filter-option-label">' + c + '</span>';
-      container.appendChild(label);
-    });
-  }
+  // ── BUILD COUNTRY/CONTINENT DROPDOWNS ──
+  // (continents are hardcoded in HTML; countries dynamic if needed)
 
   // ── RENDER LIST ──
   function renderList(locs) {
     const container = document.getElementById('location-list');
     container.innerHTML = '';
     if (!locs.length) {
-      container.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:rgba(122,79,46,0.35);font-style:italic;font-size:0.95rem;">No locations match your filters.</div>`;
+      container.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:rgba(122,79,46,0.35);font-style:italic;font-size:0.95rem;pointer-events:all;">No venues match. Try adjusting your filters.</div>`;
       return;
     }
     locs.forEach(loc => {
       const card = document.createElement('div');
       card.className = `location-card${loc.id===activeId?' active':''}`;
       card.dataset.id = loc.id;
-      const photoCard = loc.photo ? "<div style='width:100%;height:90px;overflow:hidden;border-radius:5px;margin-bottom:0.6rem;'><img src='" + loc.photo + "' style='width:100%;height:100%;object-fit:cover;opacity:0.88;' onerror='this.parentElement.style.display=\"none\"'/></div>" : "";
-      card.innerHTML = photoCard + `
+
+      const badgeHtml = loc.badge === 'pick' ? '<span class="badge badge-pick">Editor\'s Pick</span>'
+                      : loc.badge === 'new'  ? '<span class="badge badge-new">Newly Listed</span>'
+                      : '';
+      const verifiedHtml = loc.claimed ? '<span class="badge badge-verified">Verified</span>' : '';
+      const badges = (badgeHtml || verifiedHtml) ? `<div class="card-badges">${badgeHtml}${verifiedHtml}</div>` : '';
+      const photoHtml = loc.photo
+        ? `<div class="card-photo"><img src="${loc.photo}" alt="${loc.name}" loading="lazy" onerror="this.parentElement.style.display='none'"/></div>`
+        : '';
+
+      card.innerHTML = photoHtml + badges + `
         <div class="card-header">
           <span class="card-name">${loc.name}</span>
           ${rosettesvg(loc.score, 30)}
@@ -796,7 +862,7 @@
         <div class="card-place">${loc.city}, ${loc.country}</div>
         <div class="card-footer">
           <span class="pill pill-type">${loc.type}</span>
-          <span class="pill pill-roast">${loc.roast}</span>
+          <span class="pill pill-continent">${loc.continent}</span>
         </div>
       `;
       card.addEventListener('click', () => selectLocation(loc.id));
@@ -810,66 +876,85 @@
     markers = {};
     locs.forEach(loc => {
       const m = L.marker([loc.lat,loc.lng],{icon:pinIcon(loc.type,false)}).addTo(map);
-      m.bindPopup(`<div class="popup-name">${loc.name}</div><div class="popup-sub">${loc.city}, ${loc.country} · ${loc.specialty}</div><button class="popup-btn" onclick="selectLocation(${loc.id})">Explore →</button>`,{closeButton:false,maxWidth:220});
-      m.on('click',()=>selectLocation(loc.id));
-      markers[loc.id]=m;
+      m.bindPopup(
+        `<div class="popup-name">${loc.name}</div>
+         <div class="popup-sub">${loc.city}, ${loc.country} · ${loc.specialty}</div>
+         <button class="popup-btn" onclick="selectLocation(${loc.id})">View Details →</button>`,
+        {closeButton:false, maxWidth:230}
+      );
+      m.on('click', () => selectLocation(loc.id));
+      markers[loc.id] = m;
     });
   }
 
-  // ── SELECT ──
+  // ── SELECT / DETAIL ──
   function selectLocation(id) {
     if (activeId) {
       document.querySelector(`.location-card[data-id="${activeId}"]`)?.classList.remove('active');
-      const prev = LOCATIONS.find(l=>l.id===activeId);
-      if (prev && markers[activeId]) markers[activeId].setIcon(pinIcon(prev.type,false));
+      const prev = LOCATIONS.find(l => l.id === activeId);
+      if (prev && markers[activeId]) markers[activeId].setIcon(pinIcon(prev.type, false));
     }
     activeId = id;
-    const loc = LOCATIONS.find(l=>l.id===id);
+    const loc = LOCATIONS.find(l => l.id === id);
     if (!loc) return;
     document.querySelector(`.location-card[data-id="${id}"]`)?.classList.add('active');
     document.querySelector(`.location-card[data-id="${id}"]`)?.scrollIntoView({behavior:'smooth',block:'nearest'});
     if (markers[id]) {
-      markers[id].setIcon(pinIcon(loc.type,true));
-      map.setView([loc.lat,loc.lng],Math.max(map.getZoom(),5),{animate:true,duration:0.5});
+      markers[id].setIcon(pinIcon(loc.type, true));
+      map.setView([loc.lat, loc.lng], Math.max(map.getZoom(), 5), {animate:true, duration:0.5});
       markers[id].openPopup();
     }
+    // Deep link
+    history.replaceState(null, '', `?v=${loc.slug}`);
     showDetail(loc);
   }
 
   function showDetail(loc) {
-    const principleRows = PRINCIPLES.map((name,i)=>`
+    const principleRows = PRINCIPLES.map((p,i) => `
       <div class="principle-row">
-        <span class="principle-label">${name}</span>
+        <span class="principle-icon">${p.icon}</span>
+        <span class="principle-label">${p.name}</span>
         <div class="principle-bar"><div class="principle-fill" style="width:${loc.principles[i]?'100':'0'}%"></div></div>
       </div>`).join('');
 
-    const products = loc.products.map(p=>`
+    const products = loc.products.map(p => `
       <div class="product">
         <div class="product-top"><span class="product-name">${p.name}</span><span class="product-price">${p.price}</span></div>
         <div class="product-notes">↳ ${p.notes}</div>
       </div>`).join('');
 
-    const detailPhotoHtml = loc.photo ? "<div style='width:100%;height:160px;overflow:hidden;border-radius:6px;margin-bottom:1.1rem;background:rgba(122,79,46,0.08);'><img src='" + loc.photo + "' style='width:100%;height:100%;object-fit:cover;opacity:0.9;' onerror='this.parentElement.style.display=\"none\"'/></div>" : "";
-    document.getElementById('detail-content').innerHTML = detailPhotoHtml + `
+    const badgeHtml = loc.badge === 'pick' ? '<span class="badge badge-pick">Editor\'s Pick</span>'
+                    : loc.badge === 'new'  ? '<span class="badge badge-new">Newly Listed</span>'
+                    : '';
+
+    const photoHtml = loc.photo
+      ? `<div style="width:100%;height:170px;overflow:hidden;border-radius:7px;margin-bottom:1.1rem;background:rgba(122,79,46,0.06);"><img src="${loc.photo}" style="width:100%;height:100%;object-fit:cover;opacity:0.9;" onerror="this.parentElement.style.display='none'"/></div>`
+      : '';
+
+    document.getElementById('detail-content').innerHTML = photoHtml + `
       <div class="detail-hero">
         <div class="detail-score-row">
-          ${rosettesvg(loc.score, 56)}
+          ${rosettesvg(loc.score, 58)}
           <div class="detail-score-info">
             <span class="detail-score-label">Rosette Score</span>
-            <span class="detail-score-value">${loc.score} / 6</span>
-            <span class="detail-score-sub">Gaia Curated · Values Aligned</span>
+            <span class="detail-score-value">${loc.score} / 6 petals</span>
+            <span class="detail-score-sub">Gaia-curated · Values-aligned</span>
           </div>
         </div>
+        ${badgeHtml ? `<div style="margin-bottom:0.6rem;">${badgeHtml}</div>` : ''}
         <div class="detail-name">${loc.name}</div>
         <div class="detail-place">📍 ${loc.city}, ${loc.country}</div>
         <div class="detail-tags">
           <span class="pill pill-type">${loc.type}</span>
-          <span class="pill pill-roast">${loc.roast} Roast</span>
+          <span class="pill pill-continent">${loc.continent}</span>
         </div>
         <div class="detail-desc">${loc.description}</div>
       </div>
       <div class="detail-section">
-        <span class="detail-section-label">Principle Alignment</span>
+        <span class="detail-section-label">
+          Principle Alignment
+          <button class="why-btn" onclick="openModal('method')">How we score ↗</button>
+        </span>
         ${principleRows}
       </div>
       <div class="detail-section">
@@ -890,20 +975,29 @@
     document.getElementById('detail').classList.remove('open');
     if (activeId) {
       document.querySelector(`.location-card[data-id="${activeId}"]`)?.classList.remove('active');
-      const prev = LOCATIONS.find(l=>l.id===activeId);
-      if (prev && markers[activeId]) markers[activeId].setIcon(pinIcon(prev.type,false));
+      const prev = LOCATIONS.find(l => l.id === activeId);
+      if (prev && markers[activeId]) markers[activeId].setIcon(pinIcon(prev.type, false));
     }
     activeId = null;
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  // ── SHARE ──
+  function shareVenue() {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({title: document.title, url});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.querySelector('.detail-share-btn');
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => btn.textContent = 'Share ↗', 2000);
+      });
+    }
   }
 
   // ── SEARCH ──
-  function handleSearch() {
-    const q = document.getElementById('search-input').value.toLowerCase();
-    const filtered = q
-      ? visibleLocations.filter(l=>l.name.toLowerCase().includes(q)||l.city.toLowerCase().includes(q)||l.country.toLowerCase().includes(q)||l.specialty.toLowerCase().includes(q))
-      : visibleLocations;
-    renderList(filtered);
-  }
+  function handleSearch() { applyFilters(); }
 
   // ── PANEL COLLAPSE ──
   function togglePanel() {
@@ -911,14 +1005,50 @@
     const toggle = document.getElementById('panel-toggle');
     const collapsed = panel.classList.toggle('collapsed');
     toggle.textContent = collapsed ? '›' : '‹';
-    toggle.title = collapsed ? 'Expand list' : 'Collapse list';
+    toggle.title = collapsed ? 'Show list' : 'Hide list';
+  }
+
+  // ── MODALS ──
+  function openModal(name) {
+    document.getElementById('modal-'+name).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(name) {
+    document.getElementById('modal-'+name).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function overlayClick(e, name) {
+    if (e.target === e.currentTarget) closeModal(name);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      ['method','apply'].forEach(n => closeModal(n));
+    }
+  });
+
+  // ── APPLY SUBMIT ──
+  function submitApplication() {
+    const btn = document.querySelector('.apply-submit');
+    btn.textContent = 'Application Received ✓';
+    btn.style.background = 'var(--sage)';
+    btn.disabled = true;
+    setTimeout(() => closeModal('apply'), 2000);
+  }
+
+  // ── DEEP LINK ON LOAD ──
+  function checkDeepLink() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('v');
+    if (slug) {
+      const loc = LOCATIONS.find(l => l.slug === slug);
+      if (loc) setTimeout(() => selectLocation(loc.id), 600);
+    }
   }
 
   // ── INIT ──
-  buildCountryChips();
-  renderList(LOCATIONS);
-  renderMarkers(LOCATIONS);
-  setTimeout(()=>document.getElementById('loading').classList.add('hidden'),1100);
+  applyFilters();
+  checkDeepLink();
+  setTimeout(() => document.getElementById('loading').classList.add('hidden'), 1200);
 </script>
 </body>
 </html>
