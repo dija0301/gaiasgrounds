@@ -214,6 +214,45 @@
     .apply-submit:hover{background:var(--bark);}
     .apply-note{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.1em;color:rgba(122,79,46,0.45);text-align:center;margin-top:0.65rem;line-height:1.5;}
 
+
+    /* ── REVIEWS ── */
+    .review-section{padding:1.1rem 1.4rem;border-bottom:1px solid rgba(122,79,46,0.07);}
+    .review-avg-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem;padding:0.85rem;background:rgba(242,234,216,0.55);border:1px solid rgba(122,79,46,0.08);border-radius:8px;}
+    .cup-avg-wrap{display:flex;flex-direction:column;align-items:center;gap:0.25rem;}
+    .cup-avg-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.46rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(122,79,46,0.45);}
+    .review-avg-info{display:flex;flex-direction:column;gap:0.2rem;}
+    .review-avg-num{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--earth);line-height:1;}
+    .review-avg-sub{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(122,79,46,0.45);}
+
+    /* Coffee cup SVG rating widget */
+    .cup-rating{display:flex;gap:0.55rem;align-items:center;margin-bottom:0.9rem;}
+    .cup-btn{background:none;border:none;padding:0;cursor:pointer;opacity:0.35;transition:opacity 0.15s,transform 0.12s;}
+    .cup-btn:hover,.cup-btn.hov{opacity:0.75;transform:translateY(-1px);}
+    .cup-btn.sel{opacity:1;transform:translateY(-1px);}
+    .cup-label{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(122,79,46,0.45);margin-left:0.25rem;}
+
+    /* Review form */
+    .review-form{background:rgba(248,243,235,0.7);border:1px solid rgba(122,79,46,0.1);border-radius:8px;padding:0.85rem;margin-bottom:1rem;}
+    .review-form-title{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.38em;text-transform:uppercase;color:rgba(122,79,46,0.5);margin-bottom:0.7rem;}
+    .review-name-input,.review-textarea{width:100%;box-sizing:border-box;font-family:'Cormorant Garamond',serif;font-size:0.95rem;color:var(--earth);background:rgba(242,234,216,0.6);border:1px solid rgba(122,79,46,0.15);border-radius:5px;padding:0.5rem 0.7rem;outline:none;transition:border 0.18s;margin-bottom:0.55rem;}
+    .review-name-input:focus,.review-textarea:focus{border-color:rgba(122,79,46,0.4);}
+    .review-name-input::placeholder,.review-textarea::placeholder{color:rgba(122,79,46,0.32);font-style:italic;}
+    .review-textarea{resize:vertical;min-height:72px;}
+    .review-submit{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.55rem;letter-spacing:0.3em;text-transform:uppercase;padding:0.5rem 1.1rem;background:var(--clay);border:none;color:var(--parchment);border-radius:4px;cursor:pointer;transition:background 0.18s;}
+    .review-submit:hover{background:var(--bark);}
+    .review-submit:disabled{background:var(--sage);cursor:default;}
+    .review-rating-req{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.14em;color:rgba(122,79,46,0.4);margin-left:0.6rem;}
+
+    /* Individual reviews */
+    .review-list{display:flex;flex-direction:column;gap:0.6rem;}
+    .review-item{padding:0.75rem 0.85rem;background:rgba(248,243,235,0.5);border:1px solid rgba(122,79,46,0.07);border-radius:7px;}
+    .review-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.35rem;}
+    .review-item-author{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(122,79,46,0.65);}
+    .review-item-date{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.46rem;letter-spacing:0.08em;color:rgba(122,79,46,0.35);}
+    .review-item-text{font-size:0.92rem;line-height:1.6;color:rgba(46,26,10,0.7);font-style:italic;}
+    .review-empty{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.56rem;letter-spacing:0.14em;color:rgba(122,79,46,0.38);text-align:center;padding:1rem 0;}
+    .review-cup-small{display:inline-flex;align-items:center;gap:0.2rem;margin-bottom:0.3rem;}
+
     /* LEAFLET */
     .leaflet-popup-content-wrapper{background:var(--mist)!important;border:1px solid rgba(122,79,46,0.2)!important;border-radius:8px!important;box-shadow:0 8px 32px rgba(30,18,8,0.15)!important;}
     .leaflet-popup-tip{background:var(--mist)!important;}
@@ -1116,7 +1155,12 @@
         <div class="contact-row"><span class="contact-key">Email</span><span class="contact-val"><a href="mailto:${loc.contact.email}">${loc.contact.email}</a></span></div>
         <div class="contact-row"><span class="contact-key">Web</span><span class="contact-val"><a href="${loc.contact.website}" target="_blank">${loc.contact.website.replace('https://','')}</a></span></div>
       </div>
+      <div class="review-section" id="reviews-section-${loc.id}">
+        <div class="review-empty" style="padding:0.5rem 0;">Loading reviews…</div>
+      </div>
     `;
+    // Async: load and render reviews after DOM is set
+    renderReviews(loc.id);
     document.getElementById('detail').classList.add('open');
   }
 
@@ -1191,6 +1235,208 @@
     btn.style.background = 'var(--sage)';
     btn.disabled = true;
     setTimeout(() => closeModal('apply'), 2000);
+  }
+
+
+  // ══════════════════════════════════════════════════════
+  // REVIEW SYSTEM — coffee cup rating + comments
+  // Storage key: "reviews:{venueId}" → JSON array
+  // Cup levels: 1=empty, 2=quarter, 3=half, 4=three-quarter, 5=full
+  // ══════════════════════════════════════════════════════
+
+  // Draw a coffee cup SVG at a given fill level (1–5) and size
+  // fill=1 empty, 2=1/4, 3=1/2, 4=3/4, 5=full
+  function cupSVG(level, size) {
+    size = size || 28;
+    const s = size;
+    // Cup proportions (in a 24×24 grid, scaled)
+    const sc = s / 24;
+    // Coffee fill heights relative to inside of cup (inside top=4, inside bottom=20)
+    const fillHeights = [0, 0.15, 0.38, 0.62, 0.87]; // fraction of cup interior filled
+    const frac = fillHeights[Math.max(0, Math.min(4, level - 1))];
+    
+    // Inside cup: x 5–19, y 5–21 (in 24-unit space)
+    const cupTop = 5, cupBot = 21, cupL = 5, cupR = 19;
+    const innerH = cupBot - cupTop; // 16 units
+    const fillH = innerH * frac;
+    const fillTop = cupBot - fillH; // y where fill starts (fill rises from bottom)
+    
+    const coffeeColor = level === 1 ? 'rgba(122,79,46,0.0)' : 'rgba(101,58,28,0.82)';
+    const steamOpacity = level >= 3 ? '0.55' : level === 2 ? '0.25' : '0';
+    
+    return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Steam -->
+      <path d="M8 3 C8 2, 9 1, 9 0" stroke="rgba(122,79,46,${steamOpacity})" stroke-width="0.9" stroke-linecap="round"/>
+      <path d="M12 3 C12 2, 13 1, 13 0" stroke="rgba(122,79,46,${steamOpacity})" stroke-width="0.9" stroke-linecap="round"/>
+      <path d="M16 3 C16 2, 17 1, 17 0" stroke="rgba(122,79,46,${steamOpacity})" stroke-width="0.9" stroke-linecap="round"/>
+      <!-- Saucer -->
+      <ellipse cx="12" cy="21.5" rx="8" ry="1.5" fill="rgba(122,79,46,0.12)" stroke="rgba(122,79,46,0.4)" stroke-width="0.7"/>
+      <!-- Cup body (trapezoid) -->
+      <path d="M5 5 L6 20 Q6 21 7 21 L17 21 Q18 21 18 20 L19 5 Z" fill="rgba(242,234,216,0.9)" stroke="rgba(122,79,46,0.55)" stroke-width="0.85"/>
+      <!-- Coffee fill (clipped inside cup) -->
+      ${frac > 0 ? `<clipPath id="cup-clip-${level}-${s}"><path d="M5.3 5 L6.1 20 Q6.1 20.8 7 20.8 L17 20.8 Q17.9 20.8 17.9 20 L18.7 5 Z"/></clipPath>
+      <rect x="4" y="${fillTop.toFixed(2)}" width="16" height="${(cupBot - fillTop + 0.8).toFixed(2)}" fill="${coffeeColor}" clip-path="url(#cup-clip-${level}-${s})"/>` : ''}
+      <!-- Cup rim -->
+      <path d="M4.5 5.5 L19.5 5.5" stroke="rgba(122,79,46,0.4)" stroke-width="0.7" stroke-linecap="round"/>
+      <!-- Handle -->
+      <path d="M19 8 Q23 8 23 12 Q23 16 19 16" stroke="rgba(122,79,46,0.55)" stroke-width="0.85" fill="none" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  // Label for each cup level
+  const CUP_LABELS = ['', 'Not for me', 'It was OK', 'Pretty good', 'Really good', 'Exceptional'];
+
+  // Current state for the review form
+  let _reviewVenueId = null;
+  let _reviewRating  = 0;  // 0 = not selected
+
+  // Load reviews for a venue from storage
+  async function loadReviews(venueId) {
+    try {
+      const res = await window.storage.get('reviews:' + venueId, true);
+      return res ? JSON.parse(res.value) : [];
+    } catch(e) { return []; }
+  }
+
+  // Save a new review
+  async function saveReview(venueId, review) {
+    let reviews = await loadReviews(venueId);
+    reviews.unshift(review); // newest first
+    if (reviews.length > 50) reviews = reviews.slice(0, 50); // cap at 50
+    try {
+      await window.storage.set('reviews:' + venueId, JSON.stringify(reviews), true);
+    } catch(e) { console.warn('Storage error', e); }
+    return reviews;
+  }
+
+  // Compute average rating (0 if no reviews)
+  function avgRating(reviews) {
+    if (!reviews.length) return 0;
+    return reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+  }
+
+  // Render the reviews section HTML into the detail panel
+  async function renderReviews(venueId) {
+    const el = document.getElementById('reviews-section-' + venueId);
+    if (!el) return;
+    const reviews = await loadReviews(venueId);
+    const avg = avgRating(reviews);
+    const avgLevel = avg === 0 ? 1 : Math.round(avg);
+
+    // Average display
+    const avgHtml = `
+      <div class="review-avg-row">
+        <div class="cup-avg-wrap">
+          ${cupSVG(avgLevel, 44)}
+          <span class="cup-avg-label">${reviews.length ? avg.toFixed(1) + ' / 5' : '—'}</span>
+        </div>
+        <div class="review-avg-info">
+          <span class="review-avg-num">${reviews.length ? avg.toFixed(1) : 'No ratings yet'}</span>
+          <span class="review-avg-sub">${reviews.length} review${reviews.length !== 1 ? 's' : ''} · Community score</span>
+          ${reviews.length ? `<span class="review-avg-sub" style="margin-top:0.15rem;">${CUP_LABELS[avgLevel]}</span>` : ''}
+        </div>
+      </div>`;
+
+    // Review list
+    const listHtml = reviews.length
+      ? reviews.map(r => {
+          const cupLevel = r.rating || 3;
+          return `<div class="review-item">
+            <div class="review-item-head">
+              <span class="review-item-author">${escHtml(r.author || 'Anonymous')}</span>
+              <span class="review-item-date">${r.date || ''}</span>
+            </div>
+            <div class="review-cup-small">${cupSVG(cupLevel, 18)}</div>
+            <div class="review-item-text">${escHtml(r.comment)}</div>
+          </div>`;
+        }).join('')
+      : '<div class="review-empty">No reviews yet — be the first</div>';
+
+    el.innerHTML = `<span class="detail-section-label">Community Reviews</span>` + avgHtml + `
+      <div class="review-form" id="rform-${venueId}">
+        <div class="review-form-title">Leave a Review</div>
+        <input class="review-name-input" id="rname-${venueId}" type="text" placeholder="Your name (optional)" maxlength="60"/>
+        <div style="margin-bottom:0.6rem;">
+          <div class="cup-rating" id="cups-${venueId}">
+            ${[1,2,3,4,5].map(lvl => `
+              <button class="cup-btn" data-level="${lvl}"
+                onclick="selectCup(this,'${venueId}')"
+                onmouseenter="hoverCup(this,'${venueId}')"
+                onmouseleave="unhoverCup('${venueId}')"
+                title="${CUP_LABELS[lvl]}">
+                ${cupSVG(lvl, 28)}
+              </button>`).join('')}
+            <span class="cup-label" id="cup-label-${venueId}">Select a rating</span>
+          </div>
+        </div>
+        <textarea class="review-textarea" id="rtext-${venueId}" placeholder="Share your experience — what made it memorable?" maxlength="500" rows="3"></textarea>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <button class="review-submit" id="rsub-${venueId}" onclick="submitReview('${venueId}')">Post Review</button>
+          <span class="review-rating-req" id="rreq-${venueId}"></span>
+        </div>
+      </div>
+      <div class="review-list">${listHtml}</div>`;
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Cup hover / select interactions
+  function hoverCup(btn, venueId) {
+    const lvl = parseInt(btn.dataset.level);
+    document.querySelectorAll(`#cups-${venueId} .cup-btn`).forEach(b => {
+      b.classList.toggle('hov', parseInt(b.dataset.level) <= lvl);
+    });
+    document.getElementById('cup-label-' + venueId).textContent = CUP_LABELS[lvl];
+  }
+  function unhoverCup(venueId) {
+    document.querySelectorAll(`#cups-${venueId} .cup-btn`).forEach(b => b.classList.remove('hov'));
+    const sel = document.querySelector(`#cups-${venueId} .cup-btn.sel`);
+    const lbl = document.getElementById('cup-label-' + venueId);
+    lbl.textContent = sel ? CUP_LABELS[parseInt(sel.dataset.level)] : 'Select a rating';
+  }
+  function selectCup(btn, venueId) {
+    const lvl = parseInt(btn.dataset.level);
+    _reviewRating = lvl;
+    _reviewVenueId = venueId;
+    document.querySelectorAll(`#cups-${venueId} .cup-btn`).forEach(b => {
+      b.classList.toggle('sel', parseInt(b.dataset.level) <= lvl);
+    });
+    document.getElementById('cup-label-' + venueId).textContent = CUP_LABELS[lvl];
+    document.getElementById('rreq-' + venueId).textContent = '';
+  }
+
+  // Submit a review
+  async function submitReview(venueId) {
+    if (_reviewVenueId !== venueId || _reviewRating === 0) {
+      document.getElementById('rreq-' + venueId).textContent = 'Please select a cup rating first';
+      return;
+    }
+    const comment = document.getElementById('rtext-' + venueId).value.trim();
+    if (!comment) {
+      document.getElementById('rreq-' + venueId).textContent = 'Please write a comment';
+      return;
+    }
+    const author  = document.getElementById('rname-' + venueId).value.trim() || 'Anonymous';
+    const now     = new Date();
+    const date    = now.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    const review  = { author, rating: _reviewRating, comment, date };
+
+    const btn = document.getElementById('rsub-' + venueId);
+    btn.textContent = 'Posting…';
+    btn.disabled = true;
+
+    await saveReview(venueId, review);
+
+    // Reset form
+    _reviewRating = 0;
+    _reviewVenueId = null;
+    btn.textContent = 'Posted ✓';
+    btn.style.background = 'var(--sage)';
+
+    // Re-render reviews list
+    await renderReviews(venueId);
   }
 
   // ── DEEP LINK ON LOAD ──
