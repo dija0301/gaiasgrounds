@@ -18,7 +18,18 @@
 
     /* MAP */
     #map{position:fixed;inset:0;z-index:0;}
-    .leaflet-tile{filter:sepia(0.22) saturate(0.88) brightness(1.04);}
+    .geo-btn{
+      width:36px;height:36px;border-radius:8px;
+      background:rgba(242,234,216,0.97);
+      border:1px solid rgba(122,79,46,0.2);
+      color:var(--clay);font-size:1.1rem;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 2px 8px rgba(30,18,8,0.15);
+      transition:all 0.2s;line-height:1;
+    }
+    .geo-btn:hover{background:var(--cream);border-color:var(--clay);}
+    .geo-btn-wrap{margin-bottom:4px;}
+    .leaflet-tile{filter:sepia(0.08) saturate(0.95) brightness(1.02);}
 
     /* HEADER */
     .header{
@@ -155,6 +166,12 @@
     .why-btn{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.48rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(122,79,46,0.4);background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
     .why-btn:hover{color:var(--clay);}
     .product{padding:0.7rem 0.85rem;background:rgba(242,234,216,0.5);border:1px solid rgba(122,79,46,0.07);border-radius:4px;margin-bottom:0.38rem;}
+    .product-shop{display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;padding-top:0.45rem;border-top:1px solid rgba(122,79,46,0.06);}
+    .product-shop-btn{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.48rem;letter-spacing:0.22em;text-transform:uppercase;padding:0.22rem 0.65rem;border-radius:2px;border:1px solid rgba(122,79,46,0.3);color:var(--clay);background:transparent;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;transition:all 0.18s;}
+    .product-shop-btn:hover{background:var(--clay);color:var(--parchment);border-color:var(--clay);}
+    .product-shop-note{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.45rem;letter-spacing:0.1em;color:rgba(122,79,46,0.35);}
+    .shop-header-btn{font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.5rem;letter-spacing:0.28em;text-transform:uppercase;padding:0.28rem 0.7rem;border-radius:2px;border:1px solid rgba(122,79,46,0.25);color:rgba(122,79,46,0.6);background:transparent;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+    .shop-header-btn:hover{color:var(--clay);border-color:var(--clay);}
     .product-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.18rem;}
     .product-name{font-weight:500;font-size:0.95rem;color:var(--earth);}
     .product-price{font-family:'Josefin Sans',sans-serif;font-weight:300;font-size:0.6rem;color:var(--clay);}
@@ -245,13 +262,19 @@
 <!-- HEADER -->
 <header class="header">
   <a class="header-logo" href="#">
-    <svg width="28" height="28" viewBox="60 60 80 80" fill="none">
-      <path d="M67.1 119L68.4 121.2L70 123.3L71.6 125.2L73.4 127.1L75.2 128.8L77.3 130.4L79.4 131.9L81.6 133.2L83.8 134.4L86.2 135.4L88.6 136.3L91.1 136.9L93.6 137.5L96.2 137.8L98.7 138L101.3 138L103.8 137.8L106.4 137.5L108.9 136.9L111.4 136.3L113.8 135.4L116.2 134.4L118.4 133.2L120.6 131.9L122.7 130.4L124.8 128.8L126.6 127.1L128.4 125.2L130 123.3L131.6 121.2L132.9 119L131.6 116.8L130 114.7L128.4 112.8L126.6 110.9L124.8 109.2L122.7 107.6L120.6 106.1L118.4 104.8L116.2 103.6L113.8 102.6L111.4 101.7L108.9 101.1L106.4 100.5L103.8 100.2L101.3 100L98.7 100L96.2 100.2L93.6 100.5L91.1 101.1L88.6 101.7L86.2 102.6L83.8 103.6L81.6 104.8L79.4 106.1L77.3 107.6L75.2 109.2L73.4 110.9L71.6 112.8L70 114.7L68.4 116.8Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
-      <path d="M100 138L102.6 137.9L105.1 137.7L107.6 137.2L110.1 136.6L112.6 135.9L115 134.9L117.3 133.8L119.6 132.6L121.7 131.2L123.8 129.7L125.7 128L127.5 126.2L129.2 124.3L130.8 122.2L132.2 120.1L133.5 117.9L134.7 115.6L135.6 113.2L136.4 110.8L137.1 108.3L137.6 105.8L137.9 103.2L138 100.6L138 98.1L137.7 95.5L137.3 93L136.8 90.5L136.1 88L135.2 85.6L134.1 83.3L132.9 81L130.3 81.1L127.8 81.3L125.3 81.8L122.8 82.4L120.3 83.1L117.9 84.1L115.6 85.2L113.4 86.4L111.2 87.8L109.1 89.3L107.2 91L105.4 92.8L103.7 94.7L102.1 96.8L100.7 98.9L99.4 101.1L98.2 103.4L97.3 105.8L96.5 108.2L95.8 110.7L95.3 113.2L95 115.8L94.9 118.4L95 120.9L95.2 123.5L95.6 126L96.1 128.5L96.8 131L97.7 133.4L98.8 135.7Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
-      <path d="M132.9 119L134.1 116.7L135.2 114.4L136.1 112L136.8 109.5L137.3 107L137.7 104.5L138 101.9L138 99.4L137.9 96.8L137.6 94.2L137.1 91.7L136.4 89.2L135.6 86.8L134.7 84.4L133.5 82.1L132.2 79.9L130.8 77.8L129.2 75.7L127.5 73.8L125.7 72L123.8 70.3L121.7 68.8L119.6 67.4L117.3 66.2L115 65.1L112.6 64.1L110.1 63.4L107.6 62.8L105.1 62.3L102.6 62.1L100 62L98.8 64.3L97.7 66.6L96.8 69L96.1 71.5L95.6 74L95.2 76.5L95 79.1L94.9 81.6L95 84.2L95.3 86.8L95.8 89.3L96.5 91.8L97.3 94.2L98.2 96.6L99.4 98.9L100.7 101.1L102.1 103.2L103.7 105.3L105.4 107.2L107.2 109L109.1 110.7L111.2 112.2L113.4 113.6L115.6 114.8L117.9 115.9L120.3 116.9L122.8 117.6L125.3 118.2L127.8 118.7L130.3 118.9Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
-      <path d="M100 62L97.4 62.1L94.9 62.3L92.4 62.8L89.9 63.4L87.4 64.1L85 65.1L82.7 66.2L80.4 67.4L78.3 68.8L76.2 70.3L74.3 72L72.5 73.8L70.8 75.7L69.2 77.8L67.8 79.9L66.5 82.1L65.3 84.4L64.4 86.8L63.6 89.2L62.9 91.7L62.4 94.2L62.1 96.8L62 99.4L62 101.9L62.3 104.5L62.7 107L63.2 109.5L63.9 112L64.8 114.4L65.9 116.7L67.1 119L69.7 118.9L72.2 118.7L74.7 118.2L77.2 117.6L79.7 116.9L82.1 115.9L84.4 114.8L86.6 113.6L88.8 112.2L90.9 110.7L92.8 109L94.6 107.2L96.3 105.3L97.9 103.2L99.3 101.1L100.6 98.9L101.8 96.6L102.7 94.2L103.5 91.8L104.2 89.3L104.7 86.8L105 84.2L105.1 81.6L105 79.1L104.8 76.5L104.4 74L103.9 71.5L103.2 69L102.3 66.6L101.2 64.3Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
-      <path d="M67.1 81L65.9 83.3L64.8 85.6L63.9 88L63.2 90.5L62.7 93L62.3 95.5L62 98.1L62 100.6L62.1 103.2L62.4 105.8L62.9 108.3L63.6 110.8L64.4 113.2L65.3 115.6L66.5 117.9L67.8 120.1L69.2 122.2L70.8 124.3L72.5 126.2L74.3 128L76.2 129.7L78.3 131.2L80.4 132.6L82.7 133.8L85 134.9L87.4 135.9L89.9 136.6L92.4 137.2L94.9 137.7L97.4 137.9L100 138L101.2 135.7L102.3 133.4L103.2 131L103.9 128.5L104.4 126L104.8 123.5L105 120.9L105.1 118.4L105 115.8L104.7 113.2L104.2 110.7L103.5 108.2L102.7 105.8L101.8 103.4L100.6 101.1L99.3 98.9L97.9 96.8L96.3 94.7L94.6 92.8L92.8 91L90.9 89.3L88.8 87.8L86.6 86.4L84.4 85.2L82.1 84.1L79.7 83.1L77.2 82.4L74.7 81.8L72.2 81.3L69.7 81.1Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
-      <path d="M132.9 81L131.6 78.8L130 76.7L128.4 74.8L126.6 72.9L124.8 71.2L122.7 69.6L120.6 68.1L118.4 66.8L116.2 65.6L113.8 64.6L111.4 63.7L108.9 63.1L106.4 62.5L103.8 62.2L101.3 62L98.7 62L96.2 62.2L93.6 62.5L91.1 63.1L88.6 63.7L86.2 64.6L83.8 65.6L81.6 66.8L79.4 68.1L77.3 69.6L75.2 71.2L73.4 72.9L71.6 74.8L70 76.7L68.4 78.8L67.1 81L68.4 83.2L70 85.3L71.6 87.2L73.4 89.1L75.2 90.8L77.3 92.4L79.4 93.9L81.6 95.2L83.8 96.4L86.2 97.4L88.6 98.3L91.1 98.9L93.6 99.5L96.2 99.8L98.7 100L101.3 100L103.8 99.8L106.4 99.5L108.9 98.9L111.4 98.3L113.8 97.4L116.2 96.4L118.4 95.2L120.6 93.9L122.7 92.4L124.8 90.8L126.6 89.1L128.4 87.2L130 85.3L131.6 83.2Z" stroke="#7A4F2E" stroke-width="0.6" fill="rgba(122,79,46,0.1)"/>
+    <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+      <g transform="translate(40,40)">
+        <!-- 6 rosette petals -->
+        <ellipse rx="8" ry="18" fill="rgba(122,79,46,0.12)" stroke="#7A4F2E" stroke-width="0.7" transform="rotate(0)"/>
+        <ellipse rx="8" ry="18" fill="rgba(122,79,46,0.12)" stroke="#7A4F2E" stroke-width="0.7" transform="rotate(60)"/>
+        <ellipse rx="8" ry="18" fill="rgba(122,79,46,0.12)" stroke="#7A4F2E" stroke-width="0.7" transform="rotate(120)"/>
+        <ellipse rx="8" ry="18" fill="rgba(122,79,46,0.12)" stroke="#7A4F2E" stroke-width="0.7" transform="rotate(180)"/>
+        <ellipse rx="8" ry="18" fill="rgba(122,79,46,0.12)" stroke="#7A4F2E" stroke-width="0.7" transform="rotate(240)"/>
+        <ellipse rx="8" ry="18" fill="rgba(122,79,46,0.12)" stroke="#7A4F2E" stroke-width="0.7" transform="rotate(300)"/>
+        <!-- Coffee bean — unique to Grounds, sits above petals -->
+        <ellipse rx="6" ry="9.5" fill="#7A4F2E" stroke="#4A2E18" stroke-width="0.8" transform="rotate(-15)"/>
+        <path d="M0 -9 Q2.5 0 0 9" stroke="rgba(242,234,216,0.65)" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      </g>
     </svg>
     <div class="header-logo-text">
       <div class="header-logo-name"><span>Gaias</span>Grounds</div>
@@ -260,6 +283,7 @@
   </a>
   <div class="header-right">
     <button class="header-btn" onclick="openModal('method')">How We Score</button>
+    <button class="header-btn" onclick="openModal('shop')">Shop ✦</button>
     <button class="header-btn cta" onclick="openModal('apply')">List Your Venue</button>
     <a href="https://gaiasglobal.com" target="_blank" class="header-global">
       <svg width="14" height="14" viewBox="60 60 80 80" fill="none" style="opacity:0.5;flex-shrink:0;">
@@ -283,62 +307,62 @@
       <span class="result-count" id="filter-count">30 venues</span>
     </div>
     <!-- FILTER BAR -->
-    <div class="filter-bar">
+    <div class="filter-bar" id="filter-bar">
 
-      <div class="filter-pill" id="pill-type">
-        <button class="filter-pill-btn active" id="btn-type" onclick="toggleDropdown('type')">
+      <div class="filter-pill" data-pill="type">
+        <button class="filter-pill-btn" data-toggle="type">
           Type <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <div class="filter-dropdown" id="drop-type">
+        <div class="filter-dropdown" data-drop="type">
           <span class="drop-title">Venue Type</span>
-          <div class="drop-opt on" data-f="type" data-v="café" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Café</span></div>
-          <div class="drop-opt on" data-f="type" data-v="roaster" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Roaster</span></div>
-          <div class="drop-opt on" data-f="type" data-v="farm" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Farm / Producer</span></div>
-          <div class="drop-opt on" data-f="type" data-v="cooperative" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Cooperative</span></div>
-          <div class="drop-footer"><button class="drop-clear" onclick="clearDrop('type')">Clear</button></div>
+          <div class="drop-opt" data-filter="type" data-value="café"><div class="fcheck"></div><span class="drop-label">Café</span></div>
+          <div class="drop-opt" data-filter="type" data-value="roaster"><div class="fcheck"></div><span class="drop-label">Roaster</span></div>
+          <div class="drop-opt" data-filter="type" data-value="farm"><div class="fcheck"></div><span class="drop-label">Farm / Producer</span></div>
+          <div class="drop-opt" data-filter="type" data-value="cooperative"><div class="fcheck"></div><span class="drop-label">Cooperative</span></div>
+          <div class="drop-footer"><button class="drop-clear" data-clear="type">Clear</button></div>
         </div>
       </div>
 
-      <div class="filter-pill" id="pill-continent">
-        <button class="filter-pill-btn active" id="btn-continent" onclick="toggleDropdown('continent')">
+      <div class="filter-pill" data-pill="continent">
+        <button class="filter-pill-btn" data-toggle="continent">
           Region <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <div class="filter-dropdown" id="drop-continent">
+        <div class="filter-dropdown" data-drop="continent">
           <span class="drop-title">World Region</span>
-          <div class="drop-opt on" data-f="continent" data-v="Africa" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Africa</span></div>
-          <div class="drop-opt on" data-f="continent" data-v="Americas" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Americas</span></div>
-          <div class="drop-opt on" data-f="continent" data-v="Asia-Pacific" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Asia-Pacific</span></div>
-          <div class="drop-opt on" data-f="continent" data-v="Europe" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Europe</span></div>
-          <div class="drop-opt on" data-f="continent" data-v="Middle East" onclick="toggleOpt(this)"><div class="fcheck"></div><span class="drop-label">Middle East</span></div>
-          <div class="drop-footer"><button class="drop-clear" onclick="clearDrop('continent')">Clear</button></div>
+          <div class="drop-opt" data-filter="continent" data-value="Africa"><div class="fcheck"></div><span class="drop-label">Africa</span></div>
+          <div class="drop-opt" data-filter="continent" data-value="Americas"><div class="fcheck"></div><span class="drop-label">Americas</span></div>
+          <div class="drop-opt" data-filter="continent" data-value="Asia-Pacific"><div class="fcheck"></div><span class="drop-label">Asia-Pacific</span></div>
+          <div class="drop-opt" data-filter="continent" data-value="Europe"><div class="fcheck"></div><span class="drop-label">Europe</span></div>
+          <div class="drop-opt" data-filter="continent" data-value="Middle East"><div class="fcheck"></div><span class="drop-label">Middle East</span></div>
+          <div class="drop-footer"><button class="drop-clear" data-clear="continent">Clear</button></div>
         </div>
       </div>
 
-      <div class="filter-pill" id="pill-score">
-        <button class="filter-pill-btn" id="btn-score" onclick="toggleDropdown('score')">
+      <div class="filter-pill" data-pill="score">
+        <button class="filter-pill-btn" data-toggle="score">
           Rosette <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <div class="filter-dropdown" id="drop-score">
+        <div class="filter-dropdown" data-drop="score">
           <span class="drop-title">Min. Rosette Score</span>
           <div class="score-opts">
-            <button class="score-opt on" data-v="0" onclick="pickScore(this)">Any</button>
-            <button class="score-opt" data-v="3" onclick="pickScore(this)">3+</button>
-            <button class="score-opt" data-v="4" onclick="pickScore(this)">4+</button>
-            <button class="score-opt" data-v="5" onclick="pickScore(this)">5+</button>
-            <button class="score-opt" data-v="6" onclick="pickScore(this)">✦ 6</button>
+            <button class="score-opt on" data-score="0">Any</button>
+            <button class="score-opt" data-score="3">3+</button>
+            <button class="score-opt" data-score="4">4+</button>
+            <button class="score-opt" data-score="5">5+</button>
+            <button class="score-opt" data-score="6">✦ 6</button>
           </div>
         </div>
       </div>
 
-      <div class="filter-pill" id="pill-sort">
-        <button class="filter-pill-btn" id="btn-sort" onclick="toggleDropdown('sort')">
+      <div class="filter-pill" data-pill="sort">
+        <button class="filter-pill-btn" data-toggle="sort">
           Sort <svg width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M1 1l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         </button>
-        <div class="filter-dropdown" id="drop-sort">
+        <div class="filter-dropdown" data-drop="sort">
           <span class="drop-title">Sort By</span>
-          <div class="drop-opt on" data-f="sort" data-v="score" onclick="pickSort(this)"><div class="fcheck"></div><span class="drop-label">Rosette Score</span></div>
-          <div class="drop-opt" data-f="sort" data-v="name" onclick="pickSort(this)"><div class="fcheck"></div><span class="drop-label">Name A–Z</span></div>
-          <div class="drop-opt" data-f="sort" data-v="new" onclick="pickSort(this)"><div class="fcheck"></div><span class="drop-label">Newly Listed</span></div>
+          <div class="drop-opt on" data-sort="score"><div class="fcheck"></div><span class="drop-label">Rosette Score</span></div>
+          <div class="drop-opt" data-sort="name"><div class="fcheck"></div><span class="drop-label">Name A–Z</span></div>
+          <div class="drop-opt" data-sort="new"><div class="fcheck"></div><span class="drop-label">Newly Listed</span></div>
         </div>
       </div>
 
@@ -459,6 +483,43 @@
       </div>
       <button class="apply-submit" onclick="submitApplication()">Submit Application</button>
       <p class="apply-note">We aim to respond within 2–3 weeks. Listing is free. Always.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP MODAL -->
+<div class="modal-overlay" id="modal-shop" onclick="overlayClick(event,'shop')">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title">Grounds Market</div>
+        <div class="modal-subtitle">Coming soon — shop directly from verified venues</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('shop')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-intro">Grounds Market will let you order directly from every venue in our directory — coffees, subscriptions, and rare single-estate lots shipped from origin to your door.</p>
+      <div style="background:rgba(242,234,216,0.6);border:1px solid rgba(122,79,46,0.1);border-radius:8px;padding:1.25rem 1.4rem;margin-bottom:1rem;">
+        <div style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(122,79,46,0.5);margin-bottom:0.6rem;">What to expect</div>
+        <div style="font-size:0.9rem;line-height:1.7;color:rgba(46,26,10,0.7);">
+          · No middlemen. Vendors keep the majority of every sale.<br>
+          · A small Grounds platform fee funds ongoing curation and site costs.<br>
+          · Every product is linked to a rosette-scored, values-verified vendor.<br>
+          · Subscription boxes curated by region, roast, or score — launching first.
+        </div>
+      </div>
+      <div style="background:rgba(242,234,216,0.6);border:1px solid rgba(122,79,46,0.1);border-radius:8px;padding:1.25rem 1.4rem;margin-bottom:1rem;">
+        <div style="font-family:'Josefin Sans',sans-serif;font-weight:200;font-size:0.52rem;letter-spacing:0.35em;text-transform:uppercase;color:rgba(122,79,46,0.5);margin-bottom:0.6rem;">For vendors</div>
+        <div style="font-size:0.9rem;line-height:1.7;color:rgba(46,26,10,0.7);">
+          Grounds Market is built for small producers — the farms, cooperatives, and micro-roasters with world-class product and no global distribution. We handle discovery. You handle the craft.
+        </div>
+      </div>
+      <div class="apply-field">
+        <label class="apply-label">Notify me when Grounds Market launches</label>
+        <input class="apply-input" type="email" id="shop-notify-email" placeholder="your@email.com"/>
+      </div>
+      <button class="apply-submit" onclick="submitShopNotify()">Notify Me</button>
+      <p class="apply-note">No spam. One email when we launch. That's it.</p>
     </div>
   </div>
 </div>
@@ -731,7 +792,44 @@
   const map = L.map('map',{center:[20,10],zoom:2.5,zoomControl:false,attributionControl:false});
   L.control.zoom({position:'bottomright'}).addTo(map);
   L.control.attribution({position:'bottomright',prefix:''}).addTo(map);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd', maxZoom:20
+  }).addTo(map);
+
+  // ── GEOLOCATION BUTTON ──
+  const geoBtn = L.control({position:'bottomright'});
+  geoBtn.onAdd = function() {
+    const div = L.DomUtil.create('div','geo-btn-wrap');
+    div.innerHTML = '<button class="geo-btn" onclick="locateMe()" title="Find my location">⊕</button>';
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+  };
+  geoBtn.addTo(map);
+
+  function locateMe() {
+    const btn = document.querySelector('.geo-btn');
+    if (!navigator.geolocation) { btn.textContent='✕'; return; }
+    btn.textContent = '…';
+    btn.style.opacity = '0.6';
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const {latitude:lat, longitude:lng} = pos.coords;
+        map.setView([lat,lng], 11, {animate:true});
+        L.circleMarker([lat,lng],{
+          radius:8, fillColor:'#7A4F2E', fillOpacity:0.9,
+          color:'#F2EAD8', weight:2
+        }).addTo(map).bindPopup('You are here').openPopup();
+        btn.textContent = '⊕';
+        btn.style.opacity = '1';
+      },
+      err => {
+        btn.textContent = '⊕';
+        btn.style.opacity = '1';
+        alert('Could not get your location. Please allow location access.');
+      }
+    );
+  }
 
   const TYPE_COLORS = {café:'#7A4F2E',roaster:'#C4A25A',farm:'#6B7C5E',cooperative:'#8B6B4A'};
 
@@ -751,86 +849,129 @@
   let activeId = null;
   let sortMode = 'score';
 
-  // ── DROPDOWN LOGIC ──
-  let openDrop = null;
+  // ══════════════════════════════════════════════════════
+  // FILTER ENGINE — event delegation, no inline handlers
+  // ══════════════════════════════════════════════════════
+  let openDropName = null;
+  let activeSortMode = 'score';
 
-  function toggleDropdown(name) {
-    const drop = document.getElementById('drop-'+name);
-    const btn  = document.getElementById('btn-'+name);
-    if (openDrop && openDrop !== name) {
-      document.getElementById('drop-'+openDrop)?.classList.remove('open');
-      document.getElementById('btn-'+openDrop)?.classList.remove('open');
-    }
-    const isOpen = drop.classList.toggle('open');
-    btn.classList.toggle('open', isOpen);
-    openDrop = isOpen ? name : null;
+  // ── Open / close a dropdown by name ──
+  function openDrop(name) {
+    closeDrop(); // close any open one first
+    const drop = document.querySelector(`[data-drop="${name}"]`);
+    const btn  = document.querySelector(`[data-toggle="${name}"]`);
+    if (!drop || !btn) return;
+    drop.classList.add('open');
+    btn.classList.add('open');
+    openDropName = name;
   }
 
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.filter-pill')) {
-      document.querySelectorAll('.filter-dropdown.open').forEach(d => d.classList.remove('open'));
-      document.querySelectorAll('.filter-pill-btn.open').forEach(b => b.classList.remove('open'));
-      openDrop = null;
+  function closeDrop() {
+    if (!openDropName) return;
+    document.querySelector(`[data-drop="${openDropName}"]`)?.classList.remove('open');
+    document.querySelector(`[data-toggle="${openDropName}"]`)?.classList.remove('open');
+    openDropName = null;
+  }
+
+  // ── Single delegated listener on the filter bar ──
+  document.getElementById('filter-bar').addEventListener('click', function(e) {
+    e.stopPropagation(); // prevent document listener from firing
+
+    // 1. Toggle pill button → open/close dropdown
+    const toggleBtn = e.target.closest('[data-toggle]');
+    if (toggleBtn) {
+      const name = toggleBtn.dataset.toggle;
+      if (openDropName === name) { closeDrop(); } else { openDrop(name); }
+      return;
+    }
+
+    // 2. Clear button
+    const clearBtn = e.target.closest('[data-clear]');
+    if (clearBtn) {
+      const name = clearBtn.dataset.clear;
+      document.querySelectorAll(`.drop-opt[data-filter="${name}"]`).forEach(o => o.classList.remove('on'));
+      document.querySelector(`[data-toggle="${name}"]`)?.classList.remove('active');
+      applyFilters();
+      return;
+    }
+
+    // 3. Score option
+    const scoreBtn = e.target.closest('.score-opt');
+    if (scoreBtn) {
+      document.querySelectorAll('.score-opt').forEach(o => o.classList.remove('on'));
+      scoreBtn.classList.add('on');
+      const isFiltered = scoreBtn.dataset.score !== '0';
+      document.querySelector('[data-toggle="score"]')?.classList.toggle('active', isFiltered);
+      applyFilters();
+      return;
+    }
+
+    // 4. Sort option
+    const sortOpt = e.target.closest('[data-sort]');
+    if (sortOpt) {
+      document.querySelectorAll('[data-sort]').forEach(o => o.classList.remove('on'));
+      sortOpt.classList.add('on');
+      activeSortMode = sortOpt.dataset.sort;
+      applyFilters();
+      return;
+    }
+
+    // 5. Type / continent checkbox option
+    const filterOpt = e.target.closest('[data-filter]');
+    if (filterOpt) {
+      filterOpt.classList.toggle('on');
+      const fname = filterOpt.dataset.filter;
+      const anyOn = document.querySelectorAll(`.drop-opt.on[data-filter="${fname}"]`).length > 0;
+      document.querySelector(`[data-toggle="${fname}"]`)?.classList.toggle('active', anyOn);
+      applyFilters();
+      return;
     }
   });
 
-  function toggleOpt(el) {
-    el.classList.toggle('on');
-    const f = el.dataset.f;
-    const anyOn = document.querySelectorAll(`.drop-opt.on[data-f="${f}"]`).length > 0;
-    document.getElementById('btn-'+f)?.classList.toggle('active', anyOn);
-    applyFilters();
-  }
+  // ── Close dropdowns when clicking anywhere outside ──
+  document.addEventListener('click', function() {
+    closeDrop();
+  });
 
-  function clearDrop(f) {
-    document.querySelectorAll(`.drop-opt[data-f="${f}"]`).forEach(o => o.classList.remove('on'));
-    document.getElementById('btn-'+f)?.classList.remove('active');
-    applyFilters();
-  }
-
-  function pickScore(el) {
-    document.querySelectorAll('.score-opt').forEach(o => o.classList.remove('on'));
-    el.classList.add('on');
-    const isFiltered = el.dataset.v !== '0';
-    document.getElementById('btn-score').classList.toggle('active', isFiltered);
-    applyFilters();
-  }
-
-  function pickSort(el) {
-    document.querySelectorAll('.drop-opt[data-f="sort"]').forEach(o => o.classList.remove('on'));
-    el.classList.add('on');
-    sortMode = el.dataset.v;
-    applyFilters();
-  }
-
+  // ── Core filter + sort + render ──
   function applyFilters() {
-    const types  = [...document.querySelectorAll('.drop-opt.on[data-f="type"]')].map(o => o.dataset.v);
-    const conts  = [...document.querySelectorAll('.drop-opt.on[data-f="continent"]')].map(o => o.dataset.v);
-    const scoreEl = document.querySelector('.score-opt.on');
-    const minScore = scoreEl ? parseInt(scoreEl.dataset.v) : 0;
-    const q = document.getElementById('search-input').value.toLowerCase();
+    const selTypes = [...document.querySelectorAll('.drop-opt.on[data-filter="type"]')]
+                       .map(o => o.dataset.value);
+    const selConts = [...document.querySelectorAll('.drop-opt.on[data-filter="continent"]')]
+                       .map(o => o.dataset.value);
+    const scoreEl  = document.querySelector('.score-opt.on');
+    const minScore = scoreEl ? parseInt(scoreEl.dataset.score, 10) : 0;
+    const q        = document.getElementById('search-input').value.trim().toLowerCase();
 
-    let filtered = LOCATIONS.filter(l => {
-      if (types.length && !types.includes(l.type)) return false;
-      if (conts.length && !conts.includes(l.continent)) return false;
-      if (l.score < minScore) return false;
-      if (q && !l.name.toLowerCase().includes(q) && !l.city.toLowerCase().includes(q) && !l.country.toLowerCase().includes(q) && !l.specialty.toLowerCase().includes(q)) return false;
+    let filtered = LOCATIONS.filter(loc => {
+      if (selTypes.length && !selTypes.includes(loc.type))           return false;
+      if (selConts.length && !selConts.includes(loc.continent))      return false;
+      if (loc.score < minScore)                                        return false;
+      if (q) {
+        const hay = [loc.name, loc.city, loc.country, loc.specialty, loc.type]
+                    .join(' ').toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
       return true;
     });
 
     // Sort
-    if (sortMode === 'score') filtered.sort((a,b) => b.score - a.score || a.name.localeCompare(b.name));
-    else if (sortMode === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
-    else if (sortMode === 'new') filtered.sort((a,b) => b.added.localeCompare(a.added));
+    if (activeSortMode === 'score') {
+      filtered.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+    } else if (activeSortMode === 'name') {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (activeSortMode === 'new') {
+      filtered.sort((a, b) => b.added.localeCompare(a.added));
+    }
 
     visibleLocations = filtered;
     renderList(filtered);
     renderMarkers(filtered);
-    document.getElementById('filter-count').textContent = `${filtered.length} venue${filtered.length !== 1 ? 's' : ''}`;
+    const n = filtered.length;
+    document.getElementById('filter-count').textContent =
+      `${n} venue${n !== 1 ? 's' : ''}`;
   }
 
-  // ── BUILD COUNTRY/CONTINENT DROPDOWNS ──
-  // (continents are hardcoded in HTML; countries dynamic if needed)
 
   // ── RENDER LIST ──
   function renderList(locs) {
@@ -917,10 +1058,17 @@
         <div class="principle-bar"><div class="principle-fill" style="width:${loc.principles[i]?'100':'0'}%"></div></div>
       </div>`).join('');
 
+    const shopUrl = loc.contact.website + '?utm_source=gaias-grounds&utm_medium=referral';
     const products = loc.products.map(p => `
       <div class="product">
         <div class="product-top"><span class="product-name">${p.name}</span><span class="product-price">${p.price}</span></div>
         <div class="product-notes">↳ ${p.notes}</div>
+        <div class="product-shop">
+          <span class="product-shop-note">Ships from vendor</span>
+          <a class="product-shop-btn" href="${shopUrl}" target="_blank" rel="noopener">
+            Buy from Vendor ↗
+          </a>
+        </div>
       </div>`).join('');
 
     const badgeHtml = loc.badge === 'pick' ? '<span class="badge badge-pick">Editor\'s Pick</span>'
@@ -996,8 +1144,7 @@
     }
   }
 
-  // ── SEARCH ──
-  function handleSearch() { applyFilters(); }
+  // ── SEARCH (handled by applyFilters) ──
 
   // ── PANEL COLLAPSE ──
   function togglePanel() {
@@ -1022,11 +1169,21 @@
   }
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-      ['method','apply'].forEach(n => closeModal(n));
+      ['method','apply','shop'].forEach(n => closeModal(n));
     }
   });
 
   // ── APPLY SUBMIT ──
+  function submitShopNotify() {
+    const email = document.getElementById('shop-notify-email').value;
+    if (!email) return;
+    const btn = document.querySelector('#modal-shop .apply-submit');
+    btn.textContent = "You're on the list 2713";
+    btn.style.background = 'var(--sage)';
+    btn.disabled = true;
+    // TODO: POST to /api/notify with email
+  }
+
   function submitApplication() {
     const btn = document.querySelector('.apply-submit');
     btn.textContent = 'Application Received ✓';
